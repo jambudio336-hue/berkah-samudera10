@@ -68,3 +68,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 
 - 🪸 Deteksi karang otomatis setiap GPS bergerak minimal 100 m atau setiap 60 detik, dengan status di dashboard.
 - 🌊 Kedalaman otomatis memakai query GEBCO 2020 global dan diperbarui saat posisi berubah.
+
+- 💝 Menu Pengaturan berisi QRIS donasi tanpa menampilkan nominal, penjelasan aplikasi, ucapan terima kasih, dan sponsor by.m4zk1pl4y.

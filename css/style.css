@@ -279,3 +279,10 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
   .map-actions, .map-tool-row { grid-template-columns:1fr; }
   .map-actions .btn, .map-tool-row .btn { min-height:42px; }
 }
+
+.donation-card, .about-card { text-align:left; }
+.donation-copy { color:#d5e7fb; font-size:.88rem; line-height:1.55; }
+.donation-qr { display:block; width:min(100%, 300px); aspect-ratio:1/1; object-fit:contain; margin:16px auto 12px; padding:8px; background:#fff; border-radius:14px; border:3px solid #e5b23c; box-shadow:0 8px 22px rgba(0,0,0,.35); }
+.about-card p { color:#d5e7fb; font-size:.86rem; line-height:1.55; }
+.about-card .thanks { margin-top:12px; color:var(--accent2); font-weight:600; }
+.about-card .sponsor { margin-top:14px; }
