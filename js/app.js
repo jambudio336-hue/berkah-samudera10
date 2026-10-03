@@ -1,5 +1,6 @@
 const App = {
   init() {
+    App.initSplash();
     App.jamRealtime();
     setInterval(App.jamRealtime, 1000);
     App.tabs();
@@ -13,6 +14,32 @@ const App = {
         Kru.render();
         alert("Semua data terhapus.");
       }
+    });
+  },
+
+  initSplash() {
+    const splash = document.getElementById("splash");
+    const video = document.getElementById("splashVideo");
+    const tap = document.getElementById("splashTap");
+
+    const mulai = () => {
+      splash.classList.add("playing");
+      video.play().catch(() => {});
+    };
+
+    video.addEventListener("ended", () => {
+      splash.style.transition = "opacity .6s";
+      splash.style.opacity = "0";
+      setTimeout(() => splash.remove(), 650);
+    });
+
+    // Coba autoplay penuh dengan suara
+    video.play().then(() => {
+      splash.classList.add("playing");
+    }).catch(() => {
+      // Browser blokir autoplay bersuara → minta ketuk dulu
+      tap.addEventListener("click", mulai);
+      video.addEventListener("click", mulai);
     });
   },
 
@@ -54,7 +81,6 @@ const App = {
       }
     };
     if (window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
-      // iOS perlu izin sekali klik
       document.getElementById("compassNeedle").addEventListener("click", () => {
         DeviceOrientationEvent.requestPermission().then((res) => {
           if (res === "granted") window.addEventListener("deviceorientationabsolute", handler, true);
