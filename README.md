@@ -51,3 +51,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🧭 Kompas 3D nautika aktif dari sensor orientasi perangkat, dengan fallback heading GPS saat kapal bergerak.
 
 - 🚢 Marker kapal bergerak mengikuti GPS, dengan kecepatan knot/km-jam, suhu, arah angin, tinggi/periode/arah ombak, dan area koordinat kondisi laut di sekitar kapal.
+
+- 🗺️ Pilihan peta: standar, satelit realistis, topografi, medan, gelap, bathymetry GEBCO, marka/karang OpenSeaMap, serta mode 3D visual.

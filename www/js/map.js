@@ -5,10 +5,13 @@ const MapApp = {
     this.map = L.map("map", { zoomControl: true }).setView([-2.5, 118], 5);
     const street = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap" }).addTo(this.map);
     const satellite = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Tiles &copy; Esri" });
+    const terrain = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Topographic tiles &copy; Esri" });
+    const topo = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { maxZoom: 17, attribution: "Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap" });
+    const dark = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { maxZoom: 20, attribution: "&copy; CARTO" });
     const bathymetry = L.tileLayer.wms("https://ows.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .58, attribution: "Bathymetry &copy; GEBCO" });
     const seamarks = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", { maxZoom: 18, opacity: .9, attribution: "Seamarks &copy; OpenSeaMap" });
-    this.layers = { street, satellite, bathymetry, seamarks };
-    L.control.layers({ "Peta standar": street, "Satelit": satellite }, { "Kedalaman laut (GEBCO)": bathymetry, "Terumbu/marka (OpenSeaMap)": seamarks }, { collapsed: true, position: "topright" }).addTo(this.map);
+    this.layers = { street, satellite, terrain, topo, dark, bathymetry, seamarks };
+    L.control.layers({ "Peta standar": street, "Satelit realistis": satellite, "Topografi": topo, "Peta medan": terrain, "Peta gelap": dark }, { "Kedalaman laut (GEBCO)": bathymetry, "Karang & marka laut": seamarks }, { collapsed: true, position: "topright" }).addTo(this.map);
     this.track = L.polyline([], { color: "#ffb703", weight: 4, opacity: .9 }).addTo(this.map);
     try {
       const savedTrack = JSON.parse(localStorage.getItem("bs10_track") || "[]");
