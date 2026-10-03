@@ -1,4 +1,4 @@
-const CACHE = "berkah-samudera10-v2";
+const CACHE = "berkah-samudera10-v3";
 const SHELL = ["./", "./index.html", "./css/style.css", "./manifest.json",
   "./js/storage.js", "./js/map.js", "./js/live-sync.js", "./icon.svg", "./logo-berkahsamudera.svg", "./js/weather.js", "./js/tangkapan.js",
   "./js/kolekting.js", "./js/perbekalan.js", "./js/kru.js", "./js/app.js",

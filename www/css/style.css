@@ -17,8 +17,9 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: url("../file_000000000fa48211b2c09fa64b21f357.png") center / cover no-repeat;
-  opacity: 0.25;
+  background-image: linear-gradient(rgba(3,18,38,.38), rgba(3,18,38,.55)), url("../file_000000000fa48211b2c09fa64b21f357.png");
+  background-position: center; background-size: cover; background-repeat: no-repeat;
+  opacity: 0.62;
   z-index: -1;
 }
 
@@ -198,3 +199,19 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 #map { transition: transform .4s ease; }
 .leaflet-control-layers { font-size: .72rem; }
 @media (max-width: 480px) { #map.map-3d { transform: perspective(700px) rotateX(7deg) scale(.98); } }
+
+.eyebrow { display:block; color:#79c8ff; font-size:.62rem; font-weight:800; letter-spacing:1.5px; margin-bottom:4px; }
+.section-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.live-dot { color:var(--accent2); font-size:.68rem; font-weight:800; white-space:nowrap; }
+.live-card { border-color:#2f79c9; }
+.quick-card { background:linear-gradient(135deg, rgba(16,48,92,.98), rgba(11,37,71,.95)); }
+.quick-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.primary-inline { width:100%; padding:10px 8px; font-size:.76rem; border-color:#3a79be; }
+.settings-hero h2 { margin-top:4px; }
+.switch-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; border:1px solid var(--line); border-radius:10px; background:var(--bg2); color:var(--text); font-size:.84rem; }
+.switch-row input { width:22px; height:22px; accent-color:var(--accent); }
+#page-pengaturan .btn { margin-top:10px; }
+.leaflet-control-layers-toggle { width:38px !important; height:38px !important; background-size:22px 22px !important; }
+.leaflet-control-layers-expanded { max-width:calc(100vw - 68px); max-height:210px; overflow:auto; font-size:.72rem; }
+.leaflet-control-attribution { max-width:85%; font-size:9px; }
+@media (max-width: 480px) { .quick-actions { grid-template-columns:1fr; } .primary-inline { font-size:.84rem; } #map { height:320px; } .leaflet-control-layers-expanded { max-width:230px; } }

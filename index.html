@@ -45,6 +45,7 @@
   <button class="tab" data-page="perbekalan">⛽ Perbekalan</button>
   <button class="tab" data-page="kru">👥 Kru</button>
   <button class="tab" data-page="riwayat">📋 Riwayat</button>
+  <button class="tab" data-page="pengaturan">⚙️ Pengaturan</button>
 </nav>
 
 <main>
@@ -55,9 +56,9 @@
     <h2>Selamat Bekerja, Bos Kapal! 🚢</h2>
     <p class="hero-sub">Semoga cuaca aman dan hasil tangkapan berlimpah.</p>
   </div>
-  <div class="grid-2">
-    <div class="card">
-      <h3>📍 Posisi Sekarang</h3>
+  <div class="grid-2 dashboard-grid">
+    <div class="card live-card">
+      <span class="eyebrow">LIVE OPERATIONS</span><h3>📍 Posisi Sekarang</h3>
       <p class="big" id="dashLat">- , -</p>
       <p class="big" id="dashLon">- , -</p>
       <p class="muted" id="dashAcc">Akurasi: - m</p>
@@ -77,6 +78,10 @@
       <h3>🌊 Ombak</h3>
       <p id="dashWave">Memuat...</p>
     </div>
+  </div>
+  <div class="card quick-card">
+    <div class="section-head"><div><span class="eyebrow">KONTROL CEPAT</span><h3>⚓ Pusat Operasi</h3></div><span class="live-dot">● ONLINE</span></div>
+    <div class="quick-actions"><button class="btn primary-inline" data-go="peta">🗺️ Buka peta</button><button class="btn primary-inline" data-go="cuaca">🌊 Cek laut</button><button class="btn primary-inline" data-go="pengaturan">⚙️ Pengaturan</button></div>
   </div>
   <div class="card">
     <h3>💬 Semangat Hari Ini</h3>
@@ -205,6 +210,14 @@
   </div>
 </section>
 
+<!-- ============ PENGATURAN ============ -->
+<section id="page-pengaturan" class="page">
+  <div class="card hero settings-hero"><span class="eyebrow">KAPAL ANDA • SAMUDERA10</span><h2>⚙️ Pengaturan Operasi</h2><p class="hero-sub">Atur identitas kapal, sinkronisasi online, dan tampilan navigasi.</p></div>
+  <div class="card"><h3>🚢 Identitas Kapal</h3><label>Nama kapal</label><input id="settingVesselName" type="text" placeholder="Contoh: Berkah Samudera 10"><label>ID kapal (untuk sinkronisasi)</label><input id="settingVesselId" type="text" placeholder="kapal-utama"><button class="btn primary" id="btnSaveSettings">💾 Simpan pengaturan</button></div>
+  <div class="card"><h3>📡 Sinkronisasi Full-Stack</h3><p class="muted">Masukkan URL server WebSocket backend untuk berbagi posisi kapal secara real-time.</p><label>URL backend API</label><input id="settingApi" type="url" placeholder="https://domain-anda.com"><div class="row"><button class="btn" id="btnTestApi">🔌 Tes koneksi</button><span class="chip" id="settingApiStatus">Belum dites</span></div></div>
+  <div class="card"><h3>🧭 Navigasi</h3><label class="switch-row"><span>Ikuti posisi kapal otomatis</span><input id="settingAutoCenter" type="checkbox" checked></label><label class="switch-row"><span>Tampilkan jalur perjalanan</span><input id="settingShowTrack" type="checkbox" checked></label><button class="btn" id="btnClearTrack">🧹 Bersihkan jalur perjalanan</button><button class="btn" id="btnRefreshData">🔄 Segarkan cuaca & peta</button></div>
+  <div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button></div>
+</section>
 <!-- ============ RIWAYAT ============ -->
 <section id="page-riwayat" class="page">
   <div class="card">
