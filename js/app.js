@@ -10,6 +10,7 @@ const App = {
     App.settings();
     if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
     if (typeof PrayerTimes !== "undefined") PrayerTimes.init();
+    if (typeof QuranApp !== "undefined") QuranApp.init();
     App.quickActions();
     App.dashboardStats();
     setInterval(App.dashboardStats, 5000);

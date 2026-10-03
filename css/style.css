@@ -311,3 +311,21 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .prayer-settings .btn { margin-top:10px; }
 
 .local-storage-card { border-color:#06d6a0; }
+
+.quran-hero, .quran-reader { border-color:#d39a22; }
+.quran-hero h2, .quran-reader h3 { color:#ffd166; }
+.quran-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px; max-height:360px; overflow:auto; margin-top:10px; }
+.quran-list-item { display:flex; flex-direction:column; gap:3px; text-align:left; padding:9px; border:1px solid #2f79c9; border-radius:9px; color:#eaf3ff; background:rgba(5,25,52,.7); cursor:pointer; }
+.quran-list-item:hover { border-color:#ffd166; }
+.quran-list-item span { color:#9fc3e8; font-size:.7rem; }
+.quran-title { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; color:#ffd166; }
+.quran-title span { color:#a9c9e8; font-size:.75rem; }
+.quran-audio-controls { align-items:flex-end; padding:10px; border-radius:10px; background:rgba(5,25,52,.75); }
+.quran-audio-controls label { min-width:180px; }
+.quran-audio-controls audio { width:min(100%,420px); height:38px; margin-top:5px; }
+.quran-ayat { position:relative; margin:12px 0; padding:16px 14px 12px; border:1px solid rgba(211,154,34,.35); border-radius:12px; background:rgba(5,25,52,.65); }
+.ayat-number { display:inline-flex; width:27px; height:27px; align-items:center; justify-content:center; border-radius:50%; background:#d39a22; color:#061a33; font-weight:800; font-size:.75rem; }
+.arabic { color:#ffe4a3; font-family:serif; font-size:1.55rem; line-height:2.1; text-align:right; margin:8px 0 12px; }
+.latin, .translation { color:#d5e7fb; font-size:.82rem; line-height:1.55; }
+.translation { color:#b8d2eb; }
+@media (max-width:520px) { .quran-list { grid-template-columns:1fr; } .quran-title, .quran-audio-controls { align-items:stretch; flex-direction:column; } .arabic { font-size:1.35rem; } }

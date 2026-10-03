@@ -86,3 +86,5 @@ Frontend dibungkus menjadi APK native memakai Capacitor. Seluruh data pengguna d
 - 📱 Mode local-first: tidak ada backend, akun, atau sinkronisasi server yang diperlukan; data operasi kapal tersimpan di HP pengguna.
 
 - 📴 APK kini local-first sepenuhnya: backend, akun, dan server tidak diperlukan; seluruh data operasional tersimpan di HP pengguna.
+
+- 📖 Menu Al-Qur’an online berisi 114 surat, Arab, latin, terjemahan Indonesia, pilihan enam qari, dan audio surat lengkap.

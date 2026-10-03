@@ -40,6 +40,7 @@
   <button class="tab active" data-page="dashboard">🏠 Dashboard</button>
   <button class="tab" data-page="peta">🗺️ Peta</button>
   <button class="tab" data-page="cuaca">🌊 Cuaca</button>
+  <button class="tab" data-page="quran">📖 Al-Qur’an</button>
   <button class="tab" data-page="tangkapan">🐟 Tangkapan</button>
   <button class="tab" data-page="kolekting">📦 Kolekting</button>
   <button class="tab" data-page="perbekalan">⛽ Perbekalan</button>
@@ -152,6 +153,13 @@
   </div>
 </section>
 
+<!-- ============ AL-QUR’AN ============ -->
+<section id="page-quran" class="page">
+  <div class="card hero quran-hero"><span class="eyebrow">BACAAN & AUDIO ONLINE</span><h2>📖 Al-Qur’an Digital</h2><p class="hero-sub">114 surat lengkap dengan Arab, latin, terjemahan Indonesia, dan audio surat.</p></div>
+  <div class="card"><div class="row"><input id="quranSearch" type="search" placeholder="Cari nama surat atau arti..."><select id="quranSurah"><option value="">Pilih surat...</option></select></div><p id="quranStatus" class="muted">Memuat daftar surat...</p><div id="quranList" class="quran-list"></div></div>
+  <div class="card quran-reader" id="quranReader"><div id="quranTitle" class="quran-title"><b>Pilih surat untuk membaca</b><span>Arab • Latin • Terjemahan</span></div><div class="row quran-audio-controls"><label>Qari<select id="quranQari"><option value="01">Abdullah Al-Juhany</option><option value="02">Abdul Muhsin Al-Qasim</option><option value="03">Abdurrahman As-Sudais</option><option value="04">Ibrahim Al-Dossari</option><option value="05">Misyari Rasyid Al-Afasy</option><option value="06">Yasser Al-Dosari</option></select></label><div><span id="quranAudioLabel" class="muted">Audio surat lengkap</span><audio id="quranAudio" controls preload="none"></audio></div></div><div id="quranAyat"><p class="muted">Pilih salah satu surat di atas.</p></div></div>
+  <div class="card"><p class="muted">Sumber data: EQuran.id API v2 • sumber konten Kementerian Agama Republik Indonesia. Audio dimuat online dari CDN EQuran.id.</p></div>
+</section>
 <!-- ============ TANGKAPAN ============ -->
 <section id="page-tangkapan" class="page">
   <div class="card">
@@ -281,6 +289,7 @@
 <script src="js/live-sync.js"></script>
 <script src="js/notifications.js"></script>
 <script src="js/prayer.js"></script>
+<script src="js/quran.js"></script>
 <script src="js/weather.js"></script>
 <script src="js/tangkapan.js"></script>
 <script src="js/kolekting.js"></script>
