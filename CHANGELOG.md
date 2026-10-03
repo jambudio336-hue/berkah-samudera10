@@ -1,5 +1,12 @@
 # Changelog — Berkah Samudera10
 
+## [1.1.0] - 2026-10-03
+### Ditambahkan
+- 🎬 Splash screen video intro: diputar full durasi + full audio saat masuk aplikasi, tanpa tombol kontrol/pause/skip, otomatis masuk aplikasi setelah selesai
+- 🖼️ Latar belakang aplikasi menggunakan gambar kustom (opacity 25% agar teks tetap terbaca)
+- 🖼️ Icon aplikasi & favicon menggunakan gambar kustom
+- Video intro & gambar di-cache di Service Worker agar tetap jalan saat offline
+
 ## [1.0.0] - 2026-10-03
 ### Rilis Pertama 🎉
 - Dashboard premium style dengan brand Berkah Samudera10
