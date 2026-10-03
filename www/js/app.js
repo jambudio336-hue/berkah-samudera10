@@ -9,6 +9,8 @@ const App = {
     App.quoteDashboard();
     App.settings();
     App.quickActions();
+    App.dashboardStats();
+    setInterval(App.dashboardStats, 5000);
     document.getElementById("btnHapusSemua").addEventListener("click", () => {
       if (confirm("Yakin hapus SEMUA data? Ini tidak bisa dibatalkan!")) {
         Store.clearAll();
@@ -119,6 +121,14 @@ const App = {
     document.getElementById("btnClearTrack").addEventListener("click", () => { if (confirm("Bersihkan jalur perjalanan di peta?")) MapApp.clearTrack(); });
     document.getElementById("btnRefreshData").addEventListener("click", () => { const pos = MapApp.lat !== null ? { lat: MapApp.lat, lon: MapApp.lon } : Weather.pos(); Weather.refreshPosition(pos.lat, pos.lon); alert("🔄 Data cuaca sedang disegarkan."); });
     document.getElementById("btnRequestGps").addEventListener("click", () => { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(() => alert("✅ Akses lokasi aktif."), () => alert("❌ Akses lokasi ditolak atau belum tersedia."), { enableHighAccuracy: true }); });
+  },
+  dashboardStats() {
+    const gps = document.getElementById("kpiGps");
+    const sub = document.getElementById("kpiGpsSub");
+    if (gps && typeof MapApp !== "undefined" ) { const active = MapApp.lat !== null; gps.textContent = active ? "AKTIF" : "MENUNGGU"; sub.textContent = active ? (document.getElementById("dashAcc").textContent.replace("Akurasi GNSS: ", "")) : "Nyalakan lokasi"; }
+    const track = document.getElementById("kpiTrack"); if (track && typeof MapApp !== "undefined" && MapApp.track) track.textContent = MapApp.track.getLatLngs().length + " titik";
+    const records = document.getElementById("kpiRecords"); if (records) records.textContent = ["tangkapan", "kolekting", "bbm", "logistik", "kru"].reduce((n, k) => n + Store.load(k).length, 0);
+    const sync = document.getElementById("kpiSync"); const syncSub = document.getElementById("kpiSyncSub"); if (sync) { sync.textContent = navigator.onLine ? "ONLINE" : "OFFLINE"; syncSub.textContent = navigator.onLine ? "data siap sinkron" : "mode aman lokal"; }
   },
   quoteDashboard() {
     const el = document.getElementById("dashQuote");

@@ -57,3 +57,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 📰 Panel berita/peringatan BMKG Maritim khusus perairan, gelombang, dan bulletin pelayaran, dengan refresh manual serta otomatis setiap 15 menit.
 
 - 🛳️ Ikon launcher APK dan PWA diganti dengan artwork kapal Berkah Samudera dari pengguna.
+
+- 🧩 Dashboard profesional dengan KPI GPS, rute, jumlah catatan, status jaringan, serta tombol operasi terkelompok.

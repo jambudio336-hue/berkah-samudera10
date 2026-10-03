@@ -233,3 +233,12 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .news-link:hover { border-color:var(--accent); transform:translateY(-1px); }
 .news-link span { color:#86c7ff; font-size:.78rem; text-align:right; }
 .news-updated { margin-top:10px; }
+
+.dashboard-kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:0 0 14px; }
+.kpi { min-width:0; padding:12px 10px; border:1px solid var(--line); border-radius:13px; background:linear-gradient(145deg, rgba(19,61,110,.96), rgba(8,32,64,.96)); box-shadow:0 4px 14px rgba(0,0,0,.22); }
+.kpi span { display:block; color:#79c8ff; font-size:.58rem; font-weight:800; letter-spacing:1px; }
+.kpi b { display:block; color:var(--accent); margin-top:5px; font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.kpi small { display:block; color:var(--muted); font-size:.64rem; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.quick-label { color:#79c8ff; font-size:.68rem; font-weight:800; letter-spacing:.5px; margin:8px 0 5px; text-transform:uppercase; }
+.quick-actions + .quick-label { margin-top:14px; }
+@media (max-width:480px) { .dashboard-kpis { grid-template-columns:repeat(2,1fr); } }
