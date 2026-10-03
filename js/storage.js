@@ -3,6 +3,7 @@ const Store = {
   save(name, arr) {
     try {
       localStorage.setItem(Store.key(name), JSON.stringify(arr));
+      if (typeof SupabaseSync !== "undefined" && !SupabaseSync.suppress) SupabaseSync.pushCollection(name, arr);
       return true;
     } catch (e) { return false; }
   },
@@ -20,6 +21,16 @@ const Store = {
   },
   remove(name, id) {
     return Store.save(name, Store.load(name).filter((x) => x.id !== id));
+  },
+  mergeRemote(name, item) {
+    if (!name || !item || !item.id) return;
+    const arr = Store.load(name); const idx = arr.findIndex((x) => String(x.id) === String(item.id));
+    if (idx >= 0) arr[idx] = { ...arr[idx], ...item }; else arr.unshift(item);
+    if (arr.length > 500) arr.length = 500;
+    if (typeof SupabaseSync !== "undefined") SupabaseSync.suppress = true;
+    Store.save(name, arr);
+    if (typeof SupabaseSync !== "undefined") SupabaseSync.suppress = false;
+    if (typeof renderSemuaList === "function") renderSemuaList();
   },
   clearAll() {
     Object.keys(localStorage)

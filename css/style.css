@@ -329,3 +329,6 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .latin, .translation { color:#d5e7fb; font-size:.82rem; line-height:1.55; }
 .translation { color:#b8d2eb; }
 @media (max-width:520px) { .quran-list { grid-template-columns:1fr; } .quran-title, .quran-audio-controls { align-items:stretch; flex-direction:column; } .arabic { font-size:1.35rem; } }
+
+.remote-ship-marker { display:flex; align-items:center; justify-content:center; width:30px !important; height:30px !important; border-radius:50%; background:#063b5c; border:2px solid #06d6a0; box-shadow:0 0 12px rgba(6,214,160,.7); font-size:18px; }
+.local-storage-card { border-color:#06d6a0; }
