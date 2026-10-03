@@ -215,3 +215,5 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .leaflet-control-layers-expanded { max-width:calc(100vw - 68px); max-height:210px; overflow:auto; font-size:.72rem; }
 .leaflet-control-attribution { max-width:85%; font-size:9px; }
 @media (max-width: 480px) { .quick-actions { grid-template-columns:1fr; } .primary-inline { font-size:.84rem; } #map { height:320px; } .leaflet-control-layers-expanded { max-width:230px; } }
+.btn.edit { background: #174f86; color: #eaf3ff; border-color: #3d8bd0; }
+.btn.edit:hover { background: #2167a8; }

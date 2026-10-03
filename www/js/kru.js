@@ -24,9 +24,9 @@ const Kru = {
     const urut = Object.fromEntries(urutanJabatan.map((jabatan, i) => [jabatan, i]));
     data.sort((a, b) => urut[a.jabatan] - urut[b.jabatan]);
     el.innerHTML = data.map((d) =>
-      "<div class='log-item'><b>" + d.nama + "</b> — " + d.jabatan +
+      "<div class='log-item'><b>" + formatTanggal(d.tanggal) + "</b><p><strong>" + d.nama + "</strong> — " + d.jabatan + "</p>" +
       "<p>📱 " + d.hp + "</p>" +
-      "<button class='btn danger sm' data-del='" + d.id + "' data-store='kru'>🗑️ Hapus</button></div>"
+      "<button class='btn sm edit' data-edit='" + d.id + "' data-store='kru'>✏️ Edit</button> <button class='btn danger sm' data-del='" + d.id + "' data-store='kru'>🗑️ Hapus</button></div>"
     ).join("");
     pasangHapus(el);
   }

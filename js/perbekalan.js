@@ -44,7 +44,7 @@ const Perbekalan = {
         "<div class='log-item'><b>" + formatTanggal(d.tanggal) + "</b>" +
         "<p>" + d.jenis + " • " + d.jumlah + " liter • Rp " +
         Number(d.harga).toLocaleString("id-ID") + "</p>" +
-        "<button class='btn danger sm' data-del='" + d.id + "' data-store='bbm'>🗑️ Hapus</button></div>"
+        "<button class='btn sm edit' data-edit='" + d.id + "' data-store='bbm'>✏️ Edit</button> <button class='btn danger sm' data-del='" + d.id + "' data-store='bbm'>🗑️ Hapus</button></div>"
       ).join("");
     }
     if (log.length > 0) {
@@ -52,7 +52,7 @@ const Perbekalan = {
         "<div class='log-item'><b>" + formatTanggal(d.tanggal) + "</b>" +
         "<p>" + d.barang + " • " + d.jumlah + " • Rp " +
         Number(d.harga).toLocaleString("id-ID") + "</p>" +
-        "<button class='btn danger sm' data-del='" + d.id + "' data-store='logistik'>🗑️ Hapus</button></div>"
+        "<button class='btn sm edit' data-edit='" + d.id + "' data-store='logistik'>✏️ Edit</button> <button class='btn danger sm' data-del='" + d.id + "' data-store='logistik'>🗑️ Hapus</button></div>"
       ).join("");
     }
     el.innerHTML = html;

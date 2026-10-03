@@ -47,7 +47,7 @@ const Kolekting = {
       "<div class='log-item'><b>" + formatTanggal(d.tanggal) + "</b>" +
       "<p>📦 Kirim " + d.totalTon + " ton ke " + d.tujuan + "</p>" +
       "<p>🐟: " + d.ikan.join(", ") + "</p>" +
-      "<button class='btn danger sm' data-del='" + d.id + "' data-store='kolekting'>🗑️ Hapus</button></div>"
+      "<button class='btn sm edit' data-edit='" + d.id + "' data-store='kolekting'>✏️ Edit</button> <button class='btn danger sm' data-del='" + d.id + "' data-store='kolekting'>🗑️ Hapus</button></div>"
     ).join("");
     pasangHapus(el);
   }

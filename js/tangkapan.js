@@ -67,12 +67,13 @@ function renderTangkapan() {
     "<div class='log-item'><b>" + formatTanggal(d.tanggal) + "</b>" +
     "<p>⏱️ Operasi: " + d.jamOperasi + " jam • 🐟 " + d.ton + " ton • 🪣 " + d.serok + " serok</p>" +
     "<p>🍖: " + d.ikan.join(", ") + "</p>" +
-    "<button class='btn danger sm' data-del='" + d.id + "' data-store='tangkapan'>🗑️ Hapus</button></div>"
+    "<button class='btn sm edit' data-edit='" + d.id + "' data-store='tangkapan'>✏️ Edit</button> <button class='btn danger sm' data-del='" + d.id + "' data-store='tangkapan'>🗑️ Hapus</button></div>"
   ).join("");
   pasangHapus(el);
 }
 
 function pasangHapus(el) {
+  el.querySelectorAll("[data-edit]").forEach((btn) => btn.addEventListener("click", () => editCatatan(btn.dataset.store, btn.dataset.edit)));
   el.querySelectorAll("[data-del]").forEach((btn) => {
     btn.addEventListener("click", () => {
       if (confirm("Hapus catatan ini?")) {
@@ -81,6 +82,16 @@ function pasangHapus(el) {
       }
     });
   });
+}
+
+function editCatatan(store, id) {
+  const data = Store.load(store); const item = data.find((x) => x.id === id); if (!item) return;
+  if (store === "tangkapan") { item.jamOperasi = prompt("Operasi (jam):", item.jamOperasi) || item.jamOperasi; item.ton = prompt("Total ton:", item.ton) || item.ton; item.serok = prompt("Jumlah serok:", item.serok) || item.serok; item.ikan = (prompt("Jenis ikan, pisahkan koma:", item.ikan.join(", ")) || item.ikan.join(", ")).split(",").map((x) => x.trim()).filter(Boolean); }
+  if (store === "kolekting") { item.totalTon = prompt("Total kirim (ton):", item.totalTon) || item.totalTon; item.tujuan = prompt("Tujuan/penerima:", item.tujuan) || item.tujuan; item.ikan = (prompt("Jenis ikan, pisahkan koma:", item.ikan.join(", ")) || item.ikan.join(", ")).split(",").map((x) => x.trim()).filter(Boolean); }
+  if (store === "bbm") { item.jenis = prompt("Jenis BBM:", item.jenis) || item.jenis; item.jumlah = prompt("Jumlah liter:", item.jumlah) || item.jumlah; item.harga = prompt("Harga total:", item.harga) || item.harga; }
+  if (store === "logistik") { item.barang = prompt("Nama barang:", item.barang) || item.barang; item.jumlah = prompt("Jumlah:", item.jumlah) || item.jumlah; item.harga = prompt("Harga total:", item.harga) || item.harga; }
+  if (store === "kru") { item.nama = prompt("Nama kru:", item.nama) || item.nama; item.jabatan = prompt("Jabatan kru:", item.jabatan) || item.jabatan; item.hp = prompt("No. HP:", item.hp) || item.hp; }
+  Store.save(store, data); renderSemuaList(); Kru.render(); alert("✅ Catatan diperbarui.");
 }
 
 function renderSemuaList() {
