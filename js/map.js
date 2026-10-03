@@ -68,12 +68,12 @@ const MapApp = {
     }).catch(() => { el.textContent = "Gagal mengambil kedalaman. Coba lagi saat online."; });
   },
   deteksiKarang(lat, lon) {
-    const el = document.getElementById("reefStatus"); el.textContent = "Memeriksa karang/marka laut sekitar 2 km...";
-    const q = "[out:json][timeout:12];(nwr[\"natural\"=\"reef\"](around:2000," + lat + "," + lon + ");nwr[\"seamark:type\"=\"reef\"](around:2000," + lat + "," + lon + "););out center;";
+    const el = document.getElementById("reefStatus"); el.textContent = "Memeriksa karang laut di bawah/sekitar kapal (radius 100 m)...";
+    const q = "[out:json][timeout:12];(nwr[\"natural\"=\"reef\"](around:100," + lat + "," + lon + ");nwr[\"seamark:type\"=\"reef\"](around:100," + lat + "," + lon + "););out center;";
     fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q)).then((r) => r.json()).then((d) => {
       this.reefMarkers.forEach((m) => this.map.removeLayer(m)); this.reefMarkers = [];
-      (d.elements || []).forEach((x) => { const p = x.lat ? [x.lat, x.lon] : [x.center.lat, x.center.lon]; const m = L.circleMarker(p, { radius: 8, color: "#ef476f", fillColor: "#ef476f", fillOpacity: .8 }).addTo(this.map).bindPopup("⚠️ Karang/marka laut terpetakan<br>" + (x.tags && (x.tags.name || x.tags.description) || "Data OpenStreetMap")); this.reefMarkers.push(m); });
-      el.textContent = this.reefMarkers.length ? "⚠️ " + this.reefMarkers.length + " titik karang/marka terpetakan di sekitar lokasi" : "✅ Tidak ada karang yang terpetakan dalam radius 2 km (bukan berarti bebas karang).";
+      (d.elements || []).forEach((x) => { const p = x.lat ? [x.lat, x.lon] : [x.center.lat, x.center.lon]; const m = L.circleMarker(p, { radius: 9, color: "#ef476f", fillColor: "#ef476f", fillOpacity: .85 }).addTo(this.map).bindPopup("⚠️ Karang Laut terpetakan dekat kapal<br>" + (x.tags && (x.tags.name || x.tags.description) || "Data OpenStreetMap")); this.reefMarkers.push(m); });
+      el.textContent = this.reefMarkers.length ? "⚠️ TERDETEKSI KARANG LAUT dalam radius 100 m dari kapal — jangan jadikan hasil ini satu-satunya alat navigasi." : "✅ Tidak ada karang laut yang terpetakan dalam radius 100 m dari kapal. Hasil kosong bukan jaminan bebas karang; gunakan sonar/peta resmi.";
     }).catch(() => { el.textContent = "Deteksi karang butuh internet. Aktifkan layer OpenSeaMap untuk marka laut."; });
   }
 };
