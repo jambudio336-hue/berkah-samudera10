@@ -87,6 +87,7 @@
     <div class="kpi"><span>CATATAN</span><b id="kpiRecords">0</b><small>total operasi</small></div>
     <div class="kpi"><span>JARINGAN</span><b id="kpiSync">OFFLINE</b><small id="kpiSyncSub">mode aman</small></div>
   </div>
+  <div class="card notification-center"><div class="section-head"><div><span class="eyebrow">PUSAT INFORMASI</span><h3>🔔 Notifikasi Resmi</h3></div><span class="live-dot" id="notificationStatus">Memeriksa...</span></div><p class="muted">Pembaruan hanya dari sumber resmi BMKG yang dapat diverifikasi. Tidak ada berita buatan.</p><div id="notifList"></div><button class="btn sm" data-go="pengaturan">⚙️ Kelola notifikasi</button></div>
   <div class="card quick-card">
     <div class="section-head"><div><span class="eyebrow">PUSAT OPERASI</span><h3>⚓ Akses Cepat</h3></div><span class="live-dot">● LIVE</span></div>
     <p class="quick-label">Navigasi & kondisi laut</p>
@@ -242,6 +243,7 @@
 <section id="page-pengaturan" class="page">
   <div class="card hero settings-hero"><span class="eyebrow">KAPAL ANDA • SAMUDERA10</span><h2>⚙️ Pengaturan Operasi</h2><p class="hero-sub">Atur identitas kapal, sinkronisasi online, dan tampilan navigasi.</p></div>
   <div class="card"><h3>🚢 Identitas Kapal</h3><label>Nama kapal</label><input id="settingVesselName" type="text" placeholder="Contoh: Berkah Samudera 10"><label>ID kapal (untuk sinkronisasi)</label><input id="settingVesselId" type="text" placeholder="kapal-utama"><button class="btn primary" id="btnSaveSettings">💾 Simpan pengaturan</button></div>
+  <div class="card notification-settings"><h3>🔔 Notifikasi Berita Resmi</h3><p class="muted">Aktifkan izin notifikasi Android. Aplikasi memeriksa sumber resmi saat online dan memberi notifikasi hanya jika data berubah.</p><label class="switch-row"><span>Peringatan BMKG Maritim</span><input id="settingNotifMaritim" type="checkbox" checked></label><label class="switch-row"><span>Gempa terbaru BMKG</span><input id="settingNotifGempa" type="checkbox" checked></label><div class="row"><button class="btn primary-inline" id="btnEnableNotifications">🔔 Aktifkan notifikasi</button><button class="btn" id="btnCheckNotifications">🔄 Cek sekarang</button></div><p class="muted" id="notificationSettingsNote">Pemeriksaan otomatis setiap 10 menit saat aplikasi online.</p></div>
   <div class="card"><h3>📡 Sinkronisasi Full-Stack</h3><p class="muted">Masukkan URL server WebSocket backend untuk berbagi posisi kapal secara real-time.</p><label>URL backend API</label><input id="settingApi" type="url" placeholder="https://domain-anda.com"><div class="row"><button class="btn" id="btnTestApi">🔌 Tes koneksi</button><span class="chip" id="settingApiStatus">Belum dites</span></div></div>
   <div class="card"><h3>🧭 Navigasi</h3><label class="switch-row"><span>Ikuti posisi kapal otomatis</span><input id="settingAutoCenter" type="checkbox" checked></label><label class="switch-row"><span>Tampilkan jalur perjalanan</span><input id="settingShowTrack" type="checkbox" checked></label><button class="btn" id="btnClearTrack">🧹 Bersihkan jalur perjalanan</button><button class="btn" id="btnRefreshData">🔄 Segarkan cuaca & peta</button></div>
   <div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
@@ -275,6 +277,7 @@
 <script src="js/storage.js"></script>
 <script src="js/map.js"></script>
 <script src="js/live-sync.js"></script>
+<script src="js/notifications.js"></script>
 <script src="js/weather.js"></script>
 <script src="js/tangkapan.js"></script>
 <script src="js/kolekting.js"></script>

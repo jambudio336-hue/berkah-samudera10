@@ -8,6 +8,7 @@ const App = {
     App.onlineStatus();
     App.quoteDashboard();
     App.settings();
+    if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
     App.quickActions();
     App.dashboardStats();
     setInterval(App.dashboardStats, 5000);

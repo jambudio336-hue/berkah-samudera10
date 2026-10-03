@@ -74,3 +74,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🧭 Router peta dengan titik tujuan, jarak NM, kecepatan kapal, dan estimasi tiba lengkap hari/tanggal/jam/detik.
 - 🪸 Overlay objek bahaya terpetakan: karang, terumbu, batu, dan kapal karam.
 - 🌧️ Overlay radar hujan, arah angin, dan indikasi badai lokal dari data cuaca online.
+
+- 🔔 Notifikasi resmi BMKG dengan izin Android, polling 10 menit saat online, deduplikasi, baseline awal, dan riwayat lokal anti-hoaks.

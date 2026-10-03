@@ -293,3 +293,11 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .hazard-marker, .wind-marker { background:rgba(6,26,51,.88); border:1px solid #ffb703; border-radius:50%; text-align:center; line-height:28px; font-size:18px; }
 .wind-marker { color:#79c8ff; border-color:#06d6a0; font-size:24px; }
 @media (max-width:420px) { .route-inputs { grid-template-columns:1fr; } }
+
+.notification-center, .notification-settings { border-color:#2f79c9; }
+.notification-item { display:flex; flex-direction:column; gap:3px; padding:9px 11px; margin:7px 0; border-left:3px solid var(--accent); border-radius:8px; background:rgba(5,25,52,.65); font-size:.78rem; }
+.notification-item b { color:#79c8ff; font-size:.65rem; text-transform:uppercase; letter-spacing:.6px; }
+.notification-item strong { color:var(--text); }
+.notification-item span { color:var(--muted); line-height:1.35; }
+.notification-settings .switch-row { margin-top:8px; }
+.notification-settings .btn { margin-top:10px; }
