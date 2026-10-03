@@ -1,7 +1,7 @@
-const CACHE = "berkah-samudera10-v3";
+const CACHE = "berkah-samudera10-v4";
 const SHELL = ["./", "./index.html", "./css/style.css", "./manifest.json",
   "./js/storage.js", "./js/map.js", "./js/live-sync.js", "./icon.svg", "./logo-berkahsamudera.svg", "./js/weather.js", "./js/tangkapan.js",
-  "./js/kolekting.js", "./js/perbekalan.js", "./js/kru.js", "./js/app.js",
+  "./js/kolekting.js", "./js/perbekalan.js", "./js/kru.js", "./js/auth.js", "./js/story.js", "./js/supabase-sync.js", "./js/notifications.js", "./js/prayer.js", "./js/quran.js", "./js/app.js",
   "./file_000000000fa48211b2c09fa64b21f357.png",
   "./490719828_1789293110615125.jpg"];
 

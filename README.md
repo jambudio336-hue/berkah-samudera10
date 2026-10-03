@@ -1,102 +1,95 @@
-# 🌊 Berkah Samudera10
+<p align="center"><img src="assets/berkah-samudera-animated.svg" alt="Berkah Samudera10" width="100%"></p>
 
-Aplikasi navigasi & manajemen kapal untuk **nelayan Indonesia**. Dibuat dengan modal **0 rupiah**, **tanpa backend**, **tanpa server**, dan **tanpa API key**.
+<h1 align="center">Berkah Samudera10</h1>
+<p align="center"><b>Navigasi laut, operasi kapal, komunitas nelayan, dan informasi maritim dalam satu APK.</b></p>
 
-## ✨ Fitur
-- 🎬 Splash screen video intro full-screen dengan audio (tanpa tombol kontrol, tidak bisa di-skip)
-- 🖼️ Latar belakang aplikasi bergambar
-- 🗺️ Peta laut real-time dengan GPS/GNSS, jejak perjalanan, layer satelit, GEBCO bathymetry, dan OpenSeaMap
-- 📍 Bujur & lintang real-time posisi kapal
-- 🧭 Kompas digital
-- 🌊 Perkiraan kedalaman/elevasi titik + overlay bathymetry GEBCO
-- 🌤️ Cuaca & ombak real-time (Open-Meteo Weather + Marine API)
-- ⚠️ Peringatan cuaca ekstrem / badai otomatis
-- 🪸 Deteksi karang terpetakan via OpenStreetMap Overpass (indikatif, bukan peta navigasi resmi)
-- 🔌 Backend server/server.js untuk sinkronisasi telemetry WebSocket multi-perangkat
-- 📰 Berita & data gempa BMKG
-- 🔄 Offline & Online (Service Worker + cache peta + cache video intro)
-- 🐟 Catatan hasil tangkapan (jam operasi, ton, serok, 14 jenis ikan)
-- 📦 Catatan kolekting/pengiriman dengan quotes berganti otomatis
-- ⛽ Catatan perbekalan, logistik & bahan bakar kapal
-- 👥 Database kru (Captain, KKM, ABK Biasa, Juru Batu, Tukang Es, Tukang Rish, Gidang, Apit, Koki, Wakil, Juru Arus, Juru Lampu)
-- 📋 Riwayat semua catatan tersimpan otomatis di localStorage
-- 🕐 Tanggal, jam & waktu real-time
+<p align="center">
+  <a href="https://github.com/jambudio336-hue/berkah-samudera10/releases/latest"><img src="https://img.shields.io/github/v/release/jambudio336-hue/berkah-samudera10?style=for-the-badge&color=0b6e99" alt="Release"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/status-release%20ready-d6a83a?style=for-the-badge" alt="Release ready"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1f8b4c?style=for-the-badge" alt="MIT license"></a>
+</p>
 
-## 🚀 Cara Pakai
-1. Buka via GitHub Pages (Settings → Pages → deploy otomatis via Actions)
-2. Di HP, buka Chrome → menu → **Add to Home Screen** → jadinya seperti APK
-3. Untuk APK asli: build dengan [PWABuilder](https://www.pwabuilder.com) — gratis
+> **Disponsori by.m4zk1pl4y** — dibuat untuk membantu nelayan dan pelaut Indonesia. Banner animasi di atas menampilkan kapal, ombak, dan identitas aplikasi.
 
-## 🔧 Teknologi
-HTML5, CSS3, Vanilla JS, Leaflet, Open-Meteo, OpenStreetMap, BMKG, Service Worker.
+## Download APK
 
-## 📄 Lisensi
-MIT — lihat [LICENSE](LICENSE)
+[**Download APK Release Terbaru**](https://github.com/jambudio336-hue/berkah-samudera10/releases/latest)
 
-## 🧱 Full-stack dan build APK
+Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera10/releases) dan pilih asset `Berkah-Samudera10-release.apk`.
 
-Frontend dibungkus menjadi APK native memakai Capacitor. Seluruh data pengguna disimpan lokal di HP dengan localStorage dan jadwal notifikasi Android; backend tidak diperlukan untuk memakai aplikasi.
+## Fitur utama
 
-### Catatan akurasi
+### Navigasi dan data laut
+- GPS/GNSS HP dengan lat/lon, akurasi, heading, rute, dan kecepatan knot.
+- Peta global Leaflet dengan mode standar, satelit, topografi, medan, gelap, nautika, bathymetry GEBCO, dan mode 3D visual.
+- Router titik saat ini ke tujuan dengan jarak, kecepatan, dan estimasi tiba.
+- Kedalaman GEBCO indikatif, objek karang/terumbu/batu/kapal karam dari data publik, serta peringatan akurasi untuk keselamatan.
+- Cuaca laut, angin, ombak, hujan, radar, dan indikasi badai.
+- Kompas 3D dengan sensor perangkat dan fallback heading GPS.
+- Panel Windy global dan berita/peringatan maritim BMKG.
 
-- Posisi “dari satelit” berasal dari GNSS perangkat; aplikasi tidak mengambil koordinat dari citra satelit.
-- Layer satelit memakai Esri World Imagery. Bathymetry memakai GEBCO; kedalaman titik adalah perkiraan dan harus diverifikasi dengan peta navigasi resmi/alat sounder.
-- Deteksi karang hanya menemukan objek yang sudah dipetakan publik di sekitar titik; hasil kosong bukan jaminan bebas karang.
-- Build release APK membutuhkan Android SDK/Gradle dan signing keystore.
+### Komunitas online Supabase
+- Login email OTP, SMS OTP, channel WhatsApp OTP, dan Google OAuth.
+- Profil Nahkoda/ABK, bio, foto profil URL, nama kapal, dan muatan.
+- Pencarian pengguna berdasarkan nama akun atau nama kapal.
+- Follow/unfollow, daftar pengikut, jumlah followers/following, dan lokasi teman yang saling follow.
+- Batas maksimal **5.000 pengikut per akun** yang ditegakkan di aplikasi dan database.
+- Supabase Realtime untuk posisi, notifikasi, data operasi, story, dan view story.
 
-- 📡 Integrasi GPS/GNSS Android dengan permission lokasi presisi, akurasi, kecepatan, heading, dan rute tersimpan lokal hingga 500 titik. Pelacakan berjalan real-time saat aplikasi aktif di layar.
+### Story 24 jam
+- Story teks, foto, dan video maksimal **60 detik**.
+- Story hanya muncul pada pengguna yang saling follow.
+- Media disimpan di bucket privat Supabase Storage.
+- Riwayat tontonan mencatat akun yang menonton story.
 
-- 🪸 Deteksi “Karang Laut” pada radius 100 m dari posisi kapal menggunakan data karang terpetakan publik; bukan pengganti sonar atau peta navigasi resmi.
+### Operasi kapal dan spiritual
+- Catatan tangkapan dengan pilihan jenis ikan.
+- Catatan kolekting, BBM, logistik, dan kru dengan riwayat edit/hapus.
+- Jadwal sholat mengikuti zona waktu lokasi, notifikasi, quotes Islami/pelaut, dan suara adzan.
+- Al-Qur’an online 114 surat dengan Arab, latin, terjemahan, dan audio.
+- QRIS donasi di Pengaturan serta ucapan terima kasih dan sponsor.
 
-- 🧭 Kompas 3D nautika aktif dari sensor orientasi perangkat, dengan fallback heading GPS saat kapal bergerak.
+## Supabase dan OTP
 
-- 🚢 Marker kapal bergerak mengikuti GPS, dengan kecepatan knot/km-jam, suhu, arah angin, tinggi/periode/arah ombak, dan area koordinat kondisi laut di sekitar kapal.
+Project sudah menggunakan Supabase. APK **tidak meminta pengguna membuat akun aplikasi terpisah**, tetapi pengguna yang ingin memakai profil, follow, lokasi teman, dan Story perlu login melalui Supabase Auth.
 
-- 🗺️ Pilihan peta: standar, satelit realistis, topografi, medan, gelap, bathymetry GEBCO, marka/karang OpenSeaMap, serta mode 3D visual.
+Provider yang perlu diaktifkan di Supabase Dashboard:
 
-- 📰 Panel berita/peringatan BMKG Maritim khusus perairan, gelombang, dan bulletin pelayaran, dengan refresh manual serta otomatis setiap 15 menit.
+1. **Email Provider** untuk Email OTP. Template email harus memakai `{{ .Token }}` jika ingin kode OTP, bukan hanya magic link.
+2. **Phone/SMS Provider** untuk OTP SMS.
+3. **Twilio WhatsApp** untuk tombol OTP WhatsApp. WhatsApp tidak dapat mengirim OTP tanpa sender/provider WhatsApp yang valid.
+4. **Google OAuth** dengan Client ID, Client Secret, dan redirect URL project.
 
-- 🛳️ Ikon launcher APK dan PWA diganti dengan artwork kapal Berkah Samudera dari pengguna.
+## Akurasi dan keselamatan
 
-- 🧩 Dashboard profesional dengan KPI GPS, rute, jumlah catatan, status jaringan, serta tombol operasi terkelompok.
+- Koordinat berasal dari GNSS HP, bukan GPS satelit khusus atau citra satelit.
+- Kedalaman GEBCO dan deteksi karang bersifat indikatif; bukan pengganti sonar, peta navigasi resmi, atau keputusan keselamatan pelayaran.
+- Hasil kosong pada deteksi karang tidak berarti area bebas karang.
+- Data online memerlukan internet; cache lokal tetap digunakan untuk data operasi dan tampilan yang sudah tersimpan.
 
-- 🌬️ Embed resmi Windy global dengan fokus koordinat GPS HP, layer angin/ombak, animasi waktu, tekanan, hujan, dan prakiraan ECMWF.
+## Build dari source
 
-- 🧭 Kompas ditingkatkan dengan sensor absolut/magnetometer, label 16 arah mata angin, dan heading GPS sebagai fallback.
+```bash
+npm install
+npx cap sync android
+./build-release.sh
+```
 
-- 📱 Layout adaptif portrait dan landscape, peta membesar saat layar melebar, serta toolbar peta responsif.
+APK release berada di `Berkah-Samudera10-release.apk`. Build membutuhkan Android SDK, Java 21, Gradle wrapper, dan keystore release.
 
-- 🪸 Deteksi karang otomatis setiap GPS bergerak minimal 100 m atau setiap 60 detik, dengan status di dashboard.
-- 🌊 Kedalaman otomatis memakai query GEBCO 2020 global dan diperbarui saat posisi berubah.
+## Struktur singkat
 
-- 💝 Menu Pengaturan berisi QRIS donasi tanpa menampilkan nominal, penjelasan aplikasi, ucapan terima kasih, dan sponsor by.m4zk1pl4y.
+- `index.html` — UI dan halaman aplikasi.
+- `js/map.js` — peta, GPS, rute, overlay, dan marker kapal.
+- `js/supabase-sync.js` — Realtime, posisi, operasi, dan cache online.
+- `js/auth.js` — Auth, profil, pencarian, follow, follower, dan lokasi teman.
+- `js/story.js` — Story, upload media, viewer history, dan feed mutual follow.
+- `android/` — wrapper Capacitor Android.
+- `CHANGELOG.md` — riwayat perubahan release.
+- `LICENSE` — lisensi MIT.
 
-- 🧭 Router peta dengan titik tujuan, jarak NM, kecepatan kapal, dan estimasi tiba lengkap hari/tanggal/jam/detik.
-- 🪸 Overlay objek bahaya terpetakan: karang, terumbu, batu, dan kapal karam.
-- 🌧️ Overlay radar hujan, arah angin, dan indikasi badai lokal dari data cuaca online.
+## Lisensi dan atribusi
 
-- 🔔 Notifikasi resmi BMKG dengan izin Android, polling 10 menit saat online, deduplikasi, baseline awal, dan riwayat lokal anti-hoaks.
+Kode dirilis di bawah [MIT License](LICENSE). Data dan layanan pihak ketiga mengikuti ketentuan masing-masing penyedia: Supabase, OpenStreetMap/OpenSeaMap, GEBCO, Esri, BMKG, Open-Meteo, Aladhan, EQuran, dan Windy.
 
-- 🕌 Jadwal sholat otomatis mengikuti zona waktu koordinat GPS, dengan notifikasi Android terjadwal, pengaturan on/off, dan quotes Islami serta pelaut/nelayan.
-
-- 🕋 Jadwal sholat memakai Aladhan API endpoint bertanggal dan meta timezone koordinat, dengan notifikasi Android lokal terjadwal serta suara notifikasi bawaan perangkat.
-
-- 🔊 Audio adzan dibundel sebagai suara channel notifikasi Android; pengguna dapat mematikan suara adzan tanpa mematikan notifikasinya.
-
-- 📱 Mode local-first: tidak ada backend, akun, atau sinkronisasi server yang diperlukan; data operasi kapal tersimpan di HP pengguna.
-
-- 📴 APK kini local-first sepenuhnya: backend, akun, dan server tidak diperlukan; seluruh data operasional tersimpan di HP pengguna.
-
-- 📖 Menu Al-Qur’an online berisi 114 surat, Arab, latin, terjemahan Indonesia, pilihan enam qari, dan audio surat lengkap.
-
-- ☁️ Supabase Realtime terhubung untuk posisi kapal, data operasi, dan notifikasi; pengguna tetap tanpa akun dengan device ID anonim dan cache lokal.
-
-- ☁️ Supabase project: `berkah-samudera10` di region Singapore, dengan tabel `live_positions`, `app_records`, dan `app_notifications` serta Realtime aktif.
-
-- 🔐 Auth Supabase: email OTP, SMS OTP, opsi WhatsApp OTP jika provider WhatsApp Twilio diaktifkan, Google OAuth, profil nahkoda/ABK, follow/unfollow, dan berbagi lokasi teman.
-
-- 👤 Fitur akun: email OTP, SMS OTP, WhatsApp OTP melalui channel Supabase jika provider Twilio WhatsApp aktif, Google OAuth, profil nahkoda/ABK, follow/unfollow, dan berbagi lokasi teman.
-
-- 📸 Story 24 jam: teks, foto, video maksimal 60 detik, feed hanya untuk mutual follow, statistik pengikut/mengikuti, dan riwayat penonton story. Media memakai bucket Storage privat Supabase.
-
-- 👥 Batas follower: maksimal 5.000 pengikut per akun, divalidasi di aplikasi dan trigger database Supabase untuk mencegah race condition.
+Terima kasih sudah menggunakan **Berkah Samudera10**. Semoga nyaman, aman, dan bermanfaat untuk perjalanan laut Anda.
