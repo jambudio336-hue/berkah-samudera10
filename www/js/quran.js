@@ -2,6 +2,7 @@ const QuranApp = {
   list: [],
   detail: null,
   qari: "01",
+  autoplay: false,
   init() {
     const select = document.getElementById("quranSurah");
     const search = document.getElementById("quranSearch");
@@ -29,10 +30,11 @@ const QuranApp = {
   },
   renderList(query) {
     const el = document.getElementById("quranList"); if (!el) return; const q = String(query || "").toLowerCase();
-    el.innerHTML = QuranApp.list.filter((x) => !q || String(x.nomor).includes(q) || x.namaLatin.toLowerCase().includes(q) || x.arti.toLowerCase().includes(q)).slice(0, 30).map((x) => "<button class='quran-list-item' data-surah='" + x.nomor + "'><b>" + x.nomor + ". " + QuranApp.escape(x.namaLatin) + "</b><span>" + QuranApp.escape(x.nama) + " • " + x.jumlahAyat + " ayat • " + QuranApp.escape(x.arti) + "</span></button>").join("") || "<p class='muted'>Surat tidak ditemukan.</p>";
-    el.querySelectorAll("[data-surah]").forEach((b) => b.addEventListener("click", () => { document.getElementById("quranSurah").value = b.dataset.surah; QuranApp.load(Number(b.dataset.surah)); }));
+    el.innerHTML = QuranApp.list.filter((x) => !q || String(x.nomor).includes(q) || x.namaLatin.toLowerCase().includes(q) || x.arti.toLowerCase().includes(q)).map((x) => "<button class='quran-list-item' data-surah='" + x.nomor + "'><b>" + x.nomor + ". " + QuranApp.escape(x.namaLatin) + "</b><span>" + QuranApp.escape(x.nama) + " • " + x.jumlahAyat + " ayat • " + QuranApp.escape(x.arti) + "</span><em>▶ Baca & putar audio</em></button>").join("") || "<p class='muted'>Surat tidak ditemukan.</p>";
+    el.querySelectorAll("[data-surah]").forEach((b) => b.addEventListener("click", () => { document.getElementById("quranSurah").value = b.dataset.surah; QuranApp.load(Number(b.dataset.surah), true); }));
   },
-  async load(number) {
+  async load(number, autoplay = false) {
+    QuranApp.autoplay = autoplay;
     if (!number) return; const status = document.getElementById("quranStatus"); if (status) status.textContent = "Memuat ayat surat...";
     try {
       const r = await fetch("https://equran.id/api/v2/surat/" + number, { cache: "no-store" }); const d = await r.json(); if (!d.data || !d.data.ayat) throw new Error("invalid surah");
@@ -46,6 +48,6 @@ const QuranApp = {
     QuranApp.renderAudio(); const el = document.getElementById("quranAyat"); if (el) el.innerHTML = d.ayat.map((a) => "<article class='quran-ayat'><div class='ayat-number'>" + a.nomorAyat + "</div><p class='arabic' dir='rtl'>" + QuranApp.escape(a.teksArab) + "</p><p class='latin'><b>Latin:</b> " + QuranApp.escape(a.teksLatin) + "</p><p class='translation'><b>Artinya:</b> " + QuranApp.escape(a.teksIndonesia) + "</p></article>").join("");
     document.getElementById("quranReader").scrollIntoView({ behavior: "smooth", block: "start" });
   },
-  renderAudio() { const audio = document.getElementById("quranAudio"); const label = document.getElementById("quranAudioLabel"); if (!audio || !QuranApp.detail) return; const url = QuranApp.detail.audioFull && QuranApp.detail.audioFull[QuranApp.qari]; if (url) { audio.src = url; audio.load(); if (label) label.textContent = "Audio surat lengkap • qari " + QuranApp.qari; } },
+  renderAudio() { const audio = document.getElementById("quranAudio"); const label = document.getElementById("quranAudioLabel"); if (!audio || !QuranApp.detail) return; const url = QuranApp.detail.audioFull && QuranApp.detail.audioFull[QuranApp.qari]; if (url) { audio.src = url; audio.load(); if (label) label.textContent = "Audio " + QuranApp.detail.namaLatin + " • qari " + QuranApp.qari; if (QuranApp.autoplay) { audio.oncanplay = () => { audio.play().catch(() => {}); QuranApp.autoplay = false; }; } } },
   escape(value) { return String(value == null ? "" : value).replace(/[&<>\"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c])); }
 };

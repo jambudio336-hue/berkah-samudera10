@@ -20,6 +20,18 @@
   <div id="splashTap">📱 Ketuk untuk memulai Berkah Samudera10</div>
 </div>
 
+<div id="accessGate" class="access-gate hidden" role="dialog" aria-modal="true" aria-labelledby="accessGateTitle">
+  <div class="access-card">
+    <div class="access-emblem">⚓</div>
+    <span class="eyebrow">SELAMAT DATANG DI LAUT</span>
+    <h2 id="accessGateTitle">Berkah Samudera10</h2>
+    <p>Daftar atau masuk untuk memakai profil, follow, lokasi teman, dan Story. Anda juga dapat lanjut sebagai pengguna biasa tanpa akun.</p>
+    <button class="btn primary access-btn" id="btnGateAccount">👤 Daftar / Masuk Akun</button>
+    <button class="btn access-btn" id="btnGateGuest">🌊 Lanjut sebagai Pengguna Biasa</button>
+    <small>Data operasi lokal tetap dapat dipakai tanpa akun.</small>
+  </div>
+</div>
+
 <header class="topbar">
   <div class="brand">
     <span class="brand-icon">⚓</span>
@@ -73,7 +85,7 @@
     </div>
     <div class="card">
       <h3>🧭 Kompas</h3>
-      <div class="compass-wrap" id="compassButton" title="Ketuk untuk mengaktifkan sensor kompas"><div class="compass-dial" id="compassDial"><span class="cardinal north">N</span><span class="cardinal east">E</span><span class="cardinal south">S</span><span class="cardinal west">W</span><div class="compass-ring"></div><div id="compassNeedle">▲<span id="compassDirection">Utara</span></div></div></div>
+      <div class="compass-wrap" id="compassButton" title="Ketuk untuk mengaktifkan sensor kompas"><div class="compass-dial" id="compassDial"><div class="compass-ticks" aria-hidden="true"></div><span class="cardinal north">N</span><span class="cardinal east">E</span><span class="cardinal south">S</span><span class="cardinal west">W</span><span class="cardinal ne">NE</span><span class="cardinal se">SE</span><span class="cardinal sw">SW</span><span class="cardinal nw">NW</span><div class="compass-ring"></div><div id="compassNeedle"><i></i><span id="compassDirection">Utara</span></div><div class="compass-hub"></div></div></div>
       <p class="big center" id="dashHeading">--°</p><p class="muted center" id="compassStatus">Ketuk kompas untuk mengaktifkan sensor</p>
     </div>
     <div class="card">
@@ -111,11 +123,11 @@
   <div class="card">
     <h3>🗺️ Peta Laut Real-Time</h3>
     <div id="map"></div>
-    <div class="row map-actions"><button class="btn" id="btnGlobal">🌍 Lihat dunia</button><button class="btn" id="btnWindyFocus">🌬️ Fokus Windy ke GPS</button></div>
+    <div class="row map-actions"><button class="btn" id="btnGlobal">🌍 Lihat dunia</button><button class="btn" id="btnGoogleMaps">🗺️ Google Maps</button><button class="btn" id="btnWindyFocus">🌬️ Fokus Windy ke GPS</button></div>
     <div class="windy-panel">
       <div class="section-head"><div><span class="eyebrow">WINDY GLOBAL</span><h3>🌬️ Angin, ombak & prakiraan waktu</h3></div><a class="btn sm" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">Buka Windy ↗</a></div>
-      <p class="muted">Layer resmi Windy dengan animasi waktu. Posisi pusat mengikuti GPS HP jika izin lokasi aktif.</p>
-      <iframe id="windyFrame" title="Windy global weather map" loading="lazy" allow="fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <p class="muted">Windy resmi global dengan animasi angin, hujan, ombak, tekanan, suhu, dan prakiraan. Titik pusat otomatis mengikuti GPS HP.</p>
+      <iframe id="windyFrame" title="Windy global weather map" loading="lazy" allow="fullscreen; geolocation" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <div class="row">
       <span class="chip">Lat: <b id="mapLat">-</b></span>

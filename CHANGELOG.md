@@ -1,5 +1,19 @@
 # Changelog — Berkah Samudera10
 
+## [1.0.26] - 2026-10-04
+### Ditambahkan
+- Gerbang awal dengan pilihan Daftar/Masuk Akun atau Lanjut sebagai Pengguna Biasa.
+- Tombol Google Maps yang membuka koordinat GPS terkini tanpa API key.
+- Latar belakang APK baru dari foto yang diberikan pengguna.
+- Kompas nautika 3D dengan bezel logam, tick mark, arah diagonal, jarum dua warna, dan hub realistis.
+- Daftar Al-Qur’an menampilkan seluruh 114 surat; setiap surat dapat dibaca dan diputar audionya langsung.
+
+### Diperbaiki
+- Panel Windy dibuat responsif portrait/landscape dan menu Windy dibuka penuh di embed resmi.
+- Pusat Windy otomatis mengikuti koordinat GPS kapal.
+- Deteksi karang diperluas dari 100 m menjadi 1 km dan mencakup reef, terumbu, batu dangkal, serta kapal karam terpetakan.
+- Marker risiko di peta menampilkan jenis objek dan radius pencarian.
+
 ## [1.0.25] - 2026-10-04
 ### Ditambahkan
 - README GitHub dengan banner SVG animasi kapal dan ombak.

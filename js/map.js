@@ -20,6 +20,7 @@ const MapApp = {
     } catch (_) {}
     this.map.on("click", (e) => { this.cekKedalaman(e.latlng.lat, e.latlng.lng); this.deteksiKarang(e.latlng.lat, e.latlng.lng); const a = document.getElementById("routeLat"), b = document.getElementById("routeLon"); if (a && b) { a.value = e.latlng.lat.toFixed(6); b.value = e.latlng.lng.toFixed(6); } });
     document.getElementById("btnGlobal").addEventListener("click", () => this.map.fitWorld({ animate: true }));
+    document.getElementById("btnGoogleMaps").addEventListener("click", () => this.openGoogleMaps());
     document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
     this.updateWindy(false);
@@ -127,8 +128,12 @@ const MapApp = {
     const lat = this.lat === null ? -2.5 : this.lat, lon = this.lon === null ? 118 : this.lon;
     const now = Date.now(), changed = !this.lastWindy || Math.abs(lat - this.lastWindy.lat) > .01 || Math.abs(lon - this.lastWindy.lon) > .01;
     if (!force && (!changed || now - (this.lastWindy && this.lastWindy.time || 0) < 15000)) return;
-    const params = "lat=" + lat.toFixed(4) + "&lon=" + lon.toFixed(4) + "&detailLat=" + lat.toFixed(4) + "&detailLon=" + lon.toFixed(4) + "&zoom=" + (this.lat === null ? 3 : 8) + "&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=kt&metricTemp=%C2%B0C";
+    const params = "lat=" + lat.toFixed(4) + "&lon=" + lon.toFixed(4) + "&detailLat=" + lat.toFixed(4) + "&detailLon=" + lon.toFixed(4) + "&zoom=" + (this.lat === null ? 3 : 8) + "&level=surface&overlay=wind&product=ecmwf&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=kt&metricTemp=%C2%B0C";
     frame.src = "https://embed.windy.com/embed2.html?" + params; this.lastWindy = { lat, lon, time: now };
+  },
+  openGoogleMaps() {
+    const lat = this.lat === null ? -2.5 : this.lat, lon = this.lon === null ? 118 : this.lon;
+    window.open("https://www.google.com/maps/@" + lat.toFixed(6) + "," + lon.toFixed(6) + ",12z", "_blank", "noopener");
   },
   setPosError(msg) { document.getElementById("dashAcc").textContent = msg; document.getElementById("gpsState").textContent = "GNSS belum tersedia"; },
   clearTrack() { if (this.track) this.track.setLatLngs([]); localStorage.removeItem("bs10_track"); } ,
@@ -147,13 +152,13 @@ const MapApp = {
   deteksiKarang(lat, lon, silent) {
     const el = document.getElementById("reefStatus"); el.textContent = "Memeriksa karang laut di bawah/sekitar kapal (radius 100 m)...";
     const dash = document.getElementById("dashReef"); if (dash) dash.textContent = "Karang sekitar: sedang diperiksa...";
-    const q = "[out:json][timeout:12];(nwr[\"natural\"=\"reef\"](around:100," + lat + "," + lon + ");nwr[\"seamark:type\"=\"reef\"](around:100," + lat + "," + lon + "););out center;";
-    fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q)).then((r) => r.json()).then((d) => {
+    const q = "[out:json][timeout:25];(nwr[\"natural\"=\"reef\"](around:1000," + lat + "," + lon + ");nwr[\"seamark:type\"~\"reef|rock|wreck\"](around:1000," + lat + "," + lon + ");nwr[\"natural\"~\"bare_rock|shallow\"](around:1000," + lat + "," + lon + ");nwr[historic=wreck](around:1000," + lat + "," + lon + "););out center;";
+    fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q), { cache: "no-store" }).then((r) => r.json()).then((d) => {
       this.reefMarkers.forEach((m) => this.map.removeLayer(m)); this.reefMarkers = [];
-      (d.elements || []).forEach((x) => { const p = x.lat ? [x.lat, x.lon] : [x.center.lat, x.center.lon]; const m = L.circleMarker(p, { radius: 9, color: "#ef476f", fillColor: "#ef476f", fillOpacity: .85 }).addTo(this.map).bindPopup("⚠️ Karang Laut terpetakan dekat kapal<br>" + (x.tags && (x.tags.name || x.tags.description) || "Data OpenStreetMap")); this.reefMarkers.push(m); });
+      (d.elements || []).forEach((x) => { const p = x.lat ? [x.lat, x.lon] : [x.center.lat, x.center.lon]; const t = x.tags || {}; const label = t["seamark:type"] === "wreck" || t.historic === "wreck" ? "⚓ Kapal karam" : t.natural === "bare_rock" ? "🪨 Batu karang" : "🪸 Karang/terumbu"; const m = L.circleMarker(p, { radius: 9, color: "#ef476f", fillColor: "#ef476f", fillOpacity: .85 }).addTo(this.map).bindPopup("⚠️ " + label + " terpetakan<br>" + (t.name || t.description || "Data OpenStreetMap") + "<br><small>Radius pencarian: 1 km</small>"); this.reefMarkers.push(m); });
       const found = this.reefMarkers.length;
-      el.textContent = found ? "⚠️ TERDETEKSI KARANG LAUT dalam radius 100 m dari kapal — jangan jadikan hasil ini satu-satunya alat navigasi." : "✅ Tidak ada karang laut yang terpetakan dalam radius 100 m dari kapal. Hasil kosong bukan jaminan bebas karang; gunakan sonar/peta resmi.";
-      if (dash) dash.textContent = found ? "⚠️ Karang terpetakan dalam radius 100 m" : "✅ Tidak ada karang terpetakan dalam radius 100 m";
+      el.textContent = found ? "⚠️ TERDETEKSI " + found + " objek karang/batu/kapal karam dalam radius 1 km — jangan jadikan hasil ini satu-satunya alat navigasi." : "✅ Tidak ada objek karang yang terpetakan dalam radius 1 km. Hasil kosong bukan jaminan bebas karang; gunakan sonar/peta resmi.";
+      if (dash) dash.textContent = found ? "⚠️ " + found + " objek karang/risiko dalam radius 1 km" : "✅ Tidak ada objek karang terpetakan dalam radius 1 km";
     }).catch(() => { el.textContent = "Deteksi karang butuh internet. Aktifkan layer OpenSeaMap untuk marka laut."; if (dash) dash.textContent = "Karang sekitar: data online gagal dimuat"; });
   }
 };

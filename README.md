@@ -11,6 +11,10 @@
 
 > **Disponsori by.m4zk1pl4y** — dibuat untuk membantu nelayan dan pelaut Indonesia. Banner animasi di atas menampilkan kapal, ombak, dan identitas aplikasi.
 
+## Akses awal dan mode pengguna biasa
+
+Saat pertama kali aplikasi dibuka, pengguna dapat memilih **Daftar/Masuk Akun** untuk mengaktifkan profil, follow, lokasi teman, dan Story, atau memilih **Lanjut sebagai Pengguna Biasa** untuk memakai navigasi, cuaca, catatan, Al-Qur’an, dan fitur lokal tanpa akun.
+
 ## Download APK
 
 [**Download APK Release Terbaru**](https://github.com/jambudio336-hue/berkah-samudera10/releases/latest)
@@ -21,12 +25,12 @@ Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera1
 
 ### Navigasi dan data laut
 - GPS/GNSS HP dengan lat/lon, akurasi, heading, rute, dan kecepatan knot.
-- Peta global Leaflet dengan mode standar, satelit, topografi, medan, gelap, nautika, bathymetry GEBCO, dan mode 3D visual.
+- Peta global Leaflet dengan mode standar, satelit, topografi, medan, gelap, nautika, bathymetry GEBCO, mode 3D visual, serta tombol Google Maps yang mengikuti koordinat GPS.
 - Router titik saat ini ke tujuan dengan jarak, kecepatan, dan estimasi tiba.
-- Kedalaman GEBCO indikatif, objek karang/terumbu/batu/kapal karam dari data publik, serta peringatan akurasi untuk keselamatan.
+- Kedalaman GEBCO indikatif, objek karang/terumbu/batu/kapal karam dari data publik dalam radius hingga 1 km, serta peringatan akurasi untuk keselamatan.
 - Cuaca laut, angin, ombak, hujan, radar, dan indikasi badai.
 - Kompas 3D dengan sensor perangkat dan fallback heading GPS.
-- Panel Windy global dan berita/peringatan maritim BMKG.
+- Panel Windy global responsif dengan menu embed resmi, pusat GPS otomatis, angin, ombak, hujan, tekanan, suhu, dan prakiraan waktu.
 
 ### Komunitas online Supabase
 - Login email OTP, SMS OTP, channel WhatsApp OTP, dan Google OAuth.
@@ -38,6 +42,7 @@ Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera1
 
 ### Story 24 jam
 - Story teks, foto, dan video maksimal **60 detik**.
+- Menu Al-Qur’an menampilkan seluruh 114 surat; tiap surat memuat Arab, latin, arti, dan tombol putar audio langsung.
 - Story hanya muncul pada pengguna yang saling follow.
 - Media disimpan di bucket privat Supabase Storage.
 - Riwayat tontonan mencatat akun yang menonton story.

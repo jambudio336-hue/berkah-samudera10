@@ -8,6 +8,7 @@ const App = {
     App.onlineStatus();
     App.quoteDashboard();
     App.settings();
+    App.accessGate();
     if (typeof SupabaseSync !== "undefined") SupabaseSync.init();
     if (typeof SupabaseAuth !== "undefined") SupabaseAuth.init();
     if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
@@ -40,7 +41,7 @@ const App = {
     video.addEventListener("ended", () => {
       splash.style.transition = "opacity .6s";
       splash.style.opacity = "0";
-      setTimeout(() => splash.remove(), 650);
+      setTimeout(() => { splash.remove(); App.showAccessGate(); }, 650);
     });
 
     // Coba autoplay penuh dengan suara
@@ -51,6 +52,22 @@ const App = {
       tap.addEventListener("click", mulai);
       video.addEventListener("click", mulai);
     });
+  },
+
+  accessGate() {
+    document.getElementById("btnGateAccount")?.addEventListener("click", () => {
+      localStorage.removeItem("bs10_guest_mode");
+      document.getElementById("accessGate")?.classList.add("hidden");
+      document.querySelector('.tab[data-page="akun"]')?.click();
+    });
+    document.getElementById("btnGateGuest")?.addEventListener("click", () => {
+      localStorage.setItem("bs10_guest_mode", "true");
+      document.getElementById("accessGate")?.classList.add("hidden");
+    });
+  },
+  showAccessGate() {
+    const gate = document.getElementById("accessGate");
+    if (gate && !localStorage.getItem("bs10_guest_mode") && !(typeof SupabaseAuth !== "undefined" && SupabaseAuth.user)) gate.classList.remove("hidden");
   },
 
   jamRealtime() {

@@ -17,7 +17,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: linear-gradient(rgba(3,18,38,.38), rgba(3,18,38,.55)), url("../file_000000000fa48211b2c09fa64b21f357.png");
+  background-image: linear-gradient(rgba(3,18,38,.38), rgba(3,18,38,.55)), url("../background-m4zk1pl4y.png");
   background-position: center; background-size: cover; background-repeat: no-repeat;
   opacity: 0.62;
   z-index: -1;
@@ -347,3 +347,18 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .story-author { display:flex; justify-content:space-between; gap:10px; color:#ffd166; } .story-card img, .story-card video { display:block; max-width:100%; max-height:440px; margin:10px auto; border-radius:10px; }
 .story-text { white-space:pre-wrap; font-size:1.15rem; line-height:1.55; padding:16px 6px; } .story-viewers { color:#a9c9e8; font-size:.78rem; }
 @media (max-width:520px) { .profile-stats { align-items:stretch; flex-wrap:wrap; } }
+
+/* Gerbang akses awal */
+.access-gate{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:20px;background:rgba(2,11,25,.88);backdrop-filter:blur(12px)}
+.access-card{width:min(100%,420px);padding:30px 24px;text-align:center;border:1px solid #d39a22;border-radius:24px;background:linear-gradient(150deg,rgba(13,50,91,.98),rgba(3,20,42,.98));box-shadow:0 22px 70px rgba(0,0,0,.55),inset 0 0 35px rgba(255,183,3,.08)}
+.access-emblem{display:grid;place-items:center;width:72px;height:72px;margin:0 auto 12px;border-radius:50%;color:#061a33;background:linear-gradient(145deg,#ffe39a,#c88a16);font-size:2.2rem;box-shadow:0 0 0 5px rgba(255,209,102,.15),0 8px 24px rgba(0,0,0,.35)}
+.access-card h2{color:#ffd166;margin:8px 0;font-size:1.55rem}.access-card p{color:#c9def2;line-height:1.55;font-size:.9rem}.access-card small{display:block;margin-top:14px;color:#8eb4d5}.access-btn{width:100%;margin-top:10px;min-height:46px}
+/* Windy penuh dan tidak terpotong */
+.windy-panel{overflow:hidden}.windy-panel .section-head{align-items:flex-start}.windy-panel .muted{line-height:1.45}
+#windyFrame{width:100%;height:clamp(430px,62vh,680px);min-height:380px;border:1px solid #3b89c9;border-radius:12px;background:#061a33}
+@media (orientation:landscape) and (max-height:720px){#windyFrame{height:clamp(360px,72vh,620px)}}
+@media (max-width:480px){#windyFrame{height:clamp(430px,68vh,620px);min-height:430px}.windy-panel .section-head{flex-direction:column}}
+/* Kompas nautika 3D */
+.compass-wrap{perspective:900px;padding:8px;cursor:pointer}.compass-dial{position:relative;width:min(78vw,270px);aspect-ratio:1;margin:auto;border-radius:50%;transform-style:preserve-3d;background:radial-gradient(circle at 35% 28%,#496783 0 4%,#142e49 42%,#07182c 72%);border:10px solid #b8801d;box-shadow:inset 0 0 0 4px #f4d37a,inset 0 0 25px #020b16,0 12px 28px rgba(0,0,0,.45),0 0 0 5px rgba(255,209,102,.12);overflow:hidden}.compass-dial::after{content:"";position:absolute;inset:13%;border-radius:50%;border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 0 22px rgba(0,0,0,.35)}.compass-ticks{position:absolute;inset:8%;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.9) 0deg 1deg,transparent 1deg 5deg);-webkit-mask:radial-gradient(circle,transparent 0 76%,#000 77% 80%,transparent 81%);mask:radial-gradient(circle,transparent 0 76%,#000 77% 80%,transparent 81%)}.compass-ring{position:absolute;inset:21%;border-radius:50%;border:1px dashed rgba(255,209,102,.45)}.compass-dial .cardinal,.compass-dial .ne,.compass-dial .se,.compass-dial .sw,.compass-dial .nw{position:absolute;z-index:3;color:#f7f9ff;font-weight:900;font-size:.9rem;text-shadow:0 2px 4px #000}.compass-dial .north{top:8%;left:50%;transform:translateX(-50%);color:#ff5c5c}.compass-dial .east{right:8%;top:50%;transform:translateY(-50%)}.compass-dial .south{bottom:8%;left:50%;transform:translateX(-50%)}.compass-dial .west{left:8%;top:50%;transform:translateY(-50%)}.compass-dial .ne{right:22%;top:22%}.compass-dial .se{right:22%;bottom:22%}.compass-dial .sw{left:22%;bottom:22%}.compass-dial .nw{left:22%;top:22%}.compass-dial #compassNeedle{position:absolute;z-index:5;left:50%;top:50%;width:0;height:0;transform-origin:50% 50%;color:#fff;font-size:.6rem}.compass-dial #compassNeedle i{position:absolute;left:-6px;top:-88px;width:12px;height:88px;clip-path:polygon(50% 0,100% 100%,50% 86%,0 100%);background:linear-gradient(#f34f5f 0 50%,#f4f7ff 50% 100%);filter:drop-shadow(0 2px 2px #000)}.compass-dial #compassNeedle span{position:absolute;left:-28px;top:10px;width:56px;text-align:center;color:#fff;font-size:.55rem;white-space:nowrap;transform:rotate(0deg)}.compass-hub{position:absolute;z-index:7;left:50%;top:50%;width:22px;height:22px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#f3bd42 35%,#85520f 100%);border:2px solid #fff;box-shadow:0 2px 5px #000}
+
+.quran-list-item em{display:block;margin-top:5px;color:#ffd166;font-size:.68rem;font-style:normal;font-weight:700}
