@@ -34,11 +34,11 @@ const Perbekalan = {
     const bbm = Store.load("bbm");
     const log = Store.load("logistik");
     const el = document.getElementById("listPerbekalan");
-    let html = "";
     if (bbm.length === 0 && log.length === 0) {
       el.innerHTML = "<p class='muted'>Belum ada catatan perbekalan.</p>";
       return;
     }
+    let html = "";
     if (bbm.length > 0) {
       html += "<h4>⛽ Bahan Bakar</h4>" + bbm.map((d) =>
         "<div class='log-item'><b>" + formatTanggal(d.tanggal) + "</b>" +
