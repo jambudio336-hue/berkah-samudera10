@@ -98,3 +98,5 @@ Frontend dibungkus menjadi APK native memakai Capacitor. Seluruh data pengguna d
 - 👤 Fitur akun: email OTP, SMS OTP, WhatsApp OTP melalui channel Supabase jika provider Twilio WhatsApp aktif, Google OAuth, profil nahkoda/ABK, follow/unfollow, dan berbagi lokasi teman.
 
 - 📸 Story 24 jam: teks, foto, video maksimal 60 detik, feed hanya untuk mutual follow, statistik pengikut/mengikuti, dan riwayat penonton story. Media memakai bucket Storage privat Supabase.
+
+- 👥 Batas follower: maksimal 5.000 pengikut per akun, divalidasi di aplikasi dan trigger database Supabase untuk mencegah race condition.
