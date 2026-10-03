@@ -18,7 +18,7 @@ Aplikasi navigasi & manajemen kapal untuk **nelayan Indonesia**. Dibuat dengan m
 - 🐟 Catatan hasil tangkapan (jam operasi, ton, serok, 14 jenis ikan)
 - 📦 Catatan kolekting/pengiriman dengan quotes berganti otomatis
 - ⛽ Catatan perbekalan, logistik & bahan bakar kapal
-- 👥 Database kru (Captain, Menteri/Matrose, ABK)
+- 👥 Database kru (Captain, KKM, ABK Biasa, Juru Batu, Tukang Es, Tukang Rish, Gidang, Apit, Koki, Wakil, Juru Arus, Juru Lampu)
 - 📋 Riwayat semua catatan tersimpan otomatis di localStorage
 - 🕐 Tanggal, jam & waktu real-time
 

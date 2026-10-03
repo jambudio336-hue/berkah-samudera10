@@ -20,7 +20,8 @@ const Kru = {
     const data = Store.load("kru");
     const el = document.getElementById("kruList");
     if (data.length === 0) { el.innerHTML = "<p class='muted'>Belum ada kru terdaftar.</p>"; return; }
-    const urut = { "Captain": 0, "Menteri (Matrose)": 1, "ABK": 2 };
+    const urutanJabatan = ["Captain", "KKM", "ABK Biasa", "Juru Batu", "Tukang Es", "Tukang Rish", "Gidang", "Apit", "Koki", "Wakil", "Juru Arus", "Juru Lampu"];
+    const urut = Object.fromEntries(urutanJabatan.map((jabatan, i) => [jabatan, i]));
     data.sort((a, b) => urut[a.jabatan] - urut[b.jabatan]);
     el.innerHTML = data.map((d) =>
       "<div class='log-item'><b>" + d.nama + "</b> — " + d.jabatan +
