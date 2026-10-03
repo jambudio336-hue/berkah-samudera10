@@ -36,13 +36,15 @@ const MapApp = {
     this.lastFix = { lat: this.lat, lon: this.lon, time: now };
     document.getElementById("mapLat").textContent = teksLat; document.getElementById("mapLon").textContent = teksLon;
     document.getElementById("dashLat").textContent = "Latitude: " + teksLat; document.getElementById("dashLon").textContent = "Longitude: " + teksLon;
-    document.getElementById("dashAcc").textContent = "Akurasi GNSS: " + acc + " m"; document.getElementById("mapSpeed").textContent = speed.toFixed(1) + " km/j";
+    const knots = speed / 1.852;
+    document.getElementById("dashAcc").textContent = "Akurasi GNSS: " + acc + " m"; document.getElementById("mapSpeed").textContent = knots.toFixed(1) + " kn • " + speed.toFixed(1) + " km/j";
+    document.getElementById("dashSpeed").textContent = "Kecepatan kapal: " + knots.toFixed(1) + " knot (" + speed.toFixed(1) + " km/j)";
     const altitude = Number.isFinite(pos.coords.altitude) ? Math.round(pos.coords.altitude) + " m" : "-";
     const heading = Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 ? Math.round(pos.coords.heading) + "°" : "-";
     if (Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 && window.App) App.setHeading(pos.coords.heading, "GPS kapal");
     document.getElementById("gpsState").textContent = "GNSS aktif • akurasi " + acc + " m • " + new Date().toLocaleTimeString("id-ID");
     document.getElementById("mapTelemetry").textContent = "Ketinggian " + altitude + " • Arah " + heading;
-    if (!this.marker) { this.marker = L.marker([this.lat, this.lon]).addTo(this.map); this.map.setView([this.lat, this.lon], 13); } else this.marker.setLatLng([this.lat, this.lon]);
+    if (!this.marker) { this.marker = L.marker([this.lat, this.lon], { icon: L.divIcon({ className: "ship-marker", html: "🚢", iconSize: [34, 34], iconAnchor: [17, 17] }) }).addTo(this.map); this.map.setView([this.lat, this.lon], 13); } else this.marker.setLatLng([this.lat, this.lon]);
     this.marker.bindPopup("Lokasi Kapal Saya<br>Lat " + teksLat + "<br>Lon " + teksLon + "<br>Kecepatan " + speed.toFixed(1) + " km/j");
     this.accuracyCircle = this.accuracyCircle || L.circle([this.lat, this.lon], { radius: acc, color: "#06d6a0", fillOpacity: .08 }).addTo(this.map);
     this.accuracyCircle.setLatLng([this.lat, this.lon]).setRadius(acc);

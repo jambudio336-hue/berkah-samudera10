@@ -224,3 +224,6 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .cardinal { position:absolute; z-index:2; font-weight:900; font-size:.8rem; color:#eaf3ff; text-shadow:0 1px 3px #000; }
 .north { top:7px; left:59px; color:#ff5e6c; }.south { bottom:7px; left:59px; }.east { top:57px; right:9px; }.west { top:57px; left:9px; }
 #compassNeedle { position:absolute; z-index:3; top:34px; left:55px; color:#ff4c5e; font-size:3.3rem; line-height:1; text-shadow:0 2px 4px #000; transform-origin:11px 32px; transition: transform .18s ease-out; }
+
+.ship-marker { background: transparent; border: 0; font-size: 28px; line-height: 34px; filter: drop-shadow(0 3px 3px rgba(0,0,0,.6)); text-align:center; }
+#mapSeaTelemetry { color: #79c8ff; }

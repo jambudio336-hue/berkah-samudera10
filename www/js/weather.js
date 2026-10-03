@@ -54,8 +54,8 @@ const Weather = {
       "<p>💨 Angin: <b>" + c.wind_speed_10m + " km/j</b> dari " + arah + "</p>" +
       "<p>🌧️ Curah hujan: <b>" + c.precipitation + " mm</b></p>";
     document.getElementById("weatherNow").innerHTML = html;
-    document.getElementById("dashWeather").innerHTML =
-      desk + " • " + c.temperature_2m + "°C • Angin " + c.wind_speed_10m + " km/j";
+    document.getElementById("dashWeather").innerHTML = desk + " • " + c.temperature_2m + "°C • Angin " + c.wind_speed_10m + " km/j dari " + arah;
+    const sea = document.getElementById("mapSeaTelemetry"); if (sea) sea.textContent = "Suhu " + c.temperature_2m + "°C • Angin " + c.wind_speed_10m + " km/j dari " + arah;
 
     let alarm = [];
     if (c.wind_speed_10m >= 40) alarm.push("Angin kencang " + c.wind_speed_10m + " km/j");
@@ -82,8 +82,8 @@ const Weather = {
       "<p>🌀 Ombak angin: <b>" + c.wind_wave_height + " m</b></p>" +
       "<p>🌡️ Suhu laut: <b>" + c.sea_surface_temperature + " °C</b></p>";
     document.getElementById("marineNow").innerHTML = html;
-    document.getElementById("dashWave").innerHTML =
-      "Ombak " + c.wave_height + " m • Periode " + c.wave_period + " s";
+    document.getElementById("dashWave").innerHTML = "Ombak " + c.wave_height + " m • Periode " + c.wave_period + " s • arah " + Weather.arahAngin(c.wave_direction);
+    const area = document.getElementById("dashWaveArea"); if (area) { const p = Weather.pos(); area.textContent = "Area ombak: sekitar " + Number(p.lat).toFixed(3) + "°, " + Number(p.lon).toFixed(3) + "° (posisi kapal)"; }
     let alarm = [];
     if (c.wave_height >= 2.5) alarm.push("Ombak tinggi " + c.wave_height + " m — WASPADA!");
     else if (c.wave_height >= 1.5) alarm.push("Ombak sedang-tinggi " + c.wave_height + " m");

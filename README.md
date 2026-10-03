@@ -49,3 +49,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🪸 Deteksi “Karang Laut” pada radius 100 m dari posisi kapal menggunakan data karang terpetakan publik; bukan pengganti sonar atau peta navigasi resmi.
 
 - 🧭 Kompas 3D nautika aktif dari sensor orientasi perangkat, dengan fallback heading GPS saat kapal bergerak.
+
+- 🚢 Marker kapal bergerak mengikuti GPS, dengan kecepatan knot/km-jam, suhu, arah angin, tinggi/periode/arah ombak, dan area koordinat kondisi laut di sekitar kapal.
