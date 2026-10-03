@@ -1,0 +1,14 @@
+{
+  "name": "Berkah Samudera10",
+  "short_name": "Samudera10",
+  "description": "Aplikasi navigasi dan manajemen kapal untuk nelayan Indonesia",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#061a33",
+  "theme_color": "#061a33",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
