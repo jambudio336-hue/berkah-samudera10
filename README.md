@@ -63,3 +63,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🌬️ Embed resmi Windy global dengan fokus koordinat GPS HP, layer angin/ombak, animasi waktu, tekanan, hujan, dan prakiraan ECMWF.
 
 - 🧭 Kompas ditingkatkan dengan sensor absolut/magnetometer, label 16 arah mata angin, dan heading GPS sebagai fallback.
+
+- 📱 Layout adaptif portrait dan landscape, peta membesar saat layar melebar, serta toolbar peta responsif.

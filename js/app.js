@@ -11,6 +11,7 @@ const App = {
     App.quickActions();
     App.dashboardStats();
     setInterval(App.dashboardStats, 5000);
+    window.addEventListener("resize", () => { if (typeof MapApp !== "undefined" && MapApp.map) setTimeout(() => MapApp.map.invalidateSize(), 180); });
     document.getElementById("btnHapusSemua").addEventListener("click", () => {
       if (confirm("Yakin hapus SEMUA data? Ini tidak bisa dibatalkan!")) {
         Store.clearAll();

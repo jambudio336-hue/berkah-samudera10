@@ -252,3 +252,30 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 
 #compassNeedle { display:flex; flex-direction:column; align-items:center; gap:0; }
 #compassDirection { display:block; color:#fff; font-size:.55rem; line-height:1; font-weight:800; letter-spacing:.2px; white-space:nowrap; text-shadow:0 1px 3px #000; transform:rotate(0deg); margin-top:-3px; }
+
+/* Layout adaptif portrait dan landscape */
+.map-actions, .map-tool-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.map-actions .btn, .map-tool-row .btn { width:100%; min-height:44px; }
+#page-peta .row .chip { min-width:0; }
+#page-peta .row .chip b { word-break:break-word; }
+@media (orientation: landscape) and (max-height: 720px) {
+  body { padding-bottom:28px; }
+  .topbar { padding:8px 16px; }
+  .tabs { padding:7px 12px; }
+  main { max-width:1100px; padding:12px 18px; }
+  .grid-2 { grid-template-columns:repeat(4,1fr); }
+  .dashboard-kpis { grid-template-columns:repeat(4,1fr); }
+  #map { height:min(62vh, 520px); min-height:300px; }
+  #windyFrame { height:min(66vh, 500px); min-height:320px; }
+  .windy-panel { padding:14px; }
+  .card { padding:14px; }
+  .quick-actions { grid-template-columns:repeat(3,1fr); }
+}
+@media (orientation: portrait) {
+  #map { min-height:300px; }
+  .map-actions, .map-tool-row { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:420px) {
+  .map-actions, .map-tool-row { grid-template-columns:1fr; }
+  .map-actions .btn, .map-tool-row .btn { min-height:42px; }
+}
