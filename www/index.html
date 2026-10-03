@@ -41,6 +41,7 @@
   <button class="tab" data-page="peta">🗺️ Peta</button>
   <button class="tab" data-page="cuaca">🌊 Cuaca</button>
   <button class="tab" data-page="quran">📖 Al-Qur’an</button>
+  <button class="tab" data-page="akun">👤 Akun</button>
   <button class="tab" data-page="tangkapan">🐟 Tangkapan</button>
   <button class="tab" data-page="kolekting">📦 Kolekting</button>
   <button class="tab" data-page="perbekalan">⛽ Perbekalan</button>
@@ -159,6 +160,20 @@
   <div class="card"><div class="row"><input id="quranSearch" type="search" placeholder="Cari nama surat atau arti..."><select id="quranSurah"><option value="">Pilih surat...</option></select></div><p id="quranStatus" class="muted">Memuat daftar surat...</p><div id="quranList" class="quran-list"></div></div>
   <div class="card quran-reader" id="quranReader"><div id="quranTitle" class="quran-title"><b>Pilih surat untuk membaca</b><span>Arab • Latin • Terjemahan</span></div><div class="row quran-audio-controls"><label>Qari<select id="quranQari"><option value="01">Abdullah Al-Juhany</option><option value="02">Abdul Muhsin Al-Qasim</option><option value="03">Abdurrahman As-Sudais</option><option value="04">Ibrahim Al-Dossari</option><option value="05">Misyari Rasyid Al-Afasy</option><option value="06">Yasser Al-Dosari</option></select></label><div><span id="quranAudioLabel" class="muted">Audio surat lengkap</span><audio id="quranAudio" controls preload="none"></audio></div></div><div id="quranAyat"><p class="muted">Pilih salah satu surat di atas.</p></div></div>
   <div class="card"><p class="muted">Sumber data: EQuran.id API v2 • sumber konten Kementerian Agama Republik Indonesia. Audio dimuat online dari CDN EQuran.id.</p></div>
+</section>
+<!-- ============ AKUN & TEMAN ============ -->
+<section id="page-akun" class="page">
+  <div id="authSignedOut">
+    <div class="card hero"><span class="eyebrow">SUPABASE AUTH</span><h2>👤 Masuk atau Daftar</h2><p class="hero-sub">Pengguna dapat masuk tanpa password menggunakan OTP email, OTP nomor telepon, atau Google.</p></div>
+    <div class="card auth-card"><h3>✉️ Email OTP</h3><input id="authEmail" type="email" placeholder="nama@email.com"><div class="row"><button class="btn primary-inline" id="btnEmailOtp">Kirim OTP Email</button><input id="authEmailCode" inputmode="numeric" maxlength="6" placeholder="Kode OTP"></div><button class="btn" id="btnVerifyEmail">Verifikasi Email</button></div>
+    <div class="card auth-card"><h3>📱 Nomor Telepon OTP</h3><input id="authPhone" type="tel" placeholder="+628123456789"><p class="muted">Format internasional. Supabase mengirim OTP melalui provider SMS yang aktif. WhatsApp memerlukan provider WhatsApp tambahan.</p><div class="row"><button class="btn primary-inline" id="btnPhoneOtp">Kirim OTP SMS</button><button class="btn" id="btnWhatsappOtp">Kirim OTP WhatsApp</button><input id="authPhoneCode" inputmode="numeric" maxlength="6" placeholder="Kode OTP"></div><button class="btn" id="btnVerifyPhone">Verifikasi Telepon</button></div>
+    <div class="card"><button class="btn google-btn" id="btnGoogleLogin">🔐 Lanjutkan dengan Google</button><p id="authStatus" class="muted">Belum masuk.</p></div>
+  </div>
+  <div id="authSignedIn" class="hidden">
+    <div class="card profile-card"><div class="section-head"><div><span class="eyebrow">PROFIL PENGGUNA</span><h2 id="profileHeading">Profil Saya</h2></div><button class="btn" id="btnSignOut">Keluar</button></div><div class="profile-grid"><div><label>Nama tampilan</label><input id="profileName" type="text" placeholder="Nama Anda"><label>Bio</label><textarea id="profileBio" rows="3" placeholder="Ceritakan tentang Anda..."></textarea><label>Peran</label><select id="profileRole"><option value="nahkoda">Nahkoda</option><option value="abk">ABK</option></select></div><div><label>URL foto profil</label><input id="profileAvatar" type="url" placeholder="https://..."><label>Nama kapal</label><input id="profileVessel" type="text" placeholder="Nama kapal"><label>Kapal membawa</label><input id="profileCargo" type="text" placeholder="Ikan, logistik, penumpang..."><label class="switch-row"><span>Bagikan lokasi ke teman yang diikuti</span><input id="profileShareLocation" type="checkbox" checked></label></div></div><button class="btn primary" id="btnSaveProfile">💾 Simpan profil</button><p id="profileStatus" class="muted"></p></div>
+    <div class="card"><h3>🔎 Cari pengguna</h3><div class="row"><input id="friendSearch" type="search" placeholder="Cari nama pengguna atau nama kapal"><button class="btn" id="btnSearchFriends">Cari</button></div><div id="friendResults"></div></div>
+    <div class="card"><h3>🧭 Teman yang diikuti</h3><p class="muted">Lokasi teman yang Anda ikuti dan mengaktifkan berbagi lokasi akan muncul di peta.</p><div id="followingList"></div></div>
+  </div>
 </section>
 <!-- ============ TANGKAPAN ============ -->
 <section id="page-tangkapan" class="page">
@@ -287,6 +302,7 @@
 <script src="js/storage.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-sync.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/map.js"></script>
 <script src="js/notifications.js"></script>
 <script src="js/prayer.js"></script>

@@ -5,7 +5,7 @@ const SupabaseSync = {
   deviceId: localStorage.getItem("bs10_device_id") || (() => { const id = "dev-" + (crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(36).slice(2)); localStorage.setItem("bs10_device_id", id); return id; })(),
   ready: false,
   suppress: false,
-  lastPositionAt: 0,
+  lastPositionAt: 0, friendIds: [],
   init() {
     try { if (!window.supabase || !window.supabase.createClient) throw new Error("Supabase JS belum dimuat"); this.client = window.supabase.createClient(this.url, this.key); this.ready = true; this.connect(); this.pullRecords(); this.setStatus("🟢 Supabase Realtime aktif"); } catch (_) { this.setStatus("🟡 Mode lokal • Supabase belum tersambung"); }
   },
@@ -15,12 +15,14 @@ const SupabaseSync = {
     if (!this.client) return;
     this.client.channel("bs10-live-positions").on("postgres_changes", { event: "*", schema: "public", table: "live_positions" }, (payload) => { const row = payload.new; if (row && row.vessel_id !== this.vesselId() && typeof MapApp !== "undefined" && MapApp.updateRemotePosition) MapApp.updateRemotePosition(row); }).subscribe();
     this.client.channel("bs10-app-records").on("postgres_changes", { event: "*", schema: "public", table: "app_records" }, (payload) => { if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") this.mergeRecord(payload.new); }).subscribe();
+    this.client.channel("bs10-user-locations").on("postgres_changes", { event: "*", schema: "public", table: "user_locations" }, (payload) => { const row = payload.new; if (row && this.friendIds.includes(row.user_id) && typeof MapApp !== "undefined" && MapApp.updateRemotePosition) MapApp.updateRemotePosition({ ...row, vessel_id: row.user_id }); }).subscribe();
     this.client.channel("bs10-app-notifications").on("postgres_changes", { event: "INSERT", schema: "public", table: "app_notifications" }, (payload) => { if (payload.new && typeof NotificationCenter !== "undefined") NotificationCenter.add({ source: payload.new.source, title: payload.new.title, body: payload.new.body, url: payload.new.url, time: payload.new.created_at }); }).subscribe();
     this.client.from("live_positions").select("vessel_id,device_id,lat,lon,speed_knots,accuracy_m,heading,updated_at").limit(50).then(({ data }) => (data || []).forEach((row) => { if (row.vessel_id !== this.vesselId() && typeof MapApp !== "undefined" && MapApp.updateRemotePosition) MapApp.updateRemotePosition(row); }));
   },
   async publishPosition(payload) {
     if (!this.ready || !this.client) return; const now = Date.now(); if (now - this.lastPositionAt < 3000) return; this.lastPositionAt = now;
     await this.client.from("live_positions").upsert({ vessel_id: this.vesselId(), device_id: this.deviceId, lat: payload.lat, lon: payload.lon, speed_knots: Number(payload.speed || 0) / 1.852, accuracy_m: payload.accuracy, heading: payload.heading || null, updated_at: new Date().toISOString() });
+    if (typeof SupabaseAuth !== "undefined" && SupabaseAuth.user) await this.client.from("user_locations").upsert({ user_id: SupabaseAuth.user.id, lat: payload.lat, lon: payload.lon, speed_knots: Number(payload.speed || 0) / 1.852, accuracy_m: payload.accuracy, heading: payload.heading || null, sharing_enabled: SupabaseAuth.profile?.share_location !== false, updated_at: new Date().toISOString() });
   },
   async pushCollection(type, arr) {
     if (!this.ready || !this.client || this.suppress || !Array.isArray(arr)) return;

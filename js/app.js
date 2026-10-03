@@ -9,6 +9,7 @@ const App = {
     App.quoteDashboard();
     App.settings();
     if (typeof SupabaseSync !== "undefined") SupabaseSync.init();
+    if (typeof SupabaseAuth !== "undefined") SupabaseAuth.init();
     if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
     if (typeof PrayerTimes !== "undefined") PrayerTimes.init();
     if (typeof QuranApp !== "undefined") QuranApp.init();

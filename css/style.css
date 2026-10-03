@@ -332,3 +332,11 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 
 .remote-ship-marker { display:flex; align-items:center; justify-content:center; width:30px !important; height:30px !important; border-radius:50%; background:#063b5c; border:2px solid #06d6a0; box-shadow:0 0 12px rgba(6,214,160,.7); font-size:18px; }
 .local-storage-card { border-color:#06d6a0; }
+
+.auth-card input, .auth-card button { margin-top:8px; }
+.google-btn { width:100%; border-color:#f5f5f5; color:#fff; }
+.profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.profile-card textarea { width:100%; resize:vertical; }
+.friend-row { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 0; border-bottom:1px solid rgba(159,195,232,.2); }
+.friend-meta { display:flex; flex-direction:column; gap:3px; } .friend-meta small { color:#a9c9e8; }
+@media (max-width:640px) { .profile-grid { grid-template-columns:1fr; } .friend-row { align-items:flex-start; flex-direction:column; } }

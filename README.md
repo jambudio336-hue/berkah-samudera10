@@ -92,3 +92,7 @@ Frontend dibungkus menjadi APK native memakai Capacitor. Seluruh data pengguna d
 - ☁️ Supabase Realtime terhubung untuk posisi kapal, data operasi, dan notifikasi; pengguna tetap tanpa akun dengan device ID anonim dan cache lokal.
 
 - ☁️ Supabase project: `berkah-samudera10` di region Singapore, dengan tabel `live_positions`, `app_records`, dan `app_notifications` serta Realtime aktif.
+
+- 🔐 Auth Supabase: email OTP, SMS OTP, opsi WhatsApp OTP jika provider WhatsApp Twilio diaktifkan, Google OAuth, profil nahkoda/ABK, follow/unfollow, dan berbagi lokasi teman.
+
+- 👤 Fitur akun: email OTP, SMS OTP, WhatsApp OTP melalui channel Supabase jika provider Twilio WhatsApp aktif, Google OAuth, profil nahkoda/ABK, follow/unfollow, dan berbagi lokasi teman.

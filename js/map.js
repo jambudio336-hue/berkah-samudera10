@@ -80,7 +80,7 @@ const MapApp = {
     if (typeof PrayerTimes !== "undefined") PrayerTimes.refresh(this.lat, this.lon);
     if (typeof SupabaseSync !== "undefined") SupabaseSync.publishPosition({ lat: this.lat, lon: this.lon, speed, accuracy: acc, heading: this.heading });
   },
-  updateRemotePosition(row) { if (!this.map || !row || !row.lat || !row.lon) return; const id = row.vessel_id; if (!this.remoteMarkers[id]) { this.remoteMarkers[id] = L.marker([row.lat, row.lon], { icon: L.divIcon({ className: "remote-ship-marker", html: "🚢", iconSize: [30, 30], iconAnchor: [15, 15] }) }).addTo(this.map).bindPopup("Kapal online: " + id); } else this.remoteMarkers[id].setLatLng([row.lat, row.lon]); this.remoteMarkers[id].setPopupContent("Kapal online: " + id + "<br>Kecepatan: " + Number(row.speed_knots || 0).toFixed(1) + " kn<br>Diperbarui: " + new Date(row.updated_at || Date.now()).toLocaleTimeString("id-ID")); },
+  updateRemotePosition(row) { if (!this.map || !row || !row.lat || !row.lon) return; const id = row.vessel_id; if (!this.remoteMarkers[id]) { this.remoteMarkers[id] = L.marker([row.lat, row.lon], { icon: L.divIcon({ className: "remote-ship-marker", html: "🚢", iconSize: [30, 30], iconAnchor: [15, 15] }) }).addTo(this.map).bindPopup((row.display_name || "Kapal online: " + id)); } else this.remoteMarkers[id].setLatLng([row.lat, row.lon]); this.remoteMarkers[id].setPopupContent((row.display_name || "Kapal online: " + id) + "<br>Kecepatan: " + Number(row.speed_knots || 0).toFixed(1) + " kn<br>Diperbarui: " + new Date(row.updated_at || Date.now()).toLocaleTimeString("id-ID")); },
   toggleLayer(layer, name) {
     if (!layer) return;
     const active = this.map.hasLayer(layer); if (active) this.map.removeLayer(layer); else layer.addTo(this.map);
