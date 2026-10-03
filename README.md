@@ -3,15 +3,17 @@
 Aplikasi navigasi & manajemen kapal untuk **nelayan Indonesia**. Dibuat dengan modal **0 rupiah**, **tanpa backend**, **tanpa server**, dan **tanpa API key**.
 
 ## ✨ Fitur
-- 🗺️ Peta laut 3D-style real-time (Leaflet + OpenStreetMap) dengan GPS navigator
+- 🎬 Splash screen video intro full-screen dengan audio (tanpa tombol kontrol, tidak bisa di-skip)
+- 🖼️ Latar belakang aplikasi bergambar
+- 🗺️ Peta laut real-time (Leaflet + OpenStreetMap) dengan GPS navigator
 - 📍 Bujur & lintang real-time posisi kapal
 - 🧭 Kompas digital
 - 🌊 Kedalaman laut di semua titik (bathymetri via Open-Meteo Elevation API)
 - 🌤️ Cuaca & ombak real-time (Open-Meteo Weather + Marine API)
 - ⚠️ Peringatan cuaca ekstrem / badai otomatis
 - 📰 Berita & data gempa BMKG
-- 🔄 Offline & Online (Service Worker + cache peta)
-- 🐟 Catatan hasil tangkapan (jam operasi, ton, serok, jenis ikan)
+- 🔄 Offline & Online (Service Worker + cache peta + cache video intro)
+- 🐟 Catatan hasil tangkapan (jam operasi, ton, serok, 14 jenis ikan)
 - 📦 Catatan kolekting/pengiriman dengan quotes berganti otomatis
 - ⛽ Catatan perbekalan, logistik & bahan bakar kapal
 - 👥 Database kru (Captain, Menteri/Matrose, ABK)
