@@ -1,6 +1,6 @@
 const MapApp = {
   map: null, marker: null, track: null, accuracyCircle: null, lat: null, lon: null,
-  watchId: null, lastFix: null, layers: {}, reefMarkers: [], is3D: false,
+  watchId: null, lastFix: null, lastMarineCheck: null, layers: {}, reefMarkers: [], is3D: false,
   init() {
     this.map = L.map("map", { zoomControl: true }).setView([-2.5, 118], 5);
     const street = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap" }).addTo(this.map);
@@ -67,7 +67,18 @@ const MapApp = {
     if (localStorage.getItem("bs10_auto_center") !== "false" && document.getElementById("page-peta").classList.contains("active") && this.map.getZoom() >= 12) this.map.panTo([this.lat, this.lon], { animate: true, duration: .35 });
     if (typeof Weather !== "undefined") Weather.refreshPosition(this.lat, this.lon);
     this.updateWindy(false);
+    this.autoMarineCheck();
     if (typeof LiveSync !== "undefined") LiveSync.publishPosition({ lat: this.lat, lon: this.lon, speed, accuracy: acc });
+  },
+  autoMarineCheck() {
+    if (this.lat === null) return;
+    const now = Date.now();
+    const last = this.lastMarineCheck;
+    const moved = last ? this.map.distance([last.lat, last.lon], [this.lat, this.lon]) : Infinity;
+    if (last && now - last.time < 60000 && moved < 100) return;
+    this.lastMarineCheck = { lat: this.lat, lon: this.lon, time: now };
+    this.cekKedalaman(this.lat, this.lon, true);
+    this.deteksiKarang(this.lat, this.lon, true);
   },
   updateWindy(force) {
     const frame = document.getElementById("windyFrame"); if (!frame) return;
@@ -80,20 +91,27 @@ const MapApp = {
   setPosError(msg) { document.getElementById("dashAcc").textContent = msg; document.getElementById("gpsState").textContent = "GNSS belum tersedia"; },
   clearTrack() { if (this.track) this.track.setLatLngs([]); localStorage.removeItem("bs10_track"); } ,
   toggle3D() { this.is3D = !this.is3D; document.getElementById("map").classList.toggle("map-3d", this.is3D); document.getElementById("btn3D").textContent = this.is3D ? "🧭 Matikan mode 3D" : "🧭 Mode peta 3D"; document.getElementById("mapMode").textContent = this.is3D ? "Mode 3D visual aktif" : "Mode datar aktif"; setTimeout(() => this.map.invalidateSize(), 450); },
-  cekKedalaman(lat, lon) {
-    const el = document.getElementById("mapDepth"); el.textContent = "Mengambil elevasi dasar laut...";
-    fetch("https://api.open-meteo.com/v1/elevation?latitude=" + lat + "&longitude=" + lon).then((r) => r.json()).then((d) => {
-      const elev = Number(d.elevation && d.elevation[0]); const text = elev < 0 ? "🌊 Perkiraan kedalaman: ±" + Math.abs(elev).toFixed(1) + " m" : "⛰️ Titik ini daratan (elevasi " + elev.toFixed(1) + " m)";
-      el.textContent = text + " • overlay GEBCO tersedia di layer peta"; document.getElementById("dashDepth").textContent = text; L.popup().setLatLng([lat, lon]).setContent(text).openOn(this.map);
-    }).catch(() => { el.textContent = "Gagal mengambil kedalaman. Coba lagi saat online."; });
+  cekKedalaman(lat, lon, silent) {
+    const el = document.getElementById("mapDepth"); el.textContent = "Mengambil kedalaman GEBCO...";
+    const url = "https://api.opentopodata.org/v1/gebco2020?locations=" + lat + "," + lon;
+    fetch(url, { cache: "no-store" }).then((r) => r.json()).then((d) => {
+      const elev = Number(d.results && d.results[0] && d.results[0].elevation);
+      if (!Number.isFinite(elev)) throw new Error("depth unavailable");
+      const text = elev < 0 ? "🌊 Kedalaman GEBCO: ±" + Math.abs(elev).toFixed(1) + " m" : "⛰️ Titik ini daratan (elevasi " + elev.toFixed(1) + " m)";
+      el.textContent = text + " • sumber GEBCO 2020"; document.getElementById("dashDepth").textContent = text;
+      if (!silent) L.popup().setLatLng([lat, lon]).setContent(text + "<br><small>Sumber: GEBCO 2020</small>").openOn(this.map);
+    }).catch(() => { el.textContent = "Kedalaman belum tersedia. Coba lagi saat online."; document.getElementById("dashDepth").textContent = "Kedalaman: data online gagal dimuat"; });
   },
-  deteksiKarang(lat, lon) {
+  deteksiKarang(lat, lon, silent) {
     const el = document.getElementById("reefStatus"); el.textContent = "Memeriksa karang laut di bawah/sekitar kapal (radius 100 m)...";
+    const dash = document.getElementById("dashReef"); if (dash) dash.textContent = "Karang sekitar: sedang diperiksa...";
     const q = "[out:json][timeout:12];(nwr[\"natural\"=\"reef\"](around:100," + lat + "," + lon + ");nwr[\"seamark:type\"=\"reef\"](around:100," + lat + "," + lon + "););out center;";
     fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q)).then((r) => r.json()).then((d) => {
       this.reefMarkers.forEach((m) => this.map.removeLayer(m)); this.reefMarkers = [];
       (d.elements || []).forEach((x) => { const p = x.lat ? [x.lat, x.lon] : [x.center.lat, x.center.lon]; const m = L.circleMarker(p, { radius: 9, color: "#ef476f", fillColor: "#ef476f", fillOpacity: .85 }).addTo(this.map).bindPopup("⚠️ Karang Laut terpetakan dekat kapal<br>" + (x.tags && (x.tags.name || x.tags.description) || "Data OpenStreetMap")); this.reefMarkers.push(m); });
-      el.textContent = this.reefMarkers.length ? "⚠️ TERDETEKSI KARANG LAUT dalam radius 100 m dari kapal — jangan jadikan hasil ini satu-satunya alat navigasi." : "✅ Tidak ada karang laut yang terpetakan dalam radius 100 m dari kapal. Hasil kosong bukan jaminan bebas karang; gunakan sonar/peta resmi.";
-    }).catch(() => { el.textContent = "Deteksi karang butuh internet. Aktifkan layer OpenSeaMap untuk marka laut."; });
+      const found = this.reefMarkers.length;
+      el.textContent = found ? "⚠️ TERDETEKSI KARANG LAUT dalam radius 100 m dari kapal — jangan jadikan hasil ini satu-satunya alat navigasi." : "✅ Tidak ada karang laut yang terpetakan dalam radius 100 m dari kapal. Hasil kosong bukan jaminan bebas karang; gunakan sonar/peta resmi.";
+      if (dash) dash.textContent = found ? "⚠️ Karang terpetakan dalam radius 100 m" : "✅ Tidak ada karang terpetakan dalam radius 100 m";
+    }).catch(() => { el.textContent = "Deteksi karang butuh internet. Aktifkan layer OpenSeaMap untuk marka laut."; if (dash) dash.textContent = "Karang sekitar: data online gagal dimuat"; });
   }
 };

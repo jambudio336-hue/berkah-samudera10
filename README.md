@@ -65,3 +65,6 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🧭 Kompas ditingkatkan dengan sensor absolut/magnetometer, label 16 arah mata angin, dan heading GPS sebagai fallback.
 
 - 📱 Layout adaptif portrait dan landscape, peta membesar saat layar melebar, serta toolbar peta responsif.
+
+- 🪸 Deteksi karang otomatis setiap GPS bergerak minimal 100 m atau setiap 60 detik, dengan status di dashboard.
+- 🌊 Kedalaman otomatis memakai query GEBCO 2020 global dan diperbarui saat posisi berubah.
