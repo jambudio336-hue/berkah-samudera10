@@ -5,12 +5,14 @@ Aplikasi navigasi & manajemen kapal untuk **nelayan Indonesia**. Dibuat dengan m
 ## ✨ Fitur
 - 🎬 Splash screen video intro full-screen dengan audio (tanpa tombol kontrol, tidak bisa di-skip)
 - 🖼️ Latar belakang aplikasi bergambar
-- 🗺️ Peta laut real-time (Leaflet + OpenStreetMap) dengan GPS navigator
+- 🗺️ Peta laut real-time dengan GPS/GNSS, jejak perjalanan, layer satelit, GEBCO bathymetry, dan OpenSeaMap
 - 📍 Bujur & lintang real-time posisi kapal
 - 🧭 Kompas digital
-- 🌊 Kedalaman laut di semua titik (bathymetri via Open-Meteo Elevation API)
+- 🌊 Perkiraan kedalaman/elevasi titik + overlay bathymetry GEBCO
 - 🌤️ Cuaca & ombak real-time (Open-Meteo Weather + Marine API)
 - ⚠️ Peringatan cuaca ekstrem / badai otomatis
+- 🪸 Deteksi karang terpetakan via OpenStreetMap Overpass (indikatif, bukan peta navigasi resmi)
+- 🔌 Backend server/server.js untuk sinkronisasi telemetry WebSocket multi-perangkat
 - 📰 Berita & data gempa BMKG
 - 🔄 Offline & Online (Service Worker + cache peta + cache video intro)
 - 🐟 Catatan hasil tangkapan (jam operasi, ton, serok, 14 jenis ikan)
@@ -30,3 +32,14 @@ HTML5, CSS3, Vanilla JS, Leaflet, Open-Meteo, OpenStreetMap, BMKG, Service Worke
 
 ## 📄 Lisensi
 MIT — lihat [LICENSE](LICENSE)
+
+## 🧱 Full-stack dan build APK
+
+Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacitor. Backend ada di `server/` dan menyediakan `/health`, `/api/vessels`, serta WebSocket `/telemetry`. Jalankan backend dengan `cd server && npm install && npm start`, lalu set URL backend pada `localStorage` dengan key `bs10_api` atau integrasikan URL deployment Anda.
+
+### Catatan akurasi
+
+- Posisi “dari satelit” berasal dari GNSS perangkat; aplikasi tidak mengambil koordinat dari citra satelit.
+- Layer satelit memakai Esri World Imagery. Bathymetry memakai GEBCO; kedalaman titik adalah perkiraan dan harus diverifikasi dengan peta navigasi resmi/alat sounder.
+- Deteksi karang hanya menemukan objek yang sudah dipetakan publik di sekitar titik; hasil kosong bukan jaminan bebas karang.
+- Build release APK membutuhkan Android SDK/Gradle dan signing keystore.

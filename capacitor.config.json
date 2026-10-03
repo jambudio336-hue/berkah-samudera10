@@ -1,0 +1,10 @@
+{
+  "appId": "com.m4zk1pl4y.berkahsamudera10",
+  "appName": "Berkah Samudera10",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "cleartext": true,
+    "androidScheme": "https"
+  }
+}
