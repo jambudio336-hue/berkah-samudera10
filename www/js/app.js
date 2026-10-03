@@ -9,6 +9,7 @@ const App = {
     App.quoteDashboard();
     App.settings();
     if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
+    if (typeof PrayerTimes !== "undefined") PrayerTimes.init();
     App.quickActions();
     App.dashboardStats();
     setInterval(App.dashboardStats, 5000);
@@ -142,6 +143,7 @@ const App = {
     const tampil = () => { el.textContent = '"' + QUOTES[i % QUOTES.length] + '"'; i++; };
     tampil();
     setInterval(tampil, 10000);
+    const prayerQuote = document.getElementById("prayerQuote"); if (prayerQuote && typeof PrayerTimes !== "undefined") { const qs = PrayerTimes.quotes(); let qi = 0; const showPrayer = () => { prayerQuote.textContent = '"' + qs[qi++ % qs.length] + '"'; }; showPrayer(); setInterval(showPrayer, 12000); }
   }
 };
 

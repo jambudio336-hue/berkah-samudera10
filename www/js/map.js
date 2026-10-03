@@ -77,6 +77,7 @@ const MapApp = {
     if (typeof Weather !== "undefined") Weather.refreshPosition(this.lat, this.lon);
     this.updateWindy(false);
     this.autoMarineCheck();
+    if (typeof PrayerTimes !== "undefined") PrayerTimes.refresh(this.lat, this.lon);
     if (typeof LiveSync !== "undefined") LiveSync.publishPosition({ lat: this.lat, lon: this.lon, speed, accuracy: acc });
   },
   toggleLayer(layer, name) {

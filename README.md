@@ -76,3 +76,7 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🌧️ Overlay radar hujan, arah angin, dan indikasi badai lokal dari data cuaca online.
 
 - 🔔 Notifikasi resmi BMKG dengan izin Android, polling 10 menit saat online, deduplikasi, baseline awal, dan riwayat lokal anti-hoaks.
+
+- 🕌 Jadwal sholat otomatis mengikuti zona waktu koordinat GPS, dengan notifikasi Android terjadwal, pengaturan on/off, dan quotes Islami serta pelaut/nelayan.
+
+- 🕋 Jadwal sholat memakai Aladhan API endpoint bertanggal dan meta timezone koordinat, dengan notifikasi Android lokal terjadwal serta suara notifikasi bawaan perangkat.

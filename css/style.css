@@ -301,3 +301,11 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .notification-item span { color:var(--muted); line-height:1.35; }
 .notification-settings .switch-row { margin-top:8px; }
 .notification-settings .btn { margin-top:10px; }
+
+.prayer-card, .prayer-settings { border-color:#d39a22; }
+.prayer-card h3, .prayer-settings h3 { color:#ffd166; }
+.prayer-row { display:flex; justify-content:space-between; padding:8px 10px; margin:5px 0; border-radius:8px; background:rgba(5,25,52,.65); border:1px solid rgba(211,154,34,.35); font-size:.82rem; }
+.prayer-row b { color:#eaf3ff; }
+.prayer-row span { color:#ffd166; font-weight:800; }
+.prayer-card .quote { margin-top:12px; }
+.prayer-settings .btn { margin-top:10px; }
