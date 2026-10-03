@@ -79,12 +79,16 @@ const App = {
     if (dial) dial.style.transform = "rotate(" + (-value) + "deg)";
     if (needle) needle.style.transform = "rotate(" + value + "deg)";
     document.getElementById("dashHeading").textContent = heading + "°";
-    document.getElementById("compassStatus").textContent = "Heading " + heading + "° • sumber " + source;
+    const dirs = ["Utara", "Utara Timur Laut", "Timur Laut", "Timur Timur Laut", "Timur", "Timur Tenggara", "Tenggara", "Selatan Tenggara", "Selatan", "Selatan Barat Daya", "Barat Daya", "Barat Barat Daya", "Barat", "Barat Barat Laut", "Barat Laut", "Utara Barat Laut"];
+    const direction = dirs[Math.round(value / 22.5) % 16];
+    const label = document.getElementById("compassDirection"); if (label) label.textContent = direction;
+    document.getElementById("compassStatus").textContent = direction + " • " + heading + "° • sumber " + source;
   },
   kompas() {
     const handler = (e) => {
-      if (e.webkitCompassHeading !== undefined && e.webkitCompassHeading !== null) App.setHeading(e.webkitCompassHeading, "sensor perangkat");
-      else if (e.alpha !== null) App.setHeading(360 - e.alpha, "sensor perangkat");
+      if (e.webkitCompassHeading !== undefined && e.webkitCompassHeading !== null) App.setHeading(e.webkitCompassHeading, "sensor magnetometer");
+      else if (e.absolute && e.alpha !== null) App.setHeading(360 - e.alpha, "sensor absolut");
+      else if (e.alpha !== null) App.setHeading(360 - e.alpha, "sensor relatif");
     };
     const aktifkan = () => {
       if (window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
@@ -116,7 +120,7 @@ const App = {
     name.value = localStorage.getItem("bs10_vessel_name") || "Berkah Samudera 10"; id.value = localStorage.getItem("bs10_vessel_id") || "kapal-utama"; api.value = localStorage.getItem("bs10_api") || "";
     document.getElementById("settingAutoCenter").checked = localStorage.getItem("bs10_auto_center") !== "false";
     document.getElementById("settingShowTrack").checked = localStorage.getItem("bs10_show_track") !== "false";
-    document.getElementById("btnSaveSettings").addEventListener("click", () => { localStorage.setItem("bs10_vessel_name", name.value.trim() || "Berkah Samudera 10"); localStorage.setItem("bs10_vessel_id", id.value.trim() || "kapal-utama"); localStorage.setItem("bs10_api", api.value.trim()); localStorage.setItem("bs10_auto_center", document.getElementById("settingAutoCenter").checked); localStorage.setItem("bs10_show_track", document.getElementById("settingShowTrack").checked); if (window.LiveSync) { LiveSync.base = api.value.trim(); LiveSync.connect(); } alert("✅ Pengaturan tersimpan."); });
+    document.getElementById("btnSaveSettings").addEventListener("click", () => { localStorage.setItem("bs10_vessel_name", name.value.trim() || "Berkah Samudera 10"); localStorage.setItem("bs10_vessel_id", id.value.trim() || "kapal-utama"); localStorage.setItem("bs10_api", api.value.trim()); localStorage.setItem("bs10_auto_center", document.getElementById("settingAutoCenter").checked); localStorage.setItem("bs10_show_track", document.getElementById("settingShowTrack").checked); if (typeof LiveSync !== "undefined") { LiveSync.base = api.value.trim(); LiveSync.connect(); } alert("✅ Pengaturan tersimpan."); });
     document.getElementById("btnTestApi").addEventListener("click", async () => { const out = document.getElementById("settingApiStatus"); if (!api.value.trim()) { out.textContent = "Isi URL backend dulu"; return; } out.textContent = "Menguji..."; try { const r = await fetch(api.value.replace(/\/$/, "") + "/health"); out.textContent = r.ok ? "✅ Online" : "❌ Respons gagal"; } catch (_) { out.textContent = "❌ Tidak tersambung"; } });
     document.getElementById("btnClearTrack").addEventListener("click", () => { if (confirm("Bersihkan jalur perjalanan di peta?")) MapApp.clearTrack(); });
     document.getElementById("btnRefreshData").addEventListener("click", () => { const pos = MapApp.lat !== null ? { lat: MapApp.lat, lon: MapApp.lon } : Weather.pos(); Weather.refreshPosition(pos.lat, pos.lon); alert("🔄 Data cuaca sedang disegarkan."); });

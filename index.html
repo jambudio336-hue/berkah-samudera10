@@ -68,7 +68,7 @@
     </div>
     <div class="card">
       <h3>🧭 Kompas</h3>
-      <div class="compass-wrap" id="compassButton" title="Ketuk untuk mengaktifkan sensor kompas"><div class="compass-dial" id="compassDial"><span class="cardinal north">N</span><span class="cardinal east">E</span><span class="cardinal south">S</span><span class="cardinal west">W</span><div class="compass-ring"></div><div id="compassNeedle">▲</div></div></div>
+      <div class="compass-wrap" id="compassButton" title="Ketuk untuk mengaktifkan sensor kompas"><div class="compass-dial" id="compassDial"><span class="cardinal north">N</span><span class="cardinal east">E</span><span class="cardinal south">S</span><span class="cardinal west">W</span><div class="compass-ring"></div><div id="compassNeedle">▲<span id="compassDirection">Utara</span></div></div></div>
       <p class="big center" id="dashHeading">--°</p><p class="muted center" id="compassStatus">Ketuk kompas untuk mengaktifkan sensor</p>
     </div>
     <div class="card">
@@ -104,6 +104,12 @@
   <div class="card">
     <h3>🗺️ Peta Laut Real-Time</h3>
     <div id="map"></div>
+    <div class="row map-actions"><button class="btn" id="btnGlobal">🌍 Lihat dunia</button><button class="btn" id="btnWindyFocus">🌬️ Fokus Windy ke GPS</button></div>
+    <div class="windy-panel">
+      <div class="section-head"><div><span class="eyebrow">WINDY GLOBAL</span><h3>🌬️ Angin, ombak & prakiraan waktu</h3></div><a class="btn sm" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">Buka Windy ↗</a></div>
+      <p class="muted">Layer resmi Windy dengan animasi waktu. Posisi pusat mengikuti GPS HP jika izin lokasi aktif.</p>
+      <iframe id="windyFrame" title="Windy global weather map" loading="lazy" allow="fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
     <div class="row">
       <span class="chip">Lat: <b id="mapLat">-</b></span>
       <span class="chip">Lon: <b id="mapLon">-</b></span>

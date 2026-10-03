@@ -18,7 +18,10 @@ const MapApp = {
       if (Array.isArray(savedTrack)) this.track.setLatLngs(savedTrack.slice(-500));
     } catch (_) {}
     this.map.on("click", (e) => { this.cekKedalaman(e.latlng.lat, e.latlng.lng); this.deteksiKarang(e.latlng.lat, e.latlng.lng); });
+    document.getElementById("btnGlobal").addEventListener("click", () => this.map.fitWorld({ animate: true }));
+    document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
+    this.updateWindy(false);
     document.getElementById("btnDepth").addEventListener("click", () => this.lat !== null ? this.cekKedalaman(this.lat, this.lon) : alert("GPS belum aktif."));
     document.getElementById("btn3D").addEventListener("click", () => this.toggle3D());
     document.getElementById("btnReef").addEventListener("click", () => this.lat !== null ? this.deteksiKarang(this.lat, this.lon) : alert("GPS belum aktif."));
@@ -26,7 +29,9 @@ const MapApp = {
   },
   startGPS() {
     if (!navigator.geolocation) return this.setPosError("Perangkat tidak mendukung GPS.");
-    this.watchId = navigator.geolocation.watchPosition((pos) => this.onPos(pos), () => this.setPosError("GPS tidak dapat diakses. Izinkan lokasi."), { enableHighAccuracy: true, maximumAge: 3000, timeout: 15000 });
+    const options = { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 };
+    navigator.geolocation.getCurrentPosition((pos) => this.onPos(pos), () => {}, options);
+    this.watchId = navigator.geolocation.watchPosition((pos) => this.onPos(pos), () => this.setPosError("GPS tidak dapat diakses. Izinkan lokasi."), options);
   },
   onPos(pos) {
     this.lat = pos.coords.latitude; this.lon = pos.coords.longitude;
@@ -60,8 +65,17 @@ const MapApp = {
     }
     localStorage.setItem("bs10_lastpos", JSON.stringify({ lat: this.lat, lon: this.lon }));
     if (localStorage.getItem("bs10_auto_center") !== "false" && document.getElementById("page-peta").classList.contains("active") && this.map.getZoom() >= 12) this.map.panTo([this.lat, this.lon], { animate: true, duration: .35 });
-    if (window.Weather) Weather.refreshPosition(this.lat, this.lon);
-    if (window.LiveSync) LiveSync.publishPosition({ lat: this.lat, lon: this.lon, speed, accuracy: acc });
+    if (typeof Weather !== "undefined") Weather.refreshPosition(this.lat, this.lon);
+    this.updateWindy(false);
+    if (typeof LiveSync !== "undefined") LiveSync.publishPosition({ lat: this.lat, lon: this.lon, speed, accuracy: acc });
+  },
+  updateWindy(force) {
+    const frame = document.getElementById("windyFrame"); if (!frame) return;
+    const lat = this.lat === null ? -2.5 : this.lat, lon = this.lon === null ? 118 : this.lon;
+    const now = Date.now(), changed = !this.lastWindy || Math.abs(lat - this.lastWindy.lat) > .01 || Math.abs(lon - this.lastWindy.lon) > .01;
+    if (!force && (!changed || now - (this.lastWindy && this.lastWindy.time || 0) < 15000)) return;
+    const params = "lat=" + lat.toFixed(4) + "&lon=" + lon.toFixed(4) + "&detailLat=" + lat.toFixed(4) + "&detailLon=" + lon.toFixed(4) + "&zoom=" + (this.lat === null ? 3 : 8) + "&level=surface&overlay=wind&product=ecmwf&menu=&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=kt&metricTemp=%C2%B0C";
+    frame.src = "https://embed.windy.com/embed2.html?" + params; this.lastWindy = { lat, lon, time: now };
   },
   setPosError(msg) { document.getElementById("dashAcc").textContent = msg; document.getElementById("gpsState").textContent = "GNSS belum tersedia"; },
   clearTrack() { if (this.track) this.track.setLatLngs([]); localStorage.removeItem("bs10_track"); } ,

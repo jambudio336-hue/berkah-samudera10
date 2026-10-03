@@ -59,3 +59,7 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🛳️ Ikon launcher APK dan PWA diganti dengan artwork kapal Berkah Samudera dari pengguna.
 
 - 🧩 Dashboard profesional dengan KPI GPS, rute, jumlah catatan, status jaringan, serta tombol operasi terkelompok.
+
+- 🌬️ Embed resmi Windy global dengan fokus koordinat GPS HP, layer angin/ombak, animasi waktu, tekanan, hujan, dan prakiraan ECMWF.
+
+- 🧭 Kompas ditingkatkan dengan sensor absolut/magnetometer, label 16 arah mata angin, dan heading GPS sebagai fallback.

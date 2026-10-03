@@ -242,3 +242,13 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .quick-label { color:#79c8ff; font-size:.68rem; font-weight:800; letter-spacing:.5px; margin:8px 0 5px; text-transform:uppercase; }
 .quick-actions + .quick-label { margin-top:14px; }
 @media (max-width:480px) { .dashboard-kpis { grid-template-columns:repeat(2,1fr); } }
+
+.map-actions { justify-content:flex-start; }
+.windy-panel { margin-top:14px; padding:12px; border:1px solid #2f79c9; border-radius:14px; background:rgba(5,25,52,.72); }
+.windy-panel h3 { margin-bottom:4px; }
+.windy-panel .btn { flex:0 0 auto; }
+#windyFrame { display:block; width:100%; height:390px; margin-top:10px; border:1px solid var(--line); border-radius:10px; background:#071b34; }
+@media (max-width:480px) { #windyFrame { height:330px; } .map-actions .btn { flex:1; padding:10px 8px; font-size:.75rem; } }
+
+#compassNeedle { display:flex; flex-direction:column; align-items:center; gap:0; }
+#compassDirection { display:block; color:#fff; font-size:.55rem; line-height:1; font-weight:800; letter-spacing:.2px; white-space:nowrap; text-shadow:0 1px 3px #000; transform:rotate(0deg); margin-top:-3px; }
