@@ -9,11 +9,13 @@ const App = {
     App.quoteDashboard();
     App.settings();
     App.accessGate();
-    if (typeof SupabaseSync !== "undefined") SupabaseSync.init();
-    if (typeof SupabaseAuth !== "undefined") SupabaseAuth.init();
-    if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
-    if (typeof PrayerTimes !== "undefined") PrayerTimes.init();
-    if (typeof QuranApp !== "undefined") QuranApp.init();
+    setTimeout(() => {
+      if (typeof SupabaseSync !== "undefined") SupabaseSync.init();
+      if (typeof SupabaseAuth !== "undefined") SupabaseAuth.init();
+      if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
+      if (typeof PrayerTimes !== "undefined") PrayerTimes.init();
+      if (typeof QuranApp !== "undefined") QuranApp.init();
+    }, 350);
     App.quickActions();
     App.dashboardStats();
     setInterval(App.dashboardStats, 5000);
@@ -88,7 +90,7 @@ const App = {
         btn.classList.add("active");
         document.getElementById("page-" + btn.dataset.page).classList.add("active");
         if (btn.dataset.page === "peta" && MapApp.map) {
-          setTimeout(() => MapApp.map.invalidateSize(), 100);
+          setTimeout(() => { MapApp.map.invalidateSize(); MapApp.updateWindy(true); }, 180);
         }
       });
     });

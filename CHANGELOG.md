@@ -1,5 +1,13 @@
 # Changelog — Berkah Samudera10
 
+## [1.0.27] - 2026-10-04
+### Diperbaiki
+- Memperbaiki UI lambat/macet saat startup dengan lazy-load iframe Windy; Windy kini baru dimuat saat menu Peta dibuka atau tombol fokus ditekan.
+- Menunda request BMKG, notifikasi, jadwal sholat, Supabase, dan daftar Qur’an agar thread UI tidak terbebani bersamaan saat aplikasi mulai.
+- Menambahkan atribut `defer` pada Leaflet, Supabase CDN, dan seluruh modul JavaScript.
+- Mengubah `preload` video splash menjadi `metadata` agar decoding awal lebih ringan.
+- Menaikkan versi cache Service Worker ke v5 agar update JavaScript/CSS tidak tertahan cache lama.
+
 ## [1.0.26] - 2026-10-04
 ### Ditambahkan
 - Gerbang awal dengan pilihan Daftar/Masuk Akun atau Lanjut sebagai Pengguna Biasa.

@@ -1,6 +1,6 @@
 const MapApp = {
   map: null, marker: null, track: null, accuracyCircle: null, lat: null, lon: null,
-  remoteMarkers: {}, watchId: null, lastFix: null, lastMarineCheck: null, speedKmh: 0, layers: {}, reefMarkers: [], hazardLayer: null, windLayer: null, stormLayer: null, rainLayer: null, routeLine: null, destinationMarker: null, is3D: false,
+  remoteMarkers: {}, watchId: null, lastFix: null, lastMarineCheck: null, speedKmh: 0, layers: {}, reefMarkers: [], hazardLayer: null, windLayer: null, stormLayer: null, rainLayer: null, routeLine: null, destinationMarker: null, is3D: false, windyLoaded: false,
   init() {
     this.map = L.map("map", { zoomControl: true }).setView([-2.5, 118], 5);
     const street = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap" }).addTo(this.map);
@@ -23,7 +23,6 @@ const MapApp = {
     document.getElementById("btnGoogleMaps").addEventListener("click", () => this.openGoogleMaps());
     document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
-    this.updateWindy(false);
     document.getElementById("btnDepth").addEventListener("click", () => this.lat !== null ? this.cekKedalaman(this.lat, this.lon) : alert("GPS belum aktif."));
     document.getElementById("btn3D").addEventListener("click", () => this.toggle3D());
     document.getElementById("btnReef").addEventListener("click", () => this.lat !== null ? this.deteksiKarang(this.lat, this.lon) : alert("GPS belum aktif."));
@@ -125,6 +124,8 @@ const MapApp = {
   },
   updateWindy(force) {
     const frame = document.getElementById("windyFrame"); if (!frame) return;
+    if (!force && !this.windyLoaded) return;
+    this.windyLoaded = true;
     const lat = this.lat === null ? -2.5 : this.lat, lon = this.lon === null ? 118 : this.lon;
     const now = Date.now(), changed = !this.lastWindy || Math.abs(lat - this.lastWindy.lat) > .01 || Math.abs(lon - this.lastWindy.lon) > .01;
     if (!force && (!changed || now - (this.lastWindy && this.lastWindy.time || 0) < 15000)) return;

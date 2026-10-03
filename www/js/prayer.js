@@ -11,7 +11,7 @@ const PrayerTimes = {
     if (sound) { sound.checked = localStorage.getItem("bs10_adhan_sound") !== "false"; sound.addEventListener("change", () => { localStorage.setItem("bs10_adhan_sound", sound.checked); PrayerTimes.refresh(); }); }
     const btn = document.getElementById("btnEnablePrayer"); if (btn) btn.addEventListener("click", () => PrayerTimes.enable());
     PrayerTimes.renderSaved();
-    PrayerTimes.refresh();
+    setTimeout(() => PrayerTimes.refresh(), 1200);
     setInterval(() => PrayerTimes.refresh(), 30 * 60 * 1000);
   },
   position() { try { const p = JSON.parse(localStorage.getItem("bs10_lastpos")); return p || { lat: -2.5, lon: 118 }; } catch (_) { return { lat: -2.5, lon: 118 }; } },

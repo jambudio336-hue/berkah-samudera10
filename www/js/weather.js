@@ -5,7 +5,7 @@ const Weather = {
     const q = "latitude=" + p.lat + "&longitude=" + p.lon;
     Weather.muatCuaca(q);
     Weather.muatMarine(q);
-    Weather.muatBMKG();
+    setTimeout(() => Weather.muatBMKG(), 1800);
     setInterval(Weather.muatBMKG, 15 * 60 * 1000);
     const btn = document.getElementById("btnRefreshBMKG"); if (btn) btn.addEventListener("click", Weather.muatBMKG);
   },

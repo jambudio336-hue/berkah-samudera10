@@ -16,7 +16,7 @@ const NotificationCenter = {
     if (gempa) { gempa.checked = localStorage.getItem("bs10_notif_gempa") !== "false"; gempa.addEventListener("change", () => localStorage.setItem("bs10_notif_gempa", gempa.checked)); }
     NotificationCenter.render();
     NotificationCenter.updateStatus();
-    NotificationCenter.check(false);
+    setTimeout(() => NotificationCenter.check(false), 2500);
     setInterval(() => NotificationCenter.check(false), 10 * 60 * 1000);
   },
   async enable() {
