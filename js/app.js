@@ -69,30 +69,30 @@ const App = {
     });
   },
 
-  kompas() {
-    const tampil = (deg) => {
-      document.getElementById("dashHeading").textContent = Math.round(deg) + "°";
-      document.getElementById("compassNeedle").style.transform =
-        "rotate(" + deg + "deg)";
-    };
-    const handler = (e) => {
-      if (e.webkitCompassHeading !== undefined && e.webkitCompassHeading !== null) {
-        tampil(e.webkitCompassHeading);
-      } else if (e.alpha !== null) {
-        tampil(360 - e.alpha);
-      }
-    };
-    if (window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
-      document.getElementById("compassNeedle").addEventListener("click", () => {
-        DeviceOrientationEvent.requestPermission().then((res) => {
-          if (res === "granted") window.addEventListener("deviceorientationabsolute", handler, true);
-        });
-      });
-    } else if (window.DeviceOrientationEvent) {
-      window.addEventListener("deviceorientationabsolute", handler, true);
-    }
+  setHeading(deg, source) {
+    const value = ((Number(deg) % 360) + 360) % 360;
+    const heading = Math.round(value);
+    const dial = document.getElementById("compassDial");
+    const needle = document.getElementById("compassNeedle");
+    if (dial) dial.style.transform = "rotate(" + (-value) + "deg)";
+    if (needle) needle.style.transform = "rotate(" + value + "deg)";
+    document.getElementById("dashHeading").textContent = heading + "°";
+    document.getElementById("compassStatus").textContent = "Heading " + heading + "° • sumber " + source;
   },
-
+  kompas() {
+    const handler = (e) => {
+      if (e.webkitCompassHeading !== undefined && e.webkitCompassHeading !== null) App.setHeading(e.webkitCompassHeading, "sensor perangkat");
+      else if (e.alpha !== null) App.setHeading(360 - e.alpha, "sensor perangkat");
+    };
+    const aktifkan = () => {
+      if (window.DeviceOrientationEvent && DeviceOrientationEvent.requestPermission) {
+        DeviceOrientationEvent.requestPermission().then((res) => { if (res === "granted") { window.addEventListener("deviceorientationabsolute", handler, true); document.getElementById("compassStatus").textContent = "Sensor kompas aktif"; } }).catch(() => {});
+      } else if (window.DeviceOrientationEvent) { window.addEventListener("deviceorientationabsolute", handler, true); document.getElementById("compassStatus").textContent = "Sensor kompas aktif"; }
+    };
+    document.getElementById("compassButton").addEventListener("click", aktifkan);
+    const btn = document.getElementById("btnRequestCompass"); if (btn) btn.addEventListener("click", aktifkan);
+    aktifkan();
+  },
   onlineStatus() {
     const el = document.getElementById("statusNet");
     const update = () => {

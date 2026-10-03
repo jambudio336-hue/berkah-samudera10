@@ -67,8 +67,8 @@
     </div>
     <div class="card">
       <h3>🧭 Kompas</h3>
-      <div class="compass-wrap"><div id="compassNeedle">⬆️</div></div>
-      <p class="big center" id="dashHeading">--°</p>
+      <div class="compass-wrap" id="compassButton" title="Ketuk untuk mengaktifkan sensor kompas"><div class="compass-dial" id="compassDial"><span class="cardinal north">N</span><span class="cardinal east">E</span><span class="cardinal south">S</span><span class="cardinal west">W</span><div class="compass-ring"></div><div id="compassNeedle">▲</div></div></div>
+      <p class="big center" id="dashHeading">--°</p><p class="muted center" id="compassStatus">Ketuk kompas untuk mengaktifkan sensor</p>
     </div>
     <div class="card">
       <h3>🌤️ Cuaca Singkat</h3>
@@ -226,7 +226,7 @@
   <div class="card"><h3>🚢 Identitas Kapal</h3><label>Nama kapal</label><input id="settingVesselName" type="text" placeholder="Contoh: Berkah Samudera 10"><label>ID kapal (untuk sinkronisasi)</label><input id="settingVesselId" type="text" placeholder="kapal-utama"><button class="btn primary" id="btnSaveSettings">💾 Simpan pengaturan</button></div>
   <div class="card"><h3>📡 Sinkronisasi Full-Stack</h3><p class="muted">Masukkan URL server WebSocket backend untuk berbagi posisi kapal secara real-time.</p><label>URL backend API</label><input id="settingApi" type="url" placeholder="https://domain-anda.com"><div class="row"><button class="btn" id="btnTestApi">🔌 Tes koneksi</button><span class="chip" id="settingApiStatus">Belum dites</span></div></div>
   <div class="card"><h3>🧭 Navigasi</h3><label class="switch-row"><span>Ikuti posisi kapal otomatis</span><input id="settingAutoCenter" type="checkbox" checked></label><label class="switch-row"><span>Tampilkan jalur perjalanan</span><input id="settingShowTrack" type="checkbox" checked></label><button class="btn" id="btnClearTrack">🧹 Bersihkan jalur perjalanan</button><button class="btn" id="btnRefreshData">🔄 Segarkan cuaca & peta</button></div>
-  <div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button></div>
+  <div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
 </section>
 <!-- ============ RIWAYAT ============ -->
 <section id="page-riwayat" class="page">

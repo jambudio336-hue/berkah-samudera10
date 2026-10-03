@@ -39,6 +39,7 @@ const MapApp = {
     document.getElementById("dashAcc").textContent = "Akurasi GNSS: " + acc + " m"; document.getElementById("mapSpeed").textContent = speed.toFixed(1) + " km/j";
     const altitude = Number.isFinite(pos.coords.altitude) ? Math.round(pos.coords.altitude) + " m" : "-";
     const heading = Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 ? Math.round(pos.coords.heading) + "°" : "-";
+    if (Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 && window.App) App.setHeading(pos.coords.heading, "GPS kapal");
     document.getElementById("gpsState").textContent = "GNSS aktif • akurasi " + acc + " m • " + new Date().toLocaleTimeString("id-ID");
     document.getElementById("mapTelemetry").textContent = "Ketinggian " + altitude + " • Arah " + heading;
     if (!this.marker) { this.marker = L.marker([this.lat, this.lon]).addTo(this.map); this.map.setView([this.lat, this.lon], 13); } else this.marker.setLatLng([this.lat, this.lon]);

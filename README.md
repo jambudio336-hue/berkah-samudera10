@@ -47,3 +47,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 📡 Integrasi GPS/GNSS Android dengan permission lokasi presisi, akurasi, kecepatan, heading, dan rute tersimpan lokal hingga 500 titik. Pelacakan berjalan real-time saat aplikasi aktif di layar.
 
 - 🪸 Deteksi “Karang Laut” pada radius 100 m dari posisi kapal menggunakan data karang terpetakan publik; bukan pengganti sonar atau peta navigasi resmi.
+
+- 🧭 Kompas 3D nautika aktif dari sensor orientasi perangkat, dengan fallback heading GPS saat kapal bergerak.
