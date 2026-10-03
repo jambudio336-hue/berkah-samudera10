@@ -10,6 +10,10 @@ const MapApp = {
     this.layers = { street, satellite, bathymetry, seamarks };
     L.control.layers({ "Peta standar": street, "Satelit": satellite }, { "Kedalaman laut (GEBCO)": bathymetry, "Terumbu/marka (OpenSeaMap)": seamarks }, { collapsed: true, position: "topright" }).addTo(this.map);
     this.track = L.polyline([], { color: "#ffb703", weight: 4, opacity: .9 }).addTo(this.map);
+    try {
+      const savedTrack = JSON.parse(localStorage.getItem("bs10_track") || "[]");
+      if (Array.isArray(savedTrack)) this.track.setLatLngs(savedTrack.slice(-500));
+    } catch (_) {}
     this.map.on("click", (e) => { this.cekKedalaman(e.latlng.lat, e.latlng.lng); this.deteksiKarang(e.latlng.lat, e.latlng.lng); });
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
     document.getElementById("btnDepth").addEventListener("click", () => this.lat !== null ? this.cekKedalaman(this.lat, this.lon) : alert("GPS belum aktif."));
@@ -33,21 +37,28 @@ const MapApp = {
     document.getElementById("mapLat").textContent = teksLat; document.getElementById("mapLon").textContent = teksLon;
     document.getElementById("dashLat").textContent = "Latitude: " + teksLat; document.getElementById("dashLon").textContent = "Longitude: " + teksLon;
     document.getElementById("dashAcc").textContent = "Akurasi GNSS: " + acc + " m"; document.getElementById("mapSpeed").textContent = speed.toFixed(1) + " km/j";
-    document.getElementById("gpsState").textContent = "GNSS aktif • diperbarui " + new Date().toLocaleTimeString("id-ID");
+    const altitude = Number.isFinite(pos.coords.altitude) ? Math.round(pos.coords.altitude) + " m" : "-";
+    const heading = Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 ? Math.round(pos.coords.heading) + "°" : "-";
+    document.getElementById("gpsState").textContent = "GNSS aktif • akurasi " + acc + " m • " + new Date().toLocaleTimeString("id-ID");
+    document.getElementById("mapTelemetry").textContent = "Ketinggian " + altitude + " • Arah " + heading;
     if (!this.marker) { this.marker = L.marker([this.lat, this.lon]).addTo(this.map); this.map.setView([this.lat, this.lon], 13); } else this.marker.setLatLng([this.lat, this.lon]);
     this.marker.bindPopup("Lokasi Kapal Saya<br>Lat " + teksLat + "<br>Lon " + teksLon + "<br>Kecepatan " + speed.toFixed(1) + " km/j");
     this.accuracyCircle = this.accuracyCircle || L.circle([this.lat, this.lon], { radius: acc, color: "#06d6a0", fillOpacity: .08 }).addTo(this.map);
     this.accuracyCircle.setLatLng([this.lat, this.lon]).setRadius(acc);
     const points = this.track.getLatLngs();
     if (localStorage.getItem("bs10_show_track") === "false") this.track.setStyle({ opacity: 0 }); else this.track.setStyle({ opacity: .9 });
-    if (!points.length || this.map.distance(points[points.length - 1], [this.lat, this.lon]) > 8) { points.push([this.lat, this.lon]); this.track.setLatLngs(points.slice(-500)); }
+    if (!points.length || this.map.distance(points[points.length - 1], [this.lat, this.lon]) > 8) {
+      points.push([this.lat, this.lon]);
+      const kept = points.slice(-500); this.track.setLatLngs(kept);
+      localStorage.setItem("bs10_track", JSON.stringify(kept.map((p) => ({ lat: p.lat, lng: p.lng }))));
+    }
     localStorage.setItem("bs10_lastpos", JSON.stringify({ lat: this.lat, lon: this.lon }));
     if (localStorage.getItem("bs10_auto_center") !== "false" && document.getElementById("page-peta").classList.contains("active") && this.map.getZoom() >= 12) this.map.panTo([this.lat, this.lon], { animate: true, duration: .35 });
     if (window.Weather) Weather.refreshPosition(this.lat, this.lon);
     if (window.LiveSync) LiveSync.publishPosition({ lat: this.lat, lon: this.lon, speed, accuracy: acc });
   },
   setPosError(msg) { document.getElementById("dashAcc").textContent = msg; document.getElementById("gpsState").textContent = "GNSS belum tersedia"; },
-  clearTrack() { if (this.track) this.track.setLatLngs([]); } ,
+  clearTrack() { if (this.track) this.track.setLatLngs([]); localStorage.removeItem("bs10_track"); } ,
   toggle3D() { this.is3D = !this.is3D; document.getElementById("map").classList.toggle("map-3d", this.is3D); document.getElementById("btn3D").textContent = this.is3D ? "🧭 Matikan mode 3D" : "🧭 Mode peta 3D"; document.getElementById("mapMode").textContent = this.is3D ? "Mode 3D visual aktif" : "Mode datar aktif"; setTimeout(() => this.map.invalidateSize(), 450); },
   cekKedalaman(lat, lon) {
     const el = document.getElementById("mapDepth"); el.textContent = "Mengambil elevasi dasar laut...";

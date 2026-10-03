@@ -43,3 +43,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - Layer satelit memakai Esri World Imagery. Bathymetry memakai GEBCO; kedalaman titik adalah perkiraan dan harus diverifikasi dengan peta navigasi resmi/alat sounder.
 - Deteksi karang hanya menemukan objek yang sudah dipetakan publik di sekitar titik; hasil kosong bukan jaminan bebas karang.
 - Build release APK membutuhkan Android SDK/Gradle dan signing keystore.
+
+- 📡 Integrasi GPS/GNSS Android dengan permission lokasi presisi, akurasi, kecepatan, heading, dan rute tersimpan lokal hingga 500 titik. Pelacakan berjalan real-time saat aplikasi aktif di layar.
