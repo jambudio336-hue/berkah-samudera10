@@ -96,3 +96,5 @@ Frontend dibungkus menjadi APK native memakai Capacitor. Seluruh data pengguna d
 - 🔐 Auth Supabase: email OTP, SMS OTP, opsi WhatsApp OTP jika provider WhatsApp Twilio diaktifkan, Google OAuth, profil nahkoda/ABK, follow/unfollow, dan berbagi lokasi teman.
 
 - 👤 Fitur akun: email OTP, SMS OTP, WhatsApp OTP melalui channel Supabase jika provider Twilio WhatsApp aktif, Google OAuth, profil nahkoda/ABK, follow/unfollow, dan berbagi lokasi teman.
+
+- 📸 Story 24 jam: teks, foto, video maksimal 60 detik, feed hanya untuk mutual follow, statistik pengikut/mengikuti, dan riwayat penonton story. Media memakai bucket Storage privat Supabase.

@@ -42,6 +42,7 @@
   <button class="tab" data-page="cuaca">🌊 Cuaca</button>
   <button class="tab" data-page="quran">📖 Al-Qur’an</button>
   <button class="tab" data-page="akun">👤 Akun</button>
+  <button class="tab" data-page="story">📸 Story</button>
   <button class="tab" data-page="tangkapan">🐟 Tangkapan</button>
   <button class="tab" data-page="kolekting">📦 Kolekting</button>
   <button class="tab" data-page="perbekalan">⛽ Perbekalan</button>
@@ -170,9 +171,21 @@
     <div class="card"><button class="btn google-btn" id="btnGoogleLogin">🔐 Lanjutkan dengan Google</button><p id="authStatus" class="muted">Belum masuk.</p></div>
   </div>
   <div id="authSignedIn" class="hidden">
-    <div class="card profile-card"><div class="section-head"><div><span class="eyebrow">PROFIL PENGGUNA</span><h2 id="profileHeading">Profil Saya</h2></div><button class="btn" id="btnSignOut">Keluar</button></div><div class="profile-grid"><div><label>Nama tampilan</label><input id="profileName" type="text" placeholder="Nama Anda"><label>Bio</label><textarea id="profileBio" rows="3" placeholder="Ceritakan tentang Anda..."></textarea><label>Peran</label><select id="profileRole"><option value="nahkoda">Nahkoda</option><option value="abk">ABK</option></select></div><div><label>URL foto profil</label><input id="profileAvatar" type="url" placeholder="https://..."><label>Nama kapal</label><input id="profileVessel" type="text" placeholder="Nama kapal"><label>Kapal membawa</label><input id="profileCargo" type="text" placeholder="Ikan, logistik, penumpang..."><label class="switch-row"><span>Bagikan lokasi ke teman yang diikuti</span><input id="profileShareLocation" type="checkbox" checked></label></div></div><button class="btn primary" id="btnSaveProfile">💾 Simpan profil</button><p id="profileStatus" class="muted"></p></div>
+    <div class="card profile-stats"><div class="social-stat"><b id="followersCount">0</b><span>Pengikut</span></div><div class="social-stat"><b id="followingCount">0</b><span>Mengikuti</span></div><button class="btn" id="btnShowFollowers">Lihat pengikut</button></div>
+    <div class="card profile-card"><div class="section-head><div><span class="eyebrow">PROFIL PENGGUNA</span><h2 id="profileHeading">Profil Saya</h2></div><button class="btn" id="btnSignOut">Keluar</button></div><div class="profile-grid"><div><label>Nama tampilan</label><input id="profileName" type="text" placeholder="Nama Anda"><label>Bio</label><textarea id="profileBio" rows="3" placeholder="Ceritakan tentang Anda..."></textarea><label>Peran</label><select id="profileRole"><option value="nahkoda">Nahkoda</option><option value="abk">ABK</option></select></div><div><label>URL foto profil</label><input id="profileAvatar" type="url" placeholder="https://..."><label>Nama kapal</label><input id="profileVessel" type="text" placeholder="Nama kapal"><label>Kapal membawa</label><input id="profileCargo" type="text" placeholder="Ikan, logistik, penumpang..."><label class="switch-row"><span>Bagikan lokasi ke teman yang diikuti</span><input id="profileShareLocation" type="checkbox" checked></label></div></div><button class="btn primary" id="btnSaveProfile">💾 Simpan profil</button><p id="profileStatus" class="muted"></p></div>
     <div class="card"><h3>🔎 Cari pengguna</h3><div class="row"><input id="friendSearch" type="search" placeholder="Cari nama pengguna atau nama kapal"><button class="btn" id="btnSearchFriends">Cari</button></div><div id="friendResults"></div></div>
+    <div class="card"><h3>👥 Daftar pengikut</h3><div id="followersList"><p class="muted">Memuat pengikut...</p></div></div>
     <div class="card"><h3>🧭 Teman yang diikuti</h3><p class="muted">Lokasi teman yang Anda ikuti dan mengaktifkan berbagi lokasi akan muncul di peta.</p><div id="followingList"></div></div>
+  </div>
+</section>
+<!-- ============ STORY ============ -->
+<section id="page-story" class="page">
+  <div class="card hero"><span class="eyebrow">24 JAM • TEMAN YANG SALING FOLLOW</span><h2>📸 Story Berkah Samudera</h2><p class="hero-sub">Bagikan foto, video maksimal 60 detik, atau teks kepada teman yang saling follow.</p></div>
+  <div id="storySignedOut" class="card"><p class="muted">Masuk ke menu Akun untuk membuat dan melihat story teman.</p><button class="btn primary-inline" data-go="akun">👤 Masuk / Daftar</button></div>
+  <div id="storySignedIn" class="hidden">
+    <div class="card"><h3>➕ Buat Story</h3><select id="storyType"><option value="text">Teks</option><option value="photo">Foto</option><option value="video">Video maksimal 60 detik</option></select><textarea id="storyText" rows="4" placeholder="Tulis kabar untuk teman..."></textarea><input id="storyFile" type="file" accept="image/*,video/*"><button class="btn primary" id="btnPublishStory">Terbitkan Story</button><p id="storyStatus" class="muted"></p></div>
+    <div class="card"><div class="section-head"><h3>📰 Story Teman</h3><button class="btn sm" id="btnRefreshStories">Refresh</button></div><div id="storyFeed"><p class="muted">Memuat story...</p></div></div>
+    <div class="card"><h3>👁️ Riwayat tontonan story saya</h3><div id="storyOwnViews"><p class="muted">Belum ada data tontonan.</p></div></div>
   </div>
 </section>
 <!-- ============ TANGKAPAN ============ -->
@@ -303,6 +316,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-sync.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/story.js"></script>
 <script src="js/map.js"></script>
 <script src="js/notifications.js"></script>
 <script src="js/prayer.js"></script>
