@@ -118,13 +118,12 @@ const App = {
     }));
   },
   settings() {
-    const name = document.getElementById("settingVesselName"), id = document.getElementById("settingVesselId"), api = document.getElementById("settingApi");
+    const name = document.getElementById("settingVesselName"), id = document.getElementById("settingVesselId");
     if (!name) return;
-    name.value = localStorage.getItem("bs10_vessel_name") || "Berkah Samudera 10"; id.value = localStorage.getItem("bs10_vessel_id") || "kapal-utama"; api.value = localStorage.getItem("bs10_api") || "";
+    name.value = localStorage.getItem("bs10_vessel_name") || "Berkah Samudera 10"; id.value = localStorage.getItem("bs10_vessel_id") || "kapal-utama";
     document.getElementById("settingAutoCenter").checked = localStorage.getItem("bs10_auto_center") !== "false";
     document.getElementById("settingShowTrack").checked = localStorage.getItem("bs10_show_track") !== "false";
-    document.getElementById("btnSaveSettings").addEventListener("click", () => { localStorage.setItem("bs10_vessel_name", name.value.trim() || "Berkah Samudera 10"); localStorage.setItem("bs10_vessel_id", id.value.trim() || "kapal-utama"); localStorage.setItem("bs10_api", api.value.trim()); localStorage.setItem("bs10_auto_center", document.getElementById("settingAutoCenter").checked); localStorage.setItem("bs10_show_track", document.getElementById("settingShowTrack").checked); if (typeof LiveSync !== "undefined") { LiveSync.base = api.value.trim(); LiveSync.connect(); } alert("✅ Pengaturan tersimpan."); });
-    document.getElementById("btnTestApi").addEventListener("click", async () => { const out = document.getElementById("settingApiStatus"); if (!api.value.trim()) { out.textContent = "Isi URL backend dulu"; return; } out.textContent = "Menguji..."; try { const r = await fetch(api.value.replace(/\/$/, "") + "/health"); out.textContent = r.ok ? "✅ Online" : "❌ Respons gagal"; } catch (_) { out.textContent = "❌ Tidak tersambung"; } });
+    document.getElementById("btnSaveSettings").addEventListener("click", () => { localStorage.setItem("bs10_vessel_name", name.value.trim() || "Berkah Samudera 10"); localStorage.setItem("bs10_vessel_id", id.value.trim() || "kapal-utama"); localStorage.setItem("bs10_auto_center", document.getElementById("settingAutoCenter").checked); localStorage.setItem("bs10_show_track", document.getElementById("settingShowTrack").checked); alert("✅ Pengaturan tersimpan."); });
     document.getElementById("btnClearTrack").addEventListener("click", () => { if (confirm("Bersihkan jalur perjalanan di peta?")) MapApp.clearTrack(); });
     document.getElementById("btnRefreshData").addEventListener("click", () => { const pos = MapApp.lat !== null ? { lat: MapApp.lat, lon: MapApp.lon } : Weather.pos(); Weather.refreshPosition(pos.lat, pos.lon); alert("🔄 Data cuaca sedang disegarkan."); });
     document.getElementById("btnRequestGps").addEventListener("click", () => { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(() => alert("✅ Akses lokasi aktif."), () => alert("❌ Akses lokasi ditolak atau belum tersedia."), { enableHighAccuracy: true }); });

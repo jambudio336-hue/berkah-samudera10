@@ -7,6 +7,8 @@ const PrayerTimes = {
   init() {
     const toggle = document.getElementById("settingPrayerNotif");
     if (toggle) { toggle.checked = localStorage.getItem("bs10_prayer_enabled") !== "false"; toggle.addEventListener("change", () => { localStorage.setItem("bs10_prayer_enabled", toggle.checked); if (toggle.checked) PrayerTimes.refresh(); else PrayerTimes.cancelScheduled(); }); }
+    const sound = document.getElementById("settingAdhanSound");
+    if (sound) { sound.checked = localStorage.getItem("bs10_adhan_sound") !== "false"; sound.addEventListener("change", () => { localStorage.setItem("bs10_adhan_sound", sound.checked); PrayerTimes.refresh(); }); }
     const btn = document.getElementById("btnEnablePrayer"); if (btn) btn.addEventListener("click", () => PrayerTimes.enable());
     PrayerTimes.renderSaved();
     PrayerTimes.refresh();
@@ -16,7 +18,7 @@ const PrayerTimes = {
   async enable() {
     try {
       const plugin = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
-      if (plugin) { const p = await plugin.requestPermissions(); if (p.display !== "granted") throw new Error("permission"); }
+      if (plugin) { const p = await plugin.requestPermissions(); if (p.display !== "granted") throw new Error("permission"); await PrayerTimes.createChannels(plugin); }
       else if ("Notification" in window) { const p = await Notification.requestPermission(); if (p !== "granted") throw new Error("permission"); }
       else throw new Error("unsupported");
       localStorage.setItem("bs10_prayer_enabled", "true"); const t = document.getElementById("prayerStatus"); if (t) t.textContent = "🟢 Pengingat sholat aktif"; PrayerTimes.refresh();
@@ -47,11 +49,13 @@ const PrayerTimes = {
     try { const parts = new Intl.DateTimeFormat("en-US", { timeZone: PrayerTimes.zone, timeZoneName: "longOffset" }).formatToParts(new Date(guess)); const raw = (parts.find((x) => x.type === "timeZoneName") || {}).value || "GMT"; const m = raw.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/); if (m) offset = (m[1] === "+" ? 1 : -1) * (Number(m[2]) * 60 + Number(m[3] || 0)); } catch (_) {}
     return new Date(guess - offset * 60000);
   },
+  async createChannels(plugin) { try { await plugin.createChannel({ id: "prayer_adhan", name: "Adzan & Waktu Sholat", description: "Pengingat waktu sholat dengan audio adzan", importance: 5, sound: "azan", visibility: 1 }); await plugin.createChannel({ id: "prayer_silent", name: "Waktu Sholat (senyap)", description: "Pengingat waktu sholat tanpa audio", importance: 4, visibility: 1 }); } catch (_) {} },
   async schedule(dateText) {
     const plugin = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications; if (!plugin || !PrayerTimes.times) return;
+    await PrayerTimes.createChannels(plugin);
     const ids = JSON.parse(localStorage.getItem("bs10_prayer_ids") || "[]"); if (ids.length) { try { await plugin.cancel({ notifications: ids.map((id) => ({ id })) }); } catch (_) {} }
-    const notifications = []; let id = 700000;
-    for (const k of Object.keys(PrayerTimes.names)) { const val = String(PrayerTimes.times[k] || "").split(" ")[0]; if (!/^\d{1,2}:\d{2}$/.test(val)) continue; const at = PrayerTimes.localDate(dateText, val); if (at.getTime() <= Date.now() + 30000) continue; notifications.push({ id: id++, title: "🕌 Waktu " + PrayerTimes.names[k], body: "Telah masuk waktu " + PrayerTimes.names[k] + ". Semoga ibadah dan perjalanan Anda diberkahi.", schedule: { at }, sound: "default" }); }
+    const notifications = []; let id = 700000; const soundOn = localStorage.getItem("bs10_adhan_sound") !== "false";
+    for (const k of Object.keys(PrayerTimes.names)) { const val = String(PrayerTimes.times[k] || "").split(" ")[0]; if (!/^\d{1,2}:\d{2}$/.test(val)) continue; const at = PrayerTimes.localDate(dateText, val); if (at.getTime() <= Date.now() + 30000) continue; notifications.push({ id: id++, title: "🕌 Waktu " + PrayerTimes.names[k], body: "Telah masuk waktu " + PrayerTimes.names[k] + ". " + PrayerTimes.quotes()[id % PrayerTimes.quotes().length], schedule: { at }, channelId: soundOn ? "prayer_adhan" : "prayer_silent", sound: soundOn ? "azan" : undefined }); }
     if (notifications.length) { try { await plugin.schedule({ notifications }); localStorage.setItem("bs10_prayer_ids", JSON.stringify(notifications.map((x) => x.id))); } catch (_) {} }
   },
   async cancelScheduled() { const plugin = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications; const ids = JSON.parse(localStorage.getItem("bs10_prayer_ids") || "[]"); if (plugin && ids.length) { try { await plugin.cancel({ notifications: ids.map((id) => ({ id })) }); } catch (_) {} } localStorage.removeItem("bs10_prayer_ids"); },

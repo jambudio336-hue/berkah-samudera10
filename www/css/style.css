@@ -309,3 +309,5 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .prayer-row span { color:#ffd166; font-weight:800; }
 .prayer-card .quote { margin-top:12px; }
 .prayer-settings .btn { margin-top:10px; }
+
+.local-storage-card { border-color:#06d6a0; }

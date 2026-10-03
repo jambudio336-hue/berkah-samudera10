@@ -35,7 +35,7 @@ MIT — lihat [LICENSE](LICENSE)
 
 ## 🧱 Full-stack dan build APK
 
-Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacitor. Backend ada di `server/` dan menyediakan `/health`, `/api/vessels`, serta WebSocket `/telemetry`. Jalankan backend dengan `cd server && npm install && npm start`, lalu set URL backend pada `localStorage` dengan key `bs10_api` atau integrasikan URL deployment Anda.
+Frontend dibungkus menjadi APK native memakai Capacitor. Seluruh data pengguna disimpan lokal di HP dengan localStorage dan jadwal notifikasi Android; backend tidak diperlukan untuk memakai aplikasi.
 
 ### Catatan akurasi
 
@@ -80,3 +80,9 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🕌 Jadwal sholat otomatis mengikuti zona waktu koordinat GPS, dengan notifikasi Android terjadwal, pengaturan on/off, dan quotes Islami serta pelaut/nelayan.
 
 - 🕋 Jadwal sholat memakai Aladhan API endpoint bertanggal dan meta timezone koordinat, dengan notifikasi Android lokal terjadwal serta suara notifikasi bawaan perangkat.
+
+- 🔊 Audio adzan dibundel sebagai suara channel notifikasi Android; pengguna dapat mematikan suara adzan tanpa mematikan notifikasinya.
+
+- 📱 Mode local-first: tidak ada backend, akun, atau sinkronisasi server yang diperlukan; data operasi kapal tersimpan di HP pengguna.
+
+- 📴 APK kini local-first sepenuhnya: backend, akun, dan server tidak diperlukan; seluruh data operasional tersimpan di HP pengguna.
