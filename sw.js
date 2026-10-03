@@ -1,7 +1,9 @@
-const CACHE = "berkah-samudera10-v1";
+const CACHE = "berkah-samudera10-v2";
 const SHELL = ["./", "./index.html", "./css/style.css", "./manifest.json",
   "./js/storage.js", "./js/map.js", "./js/weather.js", "./js/tangkapan.js",
-  "./js/kolekting.js", "./js/perbekalan.js", "./js/kru.js", "./js/app.js"];
+  "./js/kolekting.js", "./js/perbekalan.js", "./js/kru.js", "./js/app.js",
+  "./file_000000000fa48211b2c09fa64b21f357.png",
+  "./490719828_1789293110615125.jpg"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)));
@@ -17,6 +19,20 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const url = e.request.url;
   if (e.request.method !== "GET") return;
+
+  // Video intro: cache-first (biar splash tetap jalan saat offline)
+  if (url.includes("ssstik.io_")) {
+    e.respondWith(
+      caches.match(e.request).then((hit) => hit ||
+        fetch(e.request).then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(e.request, copy));
+          return res;
+        }))
+    );
+    return;
+  }
+
   // Cache peta (tile OSM) strategi cache-first
   if (url.includes("tile.openstreetmap.org")) {
     e.respondWith(
@@ -29,6 +45,7 @@ self.addEventListener("fetch", (e) => {
     );
     return;
   }
+
   // API cuaca: network-first, fallback cache
   if (url.includes("open-meteo.com") || url.includes("bmkg")) {
     e.respondWith(
@@ -40,6 +57,7 @@ self.addEventListener("fetch", (e) => {
     );
     return;
   }
+
   // Aset aplikasi: cache-first
   e.respondWith(
     caches.match(e.request).then((hit) => hit ||
