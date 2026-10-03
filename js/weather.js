@@ -1,5 +1,11 @@
 const Weather = {
-  lastPos: null,
+  init() {
+    const p = Weather.pos();
+    const q = "latitude=" + p.lat + "&longitude=" + p.lon;
+    Weather.muatCuaca(q);
+    Weather.muatMarine(q);
+    Weather.muatBMKG();
+  },
 
   pos() {
     try {
@@ -8,21 +14,13 @@ const Weather = {
     } catch (e) { return { lat: -2.5, lon: 118 }; }
   },
 
-  init() {
-    const p = this.pos();
-    const q = "latitude=" + p.lat + "&longitude=" + p.lon;
-    this.muatCuaca(q);
-    this.muatMarine(q);
-    this.muatBMKG();
-  },
-
   muatCuaca(q) {
     fetch("https://api.open-meteo.com/v1/forecast?" + q +
       "&current=temperature_2m,wind_speed_10m,wind_direction_10m,precipitation,weather_code" +
       "&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,precipitation_sum" +
       "&forecast_days=4&timezone=auto")
       .then((r) => r.json())
-      .then((d) => this.tampilCuaca(d))
+      .then((d) => Weather.tampilCuaca(d))
       .catch(() => {
         document.getElementById("weatherNow").textContent = "Offline: data cuaca tidak tersedia.";
       });
@@ -33,7 +31,7 @@ const Weather = {
       "&current=wave_height,wave_direction,wave_period,wind_wave_height,sea_surface_temperature" +
       "&timezone=auto")
       .then((r) => r.json())
-      .then((d) => this.tampilMarine(d))
+      .then((d) => Weather.tampilMarine(d))
       .catch(() => {
         document.getElementById("marineNow").textContent = "Offline: data ombak tidak tersedia.";
       });
@@ -51,13 +49,11 @@ const Weather = {
     document.getElementById("dashWeather").innerHTML =
       desk + " • " + c.temperature_2m + "°C • Angin " + c.wind_speed_10m + " km/j";
 
-    // Peringatan ekstrem
     let alarm = [];
     if (c.wind_speed_10m >= 40) alarm.push("Angin kencang " + c.wind_speed_10m + " km/j");
     if (c.precipitation >= 5) alarm.push("Hujan lebat terdeteksi");
     Weather.pasangAlarm(alarm);
 
-    // Prakiraan
     let rows = "";
     for (let i = 0; i < d.daily.time.length; i++) {
       rows += "<div class='row forecast-row'>" +
@@ -96,7 +92,6 @@ const Weather = {
 
   muatBMKG() {
     const el = document.getElementById("bmkgNews");
-    // Gempa terkini BMKG (endpoint resmi data terbuka)
     fetch("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json")
       .then((r) => r.json())
       .then((d) => {
