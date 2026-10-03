@@ -286,3 +286,10 @@ h4 { margin: 10px 0 6px; color: var(--accent); }
 .about-card p { color:#d5e7fb; font-size:.86rem; line-height:1.55; }
 .about-card .thanks { margin-top:12px; color:var(--accent2); font-weight:600; }
 .about-card .sponsor { margin-top:14px; }
+
+.route-panel, .overlay-panel { margin-top:14px; padding:12px; border:1px solid #2f79c9; border-radius:14px; background:rgba(5,25,52,.72); }
+.route-inputs { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.route-inputs label { margin-top:4px; }
+.hazard-marker, .wind-marker { background:rgba(6,26,51,.88); border:1px solid #ffb703; border-radius:50%; text-align:center; line-height:28px; font-size:18px; }
+.wind-marker { color:#79c8ff; border-color:#06d6a0; font-size:24px; }
+@media (max-width:420px) { .route-inputs { grid-template-columns:1fr; } }

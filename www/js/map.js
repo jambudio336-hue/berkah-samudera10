@@ -1,6 +1,6 @@
 const MapApp = {
   map: null, marker: null, track: null, accuracyCircle: null, lat: null, lon: null,
-  watchId: null, lastFix: null, lastMarineCheck: null, layers: {}, reefMarkers: [], is3D: false,
+  watchId: null, lastFix: null, lastMarineCheck: null, speedKmh: 0, layers: {}, reefMarkers: [], hazardLayer: null, windLayer: null, stormLayer: null, rainLayer: null, routeLine: null, destinationMarker: null, is3D: false,
   init() {
     this.map = L.map("map", { zoomControl: true }).setView([-2.5, 118], 5);
     const street = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap" }).addTo(this.map);
@@ -10,14 +10,15 @@ const MapApp = {
     const dark = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { maxZoom: 20, attribution: "&copy; CARTO" });
     const bathymetry = L.tileLayer.wms("https://ows.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .58, attribution: "Bathymetry &copy; GEBCO" });
     const seamarks = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", { maxZoom: 18, opacity: .9, attribution: "Seamarks &copy; OpenSeaMap" });
-    this.layers = { street, satellite, terrain, topo, dark, bathymetry, seamarks };
-    L.control.layers({ "Peta standar": street, "Satelit realistis": satellite, "Topografi": topo, "Peta medan": terrain, "Peta gelap": dark }, { "Kedalaman laut (GEBCO)": bathymetry, "Karang & marka laut": seamarks }, { collapsed: true, position: "topright" }).addTo(this.map);
+    this.hazardLayer = L.layerGroup(); this.windLayer = L.layerGroup(); this.stormLayer = L.layerGroup();
+    this.layers = { street, satellite, terrain, topo, dark, bathymetry, seamarks, hazards: this.hazardLayer, wind: this.windLayer, storm: this.stormLayer };
+    L.control.layers({ "Peta standar": street, "Satelit realistis": satellite, "Topografi": topo, "Peta medan": terrain, "Peta gelap": dark }, { "Kedalaman laut (GEBCO)": bathymetry, "Karang & marka laut": seamarks, "Objek karang/kapal karam": this.hazardLayer, "Arah angin": this.windLayer, "Indikasi badai": this.stormLayer }, { collapsed: true, position: "topright" }).addTo(this.map);
     this.track = L.polyline([], { color: "#ffb703", weight: 4, opacity: .9 }).addTo(this.map);
     try {
       const savedTrack = JSON.parse(localStorage.getItem("bs10_track") || "[]");
       if (Array.isArray(savedTrack)) this.track.setLatLngs(savedTrack.slice(-500));
     } catch (_) {}
-    this.map.on("click", (e) => { this.cekKedalaman(e.latlng.lat, e.latlng.lng); this.deteksiKarang(e.latlng.lat, e.latlng.lng); });
+    this.map.on("click", (e) => { this.cekKedalaman(e.latlng.lat, e.latlng.lng); this.deteksiKarang(e.latlng.lat, e.latlng.lng); const a = document.getElementById("routeLat"), b = document.getElementById("routeLon"); if (a && b) { a.value = e.latlng.lat.toFixed(6); b.value = e.latlng.lng.toFixed(6); } });
     document.getElementById("btnGlobal").addEventListener("click", () => this.map.fitWorld({ animate: true }));
     document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
@@ -25,6 +26,12 @@ const MapApp = {
     document.getElementById("btnDepth").addEventListener("click", () => this.lat !== null ? this.cekKedalaman(this.lat, this.lon) : alert("GPS belum aktif."));
     document.getElementById("btn3D").addEventListener("click", () => this.toggle3D());
     document.getElementById("btnReef").addEventListener("click", () => this.lat !== null ? this.deteksiKarang(this.lat, this.lon) : alert("GPS belum aktif."));
+    document.getElementById("btnSetRoute").addEventListener("click", () => this.setRoute());
+    document.getElementById("btnClearRoute").addEventListener("click", () => this.clearRoute());
+    document.getElementById("btnWindOverlay").addEventListener("click", () => this.toggleLayer(this.windLayer, "Arah angin"));
+    document.getElementById("btnRainOverlay").addEventListener("click", () => this.toggleRain());
+    document.getElementById("btnHazardOverlay").addEventListener("click", () => this.toggleHazards());
+    document.getElementById("btnStormOverlay").addEventListener("click", () => this.toggleLayer(this.stormLayer, "Indikasi badai"));
     this.startGPS();
   },
   startGPS() {
@@ -44,7 +51,9 @@ const MapApp = {
     this.lastFix = { lat: this.lat, lon: this.lon, time: now };
     document.getElementById("mapLat").textContent = teksLat; document.getElementById("mapLon").textContent = teksLon;
     document.getElementById("dashLat").textContent = "Latitude: " + teksLat; document.getElementById("dashLon").textContent = "Longitude: " + teksLon;
+    this.speedKmh = speed;
     const knots = speed / 1.852;
+    const routeSpeed = document.getElementById("routeSpeedInfo"); if (routeSpeed) routeSpeed.textContent = "Kecepatan: " + knots.toFixed(1) + " kn";
     document.getElementById("dashAcc").textContent = "Akurasi GNSS: " + acc + " m"; document.getElementById("mapSpeed").textContent = knots.toFixed(1) + " kn • " + speed.toFixed(1) + " km/j";
     document.getElementById("dashSpeed").textContent = "Kecepatan kapal: " + knots.toFixed(1) + " knot (" + speed.toFixed(1) + " km/j)";
     const altitude = Number.isFinite(pos.coords.altitude) ? Math.round(pos.coords.altitude) + " m" : "-";
@@ -70,6 +79,37 @@ const MapApp = {
     this.autoMarineCheck();
     if (typeof LiveSync !== "undefined") LiveSync.publishPosition({ lat: this.lat, lon: this.lon, speed, accuracy: acc });
   },
+  toggleLayer(layer, name) {
+    if (!layer) return;
+    const active = this.map.hasLayer(layer); if (active) this.map.removeLayer(layer); else layer.addTo(this.map);
+    const el = document.getElementById("overlayStatus"); if (el) el.textContent = name + (active ? " dimatikan." : " ditampilkan di peta.");
+  },
+  toggleRain() {
+    if (this.rainLayer) return this.toggleLayer(this.rainLayer, "Radar hujan");
+    const el = document.getElementById("overlayStatus"); if (el) el.textContent = "Mengambil radar hujan global...";
+    fetch("https://api.rainviewer.com/public/weather-maps.json", { cache: "no-store" }).then((r) => r.json()).then((d) => {
+      const frames = (d.radar && d.radar.past) || []; const latest = frames[frames.length - 1]; if (!latest) throw new Error("radar kosong");
+      this.rainLayer = L.tileLayer("https://tilecache.rainviewer.com/v2/radar/" + latest.time + "/256/{z}/{x}/{y}/2/1_1.png", { opacity: .68, maxZoom: 12, attribution: "Radar &copy; RainViewer" }).addTo(this.map); this.layers.rain = this.rainLayer;
+      L.control.layers({}, { "Radar hujan": this.rainLayer }, { collapsed: true, position: "topright" }); if (el) el.textContent = "Radar hujan global aktif • waktu frame " + new Date(latest.time * 1000).toLocaleTimeString("id-ID");
+    }).catch(() => { if (el) el.textContent = "Radar hujan belum tersedia. Coba lagi saat online."; });
+  },
+  toggleHazards() {
+    if (this.map.hasLayer(this.hazardLayer)) return this.toggleLayer(this.hazardLayer, "Objek karang/kapal karam");
+    const el = document.getElementById("overlayStatus"); if (el) el.textContent = "Mencari karang, terumbu, batu, dan kapal karam terpetakan...";
+    const center = this.lat === null ? this.map.getCenter() : { lat: this.lat, lng: this.lon }; const q = `[out:json][timeout:20];(nwr[natural=reef](around:10000,${center.lat},${center.lng});nwr["seamark:type"~"reef|wreck"](around:10000,${center.lat},${center.lng});nwr[historic=wreck](around:10000,${center.lat},${center.lng}););out center;`;
+    fetch("https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q)).then((r) => r.json()).then((d) => { this.hazardLayer.clearLayers(); (d.elements || []).forEach((x) => { const p = x.lat ? [x.lat, x.lon] : [x.center.lat, x.center.lon]; const t = x.tags || {}; const kind = t["seamark:type"] === "wreck" || t.historic === "wreck" ? "⚓ Kapal karam" : "🪸 Karang/terumbu/batu"; L.marker(p, { icon: L.divIcon({ className: "hazard-marker", html: kind.split(" ")[0], iconSize: [28, 28], iconAnchor: [14, 14] }) }).bindPopup(kind + "<br>" + (t.name || t.description || "Objek terpetakan OSM")).addTo(this.hazardLayer); }); this.hazardLayer.addTo(this.map); if (el) el.textContent = (d.elements || []).length + " objek bahaya terpetakan dalam radius 10 km."; }).catch(() => { if (el) el.textContent = "Data objek bahaya gagal dimuat. Coba lagi saat online."; });
+  },
+  setRoute() {
+    if (this.lat === null) return alert("GPS belum aktif. Izinkan lokasi HP terlebih dahulu.");
+    const lat = Number(document.getElementById("routeLat").value), lon = Number(document.getElementById("routeLon").value); if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) return alert("Isi koordinat tujuan yang valid.");
+    const distance = this.map.distance([this.lat, this.lon], [lat, lon]), knots = this.speedKmh > 1 ? this.speedKmh / 1.852 : 6, hours = distance / 1852 / knots, eta = new Date(Date.now() + hours * 3600000);
+    if (this.routeLine) this.map.removeLayer(this.routeLine); if (this.destinationMarker) this.map.removeLayer(this.destinationMarker);
+    this.routeLine = L.polyline([[this.lat, this.lon], [lat, lon]], { color: "#06d6a0", weight: 5, dashArray: "10 8" }).addTo(this.map); this.destinationMarker = L.marker([lat, lon]).addTo(this.map).bindPopup("🎯 Tujuan kapal<br>Lat " + lat.toFixed(5) + "<br>Lon " + lon.toFixed(5)); this.map.fitBounds(this.routeLine.getBounds(), { padding: [24, 24] });
+    document.getElementById("routeStatus").innerHTML = "🎯 Jarak garis lurus: <b>" + (distance / 1852).toFixed(2) + " NM</b> • Kecepatan hitung: <b>" + knots.toFixed(1) + " kn</b><br>Estimasi tiba: <b>" + eta.toLocaleString("id-ID", { weekday: "long", day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }) + "</b>";
+  },
+  clearRoute() { if (this.routeLine) this.map.removeLayer(this.routeLine); if (this.destinationMarker) this.map.removeLayer(this.destinationMarker); this.routeLine = null; this.destinationMarker = null; const el = document.getElementById("routeStatus"); if (el) el.textContent = "Rute dihapus. Ketuk peta atau isi koordinat tujuan."; },
+  updateWindOverlay(deg, speed) { if (!this.windLayer || this.lat === null) return; this.windLayer.clearLayers(); const icon = L.divIcon({ className: "wind-marker", html: "➤", iconSize: [34, 34], iconAnchor: [17, 17] }); const m = L.marker([this.lat, this.lon], { icon }).addTo(this.windLayer).bindPopup("💨 Angin datang dari " + deg + "° • " + speed + " km/j"); m.getElement(); m.setRotationAngle = () => {}; },
+  updateStormOverlay(wave, weatherCode) { if (!this.stormLayer || this.lat === null) return; this.stormLayer.clearLayers(); const severe = Number(wave) >= 2.5 || Number(weatherCode) >= 95; if (severe) L.circle([this.lat, this.lon], { radius: 5000, color: "#ef476f", fillColor: "#ef476f", fillOpacity: .16, weight: 3 }).bindPopup("⛈️ Indikasi cuaca/badai berat di sekitar posisi kapal. Periksa BMKG Maritim dan Windy.").addTo(this.stormLayer); },
   autoMarineCheck() {
     if (this.lat === null) return;
     const now = Date.now();

@@ -49,6 +49,7 @@ const Weather = {
 
   tampilCuaca(d) {
     const c = d.current;
+    Weather.lastWeatherCode = c.weather_code;
     const desk = Weather.deskCuaca(c.weather_code);
     const arah = Weather.arahAngin(c.wind_direction_10m);
     const html = "<p class='big'>" + desk + "</p>" +
@@ -57,6 +58,7 @@ const Weather = {
       "<p>🌧️ Curah hujan: <b>" + c.precipitation + " mm</b></p>";
     document.getElementById("weatherNow").innerHTML = html;
     document.getElementById("dashWeather").innerHTML = desk + " • " + c.temperature_2m + "°C • Angin " + c.wind_speed_10m + " km/j dari " + arah;
+    if (typeof MapApp !== "undefined") { MapApp.updateWindOverlay(c.wind_direction_10m, c.wind_speed_10m); MapApp.updateStormOverlay(null, c.weather_code); }
     const sea = document.getElementById("mapSeaTelemetry"); if (sea) sea.textContent = "Suhu " + c.temperature_2m + "°C • Angin " + c.wind_speed_10m + " km/j dari " + arah;
 
     let alarm = [];
@@ -78,6 +80,7 @@ const Weather = {
 
   tampilMarine(d) {
     const c = d.current;
+    if (typeof MapApp !== "undefined") MapApp.updateStormOverlay(c.wave_height, Weather.lastWeatherCode);
     const html = "<p>🌊 Tinggi ombak: <b>" + c.wave_height + " m</b></p>" +
       "<p>🧭 Arah ombak: <b>" + Weather.arahAngin(c.wave_direction) + "</b></p>" +
       "<p>⏱️ Periode ombak: <b>" + c.wave_period + " s</b></p>" +

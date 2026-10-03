@@ -70,3 +70,7 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🌊 Kedalaman otomatis memakai query GEBCO 2020 global dan diperbarui saat posisi berubah.
 
 - 💝 Menu Pengaturan berisi QRIS donasi tanpa menampilkan nominal, penjelasan aplikasi, ucapan terima kasih, dan sponsor by.m4zk1pl4y.
+
+- 🧭 Router peta dengan titik tujuan, jarak NM, kecepatan kapal, dan estimasi tiba lengkap hari/tanggal/jam/detik.
+- 🪸 Overlay objek bahaya terpetakan: karang, terumbu, batu, dan kapal karam.
+- 🌧️ Overlay radar hujan, arah angin, dan indikasi badai lokal dari data cuaca online.
