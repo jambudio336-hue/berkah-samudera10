@@ -6,6 +6,8 @@ const Weather = {
     Weather.muatCuaca(q);
     Weather.muatMarine(q);
     Weather.muatBMKG();
+    setInterval(Weather.muatBMKG, 15 * 60 * 1000);
+    const btn = document.getElementById("btnRefreshBMKG"); if (btn) btn.addEventListener("click", Weather.muatBMKG);
   },
 
   refreshPosition(lat, lon) {
@@ -100,25 +102,23 @@ const Weather = {
 
   muatBMKG() {
     const el = document.getElementById("bmkgNews");
-    fetch("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json")
-      .then((r) => r.json())
-      .then((d) => {
-        const g = d.Infogempa.gempa;
-        el.innerHTML = "<p><b>🌎 Gempa Terkini BMKG</b></p>" +
-          "<p>" + g.Tanggal + " • " + g.Jam + "</p>" +
-          "<p>Magnitude: <b>" + g.Magnitude + "</b> • Kedalaman: " + g.Kedalaman + "</p>" +
-          "<p>Lokasi: " + g.Lintang + ", " + g.Bujur + "</p>" +
-          "<p>Wilayah: " + g.Wilayah + "</p>" +
-          "<p class='muted'>Potensi: " + g.Potensi + "</p>" +
-          "<p class='muted'>Sumber: BMKG. Untuk peringatan angin/ombak wilayah perairan, " +
-          "pantau kanal resmi BMKG di web maritim.bmkg.go.id</p>";
-      })
-      .catch(() => {
-        el.innerHTML = "<p class='muted'>Offline: berita BMKG tidak dapat dimuat. " +
-          "Peringatan maritim BMKG bisa diakses di maritim.bmkg.go.id saat online.</p>";
+    if (!el) return;
+    const updated = new Date().toLocaleString("id-ID");
+    el.innerHTML = "<p class='muted'>Menghubungi kanal resmi BMKG Maritim...</p>";
+    const sources = [
+      { title: "Peringatan Gelombang Tinggi", url: "https://maritim.bmkg.go.id/cuaca/peringatan/gelombang", tag: "Gelombang & wilayah terdampak" },
+      { title: "Bulletin Cuaca untuk Pelayaran", url: "https://maritim.bmkg.go.id/cuaca/bulletin", tag: "Angin, laut, dan sinoptik" },
+      { title: "Prakiraan Cuaca Maritim", url: "https://maritim.bmkg.go.id/", tag: "Perairan Indonesia" }
+    ];
+    Promise.allSettled(sources.map((x) => fetch(x.url, { cache: "no-store", mode: "cors" }).then((r) => ({ ok: r.ok, text: r.text() }))))
+      .then((results) => {
+        const online = results.some((r) => r.status === "fulfilled" && r.value.ok);
+        const status = online ? "🟢 Kanal BMKG Maritim terhubung" : "🟡 Pratinjau offline — buka tautan resmi untuk data terbaru";
+        el.innerHTML = "<p><b>" + status + "</b></p>" + sources.map((x) => "<a class='news-link' href='" + x.url + "' target='_blank' rel='noopener noreferrer'><strong>" + x.title + "</strong><span>" + x.tag + " ↗</span></a>").join("") + "<p class='muted news-updated'>Pembaruan kanal: " + updated + " • Data peringatan tetap mengikuti halaman resmi BMKG.</p>";
+      }).catch(() => {
+        el.innerHTML = "<p><b>🟡 BMKG Maritim belum dapat dihubungi</b></p>" + sources.map((x) => "<a class='news-link' href='" + x.url + "' target='_blank' rel='noopener noreferrer'><strong>" + x.title + "</strong><span>Buka sumber resmi ↗</span></a>").join("") + "<p class='muted news-updated'>Periksa koneksi internet dan refresh kembali.</p>";
       });
   },
-
   deskCuaca(code) {
     const peta = {
       0: "☀️ Cerah", 1: "🌤️ Cerah Berawan", 2: "⛅ Berawan Sebagian",

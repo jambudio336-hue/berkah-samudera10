@@ -53,3 +53,5 @@ Frontend tetap berupa web app yang dibungkus menjadi APK native memakai Capacito
 - 🚢 Marker kapal bergerak mengikuti GPS, dengan kecepatan knot/km-jam, suhu, arah angin, tinggi/periode/arah ombak, dan area koordinat kondisi laut di sekitar kapal.
 
 - 🗺️ Pilihan peta: standar, satelit realistis, topografi, medan, gelap, bathymetry GEBCO, marka/karang OpenSeaMap, serta mode 3D visual.
+
+- 📰 Panel berita/peringatan BMKG Maritim khusus perairan, gelombang, dan bulletin pelayaran, dengan refresh manual serta otomatis setiap 15 menit.
