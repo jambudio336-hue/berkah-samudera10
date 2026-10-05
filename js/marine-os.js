@@ -52,6 +52,8 @@ const MarineOS = {
     document.getElementById("marineOpenWeather")?.addEventListener("click",()=>this.go("cuaca"));
     document.getElementById("marineOpenAccount")?.addEventListener("click",()=>this.go("akun"));
     document.getElementById("marineOpenSettings")?.addEventListener("click",()=>this.go("pengaturan"));
+    document.getElementById("marineOpenSafety")?.addEventListener("click",()=>this.go("pengaturan"));
+    document.getElementById("marineOpenAI")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineProviderInfo")?.addEventListener("click",()=>this.showProviders());
     document.getElementById("marineRefresh")?.addEventListener("click",()=>this.refreshTelemetry());
   },
