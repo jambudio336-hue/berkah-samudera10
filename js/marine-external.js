@@ -2,6 +2,8 @@
 (function(){
   "use strict";
   const CFG={
+    openMeteoMarine:"https://marine-api.open-meteo.com/v1/marine",
+    noaaNowCoast:"https://nowcoast.noaa.gov",
     bmkg:"https://maritim.bmkg.go.id/marine2026-data/",
     gebco:"https://wms.gebco.net/mapserv?",
     osm:"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -56,6 +58,14 @@
     const raw=data?.data||data;
     return {source:"BMKG Data Maritim",code,region:nearest?.feature?.properties?.name||code,distanceKm:nearest?.distanceKm,raw,fetchedAt:new Date().toISOString()};
   }
+  async function openMeteoMarine(lat,lon){
+    const u=new URL(CFG.openMeteoMarine);
+    u.searchParams.set("latitude",lat);u.searchParams.set("longitude",lon);
+    u.searchParams.set("hourly","wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction,sea_level_height_msl");
+    u.searchParams.set("forecast_days","7");u.searchParams.set("cell_selection","sea");
+    const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error("Open-Meteo Marine HTTP "+r.status);
+    const data=await r.json();return {...data,source:"Open-Meteo Marine",fetchedAt:new Date().toISOString()};
+  }
   async function warnings(){
     const meta=read();
     if(meta.warning&&Date.now()-meta.warningAt<600000)return meta.warning;
@@ -69,10 +79,10 @@
     return CFG.gebco+qs.toString();
   }
   async function health(){
-    const out={bmkg:false,gebco:false,osm:true,openseamap:true,carto:true};
+    const out={bmkg:false,gebco:false,openMeteoMarine:false,noaaNowCoast:true,osm:true,openseamap:true,carto:true};
     try{const r=await fetch(CFG.bmkg+"meta/area_province.json",{headers:{Accept:"application/json"},cache:"no-store"});out.bmkg=r.ok}catch(_){}
-    try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
+    try{const r=await fetch(CFG.openMeteoMarine+"?latitude=0&longitude=120&hourly=wave_height&forecast_days=1",{cache:"no-store"});out.openMeteoMarine=r.ok}catch(_){}\n    try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
     return out;
   }
-  window.MarineExternal={config:CFG,bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},health,cache:{read,write}};
+  window.MarineExternal={config:CFG,bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},marine:{openMeteo:openMeteoMarine},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},health,cache:{read,write}};
 })();
