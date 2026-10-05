@@ -49,8 +49,8 @@
 <div id="alertBanner" class="alert-banner hidden"></div>
 
 <nav class="tabs" id="tabs">
-  <button class="tab" data-page="marine-command">⚓ Marine OS</button>
-  <button class="tab active" data-page="dashboard">🏠 Dashboard</button>
+  <button class="tab active" data-page="marine-command">⚓ Marine OS</button>
+  <button class="tab" data-page="dashboard">🏠 Operasi</button>
   <button class="tab" data-page="peta">🗺️ Peta</button>
   <button class="tab" data-page="cuaca">🌊 Cuaca</button>
   <button class="tab" data-page="quran">📖 Al-Qur’an</button>
@@ -67,32 +67,58 @@
 <main>
 
 <!-- ============ DASHBOARD ============ -->
-<section id="page-marine-command" class="page">
-  <div class="card hero marine-hero marine-command">
-    <span class="eyebrow">MARINE OS • COMMAND CENTER</span>
-    <h2>🌊 Marine Command Center</h2>
-    <p class="hero-sub">Pusat kendali untuk peta laut, navigasi, AIS, radar, bathymetry, cuaca, keselamatan, operasi kapal, dan AI.</p>
-    <div class="marine-actions">
-      <button class="btn primary-inline" id="marineCenterMap">🗺️ Buka Sea Map</button>
-      <button class="btn" id="marineRefresh">🔄 Refresh telemetry</button>
-      <button class="btn" id="marineProviderInfo">🔌 Status provider</button>
+<section id="page-marine-command" class="page active marine-dashboard-page">
+  <div class="marine-dashboard-hero">
+    <div>
+      <span class="eyebrow">BERKAH SAMUDERA10 • MARINE OS</span>
+      <h2>🌊 Marine Command Center</h2>
+      <p>Semua informasi kapal, laut, navigasi, traffic, keselamatan, operasi, sosial, dan AI dalam satu dashboard map-first.</p>
+    </div>
+    <div class="marine-status-pill"><i></i><span id="marineNetwork">OFFLINE</span></div>
+  </div>
+
+  <div class="marine-telemetry-grid">
+    <div class="marine-telemetry"><span>📍 GNSS</span><b id="marineFix">Menunggu</b><small>Posisi kapal</small></div>
+    <div class="marine-telemetry"><span>⚡ SOG</span><b id="marineSpeed">—</b><small>Speed over ground</small></div>
+    <div class="marine-telemetry"><span>🧭 COG</span><b id="marineHeading">—</b><small>Course / heading</small></div>
+    <div class="marine-telemetry"><span>🌊 DEPTH</span><b id="marineDepth">—</b><small>Bathymetry tersedia</small></div>
+  </div>
+
+  <div class="marine-map-card">
+    <div class="marine-map-overlay">
+      <div><span class="eyebrow">LIVE SEA SITUATION</span><h3>🗺️ Sea Map</h3><p>GPS • nautical chart • bathymetry • AIS • hazards • weather • radar overlay</p></div>
+      <button class="btn primary" id="marineCenterMap">Buka Peta Laut →</button>
+    </div>
+    <div class="marine-map-preview">
+      <div class="marine-radar-ring r1"></div><div class="marine-radar-ring r2"></div><div class="marine-radar-ring r3"></div>
+      <div class="marine-map-ship">🚢</div><span class="marine-map-dot d1">🚢</span><span class="marine-map-dot d2">⚓</span><span class="marine-map-dot d3">🪸</span>
+      <div class="marine-map-gridlines"></div>
+      <div class="marine-map-caption">LIVE MAP PREVIEW • Data tampil penuh di menu Peta</div>
     </div>
   </div>
-  <div class="marine-command-grid">
-    <div class="marine-kpi"><span>GNSS</span><b id="marineFix">Menunggu</b></div>
-    <div class="marine-kpi"><span>SOG</span><b id="marineSpeed">—</b></div>
-    <div class="marine-kpi"><span>DEPTH</span><b id="marineDepth">—</b></div>
-    <div class="marine-kpi"><span>NETWORK</span><b id="marineNetwork">—</b></div>
+
+  <div class="marine-command-actions">
+    <button class="btn primary-inline" id="marineOpenWeather">🌦️ Cuaca & Ocean</button>
+    <button class="btn" id="marineProviderInfo">🔌 Provider</button>
+    <button class="btn" id="marineRefresh">🔄 Refresh</button>
+    <button class="btn" id="marineOpenAccount">👤 Kapal & Social</button>
+    <button class="btn" id="marineOpenSettings">⚙️ Safety & Settings</button>
   </div>
-  <div class="card marine-command">
-    <div class="section-head"><div><span class="eyebrow">MODULE REGISTRY</span><h3>⚓ Semua modul Marine OS</h3></div></div>
-    <div id="marineFeatureGrid" class="marine-feature-grid"></div>
+
+  <div class="marine-section-head"><div><span class="eyebrow">MARINE OS MODULES</span><h3>⚓ Semua rencana kita</h3></div><span class="chip">22 modul</span></div>
+  <div id="marineModuleGrid" class="marine-module-grid"></div>
+
+  <div class="card marine-status-card">
+    <div class="section-head"><div><span class="eyebrow">INTEGRATION STATUS</span><h3>🔌 Data source & perangkat</h3></div></div>
+    <div id="marineProviderStatus"><p class="muted">Tekan “Provider” untuk melihat status integrasi.</p></div>
   </div>
-  <div class="card marine-command">
-    <h3>🔌 Provider & perangkat</h3>
-    <div id="marineProviderStatus"><p class="muted">Tekan “Status provider” untuk melihat status integrasi.</p></div>
+
+  <div class="marine-lower-grid">
+    <div class="card marine-safety-card"><span class="eyebrow">SAFETY FIRST</span><h3>🛟 Safety Guardian</h3><p>Hazard, weather, AIS, route, anchor watch, SOS dan emergency assistant akan terhubung di sini.</p><button class="btn" id="marineOpenSafety">Buka pusat keselamatan</button></div>
+    <div class="card marine-ai-card"><span class="eyebrow">MARINE COPILOT</span><h3>🤖 Mazkiplay.ai</h3><p>AI multimodal untuk membaca konteks kapal, peta, cuaca, AIS, dokumen dan data operasi melalui tools yang diizinkan.</p><button class="btn" id="marineOpenAI">Buka Marine Copilot</button></div>
   </div>
-  <div class="marine-warning">⚠️ Data bathymetry, AIS, radar, route, hazard, dan weather adalah decision-support. Jangan gunakan aplikasi ini sebagai pengganti peralatan navigasi tersertifikasi, official nautical charts, radar/AIS, lookout, atau prosedur keselamatan pelayaran.</div>
+
+  <div class="marine-warning">⚠️ Marine OS adalah decision-support. Kedalaman, AIS, radar, cuaca, hazard dan route tidak boleh dianggap pengganti official nautical charts, ECDIS, radar/AIS tersertifikasi, visual lookout, atau prosedur keselamatan pelayaran.</div>
 </section>
 
 <section id="page-dashboard" class="page active">
