@@ -1,0 +1,9 @@
+.marine-command{border-color:#2f79c9}.marine-hero{background:radial-gradient(circle at 80% 10%,rgba(6,214,160,.2),transparent 40%),linear-gradient(135deg,rgba(8,42,76,.98),rgba(3,19,39,.98))}
+.marine-command-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.marine-kpi{padding:13px;border:1px solid rgba(121,200,255,.28);border-radius:14px;background:rgba(4,20,39,.75)}
+.marine-kpi span{display:block;color:#8fb8da;font-size:.68rem;text-transform:uppercase;letter-spacing:.7px}.marine-kpi b{display:block;margin-top:5px;color:#f4f8ff;font-size:1.05rem}
+.marine-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.marine-feature-card{display:flex;gap:11px;padding:12px;border:1px solid rgba(47,121,201,.7);border-radius:14px;background:rgba(4,20,39,.7)}.marine-feature-card .marine-icon{font-size:1.55rem}.marine-feature-card b{color:#f3f8ff}.marine-feature-card p{margin:4px 0;color:#a9c9e8;font-size:.76rem;line-height:1.4}.marine-feature-card small{color:#ffd166;font-size:.67rem}
+.marine-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.marine-provider-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(159,195,232,.15);font-size:.76rem}.marine-provider-row span{color:#a9c9e8;text-align:right}
+.marine-warning{padding:11px;border-radius:12px;border:1px solid rgba(255,183,3,.45);background:rgba(88,55,3,.18);color:#ffe7a1;font-size:.78rem;line-height:1.45}
+@media(max-width:800px){.marine-command-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.marine-feature-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.marine-actions{grid-template-columns:1fr}.marine-command-grid{grid-template-columns:1fr 1fr}}
