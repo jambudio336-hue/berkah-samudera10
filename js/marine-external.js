@@ -1,0 +1,78 @@
+/* Marine OS external-data adapters — zero-cost/open-data first. */
+(function(){
+  "use strict";
+  const CFG={
+    bmkg:"https://maritim.bmkg.go.id/marine2026-data/",
+    gebco:"https://wms.gebco.net/mapserv?",
+    osm:"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    openseamap:"https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
+    carto:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+  };
+  const cacheKey="bs10_external_cache_v1";
+  const read=()=>{try{return JSON.parse(localStorage.getItem(cacheKey)||"{}")}catch(_){return {}}};
+  const write=x=>localStorage.setItem(cacheKey,JSON.stringify(x));
+  async function json(path,opts={}){
+    const r=await fetch(CFG.bmkg+path,{headers:{Accept:"application/json",...(opts.headers||{})},cache:"no-store"});
+    if(!r.ok)throw new Error("BMKG HTTP "+r.status);
+    return r.json();
+  }
+  function haversine(a,b){
+    const R=6371,rad=Math.PI/180,dLat=(b.lat-a.lat)*rad,dLon=(b.lon-a.lon)*rad;
+    const x=Math.sin(dLat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLon/2)**2;
+    return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+  }
+  function nearestFeature(fc,lat,lon){
+    let best=null;
+    (fc?.features||[]).forEach(f=>{
+      const g=f.geometry;
+      const c=g?.type==="Point"?g.coordinates:null;
+      if(!c)return;
+      const d=haversine({lat,lon},{lat:c[1],lon:c[0]});
+      if(!best||d<best.distanceKm)best={feature:f,distanceKm:d};
+    });
+    return best;
+  }
+  async function marineMeta(){
+    const c=read(),now=Date.now();
+    if(c.meta&&now-c.metaAt<21600000)return c.meta;
+    const [areas,ports]=await Promise.all([
+      json("meta/area_province.json"),
+      json("meta/port_province.json").catch(()=>null)
+    ]);
+    c.meta={areas,ports};c.metaAt=now;write(c);return c.meta;
+  }
+  async function marineWeather(lat,lon){
+    const meta=await marineMeta();
+    const fc=await json("meta/wilmetos.min.geojson");
+    let nearest=nearestFeature(fc,lat,lon);
+    let code=nearest?.feature?.properties?.code||nearest?.feature?.properties?.kode;
+    if(!code){
+      const flat=(meta.areas?.data||[]).flatMap(p=>p.areas||[]);
+      nearest=flat.map(x=>({x,distanceKm:0}))[0];
+      code=nearest?.x?.id;
+    }
+    if(!code)throw new Error("Wilayah perairan BMKG terdekat tidak ditemukan");
+    const data=await json("perairan/"+encodeURIComponent(code)+".json");
+    const raw=data?.data||data;
+    return {source:"BMKG Data Maritim",code,region:nearest?.feature?.properties?.name||code,distanceKm:nearest?.distanceKm,raw,fetchedAt:new Date().toISOString()};
+  }
+  async function warnings(){
+    const meta=read();
+    if(meta.warning&&Date.now()-meta.warningAt<600000)return meta.warning;
+    const index=await json("warning/index.json").catch(()=>null);
+    const result={index,source:"BMKG Data Maritim",fetchedAt:new Date().toISOString()};
+    meta.warning=result;meta.warningAt=Date.now();write(meta);return result;
+  }
+  function gebcoGetFeatureInfo(lat,lon,bbox,width=101,height=101){
+    const span=0.02,b=[lon-span,lat-span,lon+span,lat+span];
+    const qs=new URLSearchParams({SERVICE:"WMS",VERSION:"1.3.0",REQUEST:"GetFeatureInfo",LAYERS:"GEBCO_LATEST_SUB_ICE_TOPO",QUERY_LAYERS:"GEBCO_LATEST_SUB_ICE_TOPO",INFO_FORMAT:"application/json",CRS:"EPSG:4326",BBOX:b.join(","),WIDTH:String(width),HEIGHT:String(height),I:String(Math.floor(width/2)),J:String(Math.floor(height/2))});
+    return CFG.gebco+qs.toString();
+  }
+  async function health(){
+    const out={bmkg:false,gebco:false,osm:true,openseamap:true,carto:true};
+    try{const r=await fetch(CFG.bmkg+"meta/area_province.json",{headers:{Accept:"application/json"},cache:"no-store"});out.bmkg=r.ok}catch(_){}
+    try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
+    return out;
+  }
+  window.MarineExternal={config:CFG,bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},health,cache:{read,write}};
+})();
