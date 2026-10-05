@@ -49,6 +49,7 @@
 <div id="alertBanner" class="alert-banner hidden"></div>
 
 <nav class="tabs" id="tabs">
+  <button class="tab" data-page="marine-command">⚓ Marine OS</button>
   <button class="tab active" data-page="dashboard">🏠 Dashboard</button>
   <button class="tab" data-page="peta">🗺️ Peta</button>
   <button class="tab" data-page="cuaca">🌊 Cuaca</button>
@@ -66,6 +67,34 @@
 <main>
 
 <!-- ============ DASHBOARD ============ -->
+<section id="page-marine-command" class="page">
+  <div class="card hero marine-hero marine-command">
+    <span class="eyebrow">MARINE OS • COMMAND CENTER</span>
+    <h2>🌊 Marine Command Center</h2>
+    <p class="hero-sub">Pusat kendali untuk peta laut, navigasi, AIS, radar, bathymetry, cuaca, keselamatan, operasi kapal, dan AI.</p>
+    <div class="marine-actions">
+      <button class="btn primary-inline" id="marineCenterMap">🗺️ Buka Sea Map</button>
+      <button class="btn" id="marineRefresh">🔄 Refresh telemetry</button>
+      <button class="btn" id="marineProviderInfo">🔌 Status provider</button>
+    </div>
+  </div>
+  <div class="marine-command-grid">
+    <div class="marine-kpi"><span>GNSS</span><b id="marineFix">Menunggu</b></div>
+    <div class="marine-kpi"><span>SOG</span><b id="marineSpeed">—</b></div>
+    <div class="marine-kpi"><span>DEPTH</span><b id="marineDepth">—</b></div>
+    <div class="marine-kpi"><span>NETWORK</span><b id="marineNetwork">—</b></div>
+  </div>
+  <div class="card marine-command">
+    <div class="section-head"><div><span class="eyebrow">MODULE REGISTRY</span><h3>⚓ Semua modul Marine OS</h3></div></div>
+    <div id="marineFeatureGrid" class="marine-feature-grid"></div>
+  </div>
+  <div class="card marine-command">
+    <h3>🔌 Provider & perangkat</h3>
+    <div id="marineProviderStatus"><p class="muted">Tekan “Status provider” untuk melihat status integrasi.</p></div>
+  </div>
+  <div class="marine-warning">⚠️ Data bathymetry, AIS, radar, route, hazard, dan weather adalah decision-support. Jangan gunakan aplikasi ini sebagai pengganti peralatan navigasi tersertifikasi, official nautical charts, radar/AIS, lookout, atau prosedur keselamatan pelayaran.</div>
+</section>
+
 <section id="page-dashboard" class="page active">
   <div class="card hero">
     <h2>Selamat Bekerja, Bos Kapal! 🚢</h2>
@@ -327,7 +356,7 @@
 <footer class="footer">Berkah Samudera10 © 2026 — Dibuat untuk nelayan Indonesia 🇮🇩<br><b class="sponsor">Disponsori by.m4zk1pl4y</b><br><span id="syncState">Supabase Realtime • data tersimpan lokal sebagai cache</span></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="js/storage.js" defer></script>
+<link rel="stylesheet" href="css/marine-os.css"><script src="js/storage.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="js/supabase-sync.js" defer></script>
 <script src="js/auth.js" defer></script>
@@ -342,5 +371,6 @@
 <script src="js/perbekalan.js" defer></script>
 <script src="js/kru.js" defer></script>
 <script src="js/app.js" defer></script>
+<script src="js/marine-os.js" defer></script>
 </body>
 </html>
