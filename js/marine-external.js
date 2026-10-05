@@ -81,7 +81,8 @@
   async function health(){
     const out={bmkg:false,gebco:false,openMeteoMarine:false,noaaNowCoast:true,osm:true,openseamap:true,carto:true};
     try{const r=await fetch(CFG.bmkg+"meta/area_province.json",{headers:{Accept:"application/json"},cache:"no-store"});out.bmkg=r.ok}catch(_){}
-    try{const r=await fetch(CFG.openMeteoMarine+"?latitude=0&longitude=120&hourly=wave_height&forecast_days=1",{cache:"no-store"});out.openMeteoMarine=r.ok}catch(_){}\n    try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
+    try{const r=await fetch(CFG.openMeteoMarine+"?latitude=0&longitude=120&hourly=wave_height&forecast_days=1",{cache:"no-store"});out.openMeteoMarine=r.ok}catch(_){}
+    try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
     return out;
   }
   window.MarineExternal={config:CFG,bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},marine:{openMeteo:openMeteoMarine},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},health,cache:{read,write}};
