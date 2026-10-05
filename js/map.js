@@ -8,11 +8,18 @@ const MapApp = {
     const terrain = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Topographic tiles &copy; Esri" });
     const topo = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { maxZoom: 17, attribution: "Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap" });
     const dark = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { maxZoom: 20, attribution: "&copy; CARTO" });
-    const bathymetry = L.tileLayer.wms("https://ows.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .58, attribution: "Bathymetry &copy; GEBCO" });
-    const seamarks = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", { maxZoom: 18, opacity: .9, attribution: "Seamarks &copy; OpenSeaMap" });
+    const bathymetry = L.tileLayer.wms("https://wms.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .58, attribution: "Bathymetry &copy; GEBCO 2026" });
+    const seamarks = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", { maxZoom: 18, opacity: .9, attribution: "Seamarks &copy; OpenSeaMap / OpenStreetMap (ODbL/CC BY-SA)" });
+    const gebcoRelief = L.tileLayer.wms("https://wms.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .42, attribution: "Relief &copy; GEBCO 2026" });
+    const osmHumanitarian = L.tileLayer("https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap contributors, HOT" });
+    const cartoVoyage = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", { maxZoom: 20, attribution: "&copy; OpenStreetMap contributors &copy; CARTO" });
     this.hazardLayer = L.layerGroup(); this.windLayer = L.layerGroup(); this.stormLayer = L.layerGroup();
-    this.layers = { street, satellite, terrain, topo, dark, bathymetry, seamarks, hazards: this.hazardLayer, wind: this.windLayer, storm: this.stormLayer };
-    L.control.layers({ "Peta standar": street, "Satelit realistis": satellite, "Topografi": topo, "Peta medan": terrain, "Peta gelap": dark }, { "Kedalaman laut (GEBCO)": bathymetry, "Karang & marka laut": seamarks, "Objek karang/kapal karam": this.hazardLayer, "Arah angin": this.windLayer, "Indikasi badai": this.stormLayer }, { collapsed: true, position: "topright" }).addTo(this.map);
+    this.layers = { street, osmHumanitarian, cartoVoyage, satellite, terrain, topo, dark, bathymetry, gebcoRelief, seamarks, hazards: this.hazardLayer, wind: this.windLayer, storm: this.stormLayer };
+    L.control.layers(
+      { "OSM Standard": street, "OSM Humanitarian": osmHumanitarian, "CARTO Voyager": cartoVoyage, "Satelit Esri (syarat layanan)": satellite, "Topografi": topo, "Peta medan Esri (syarat layanan)": terrain, "Peta gelap CARTO": dark },
+      { "GEBCO 2026 Bathymetry": bathymetry, "GEBCO 2026 Relief": gebcoRelief, "OpenSeaMap Seamarks": seamarks, "Objek karang/kapal karam": this.hazardLayer, "Arah angin": this.windLayer, "Indikasi badai": this.stormLayer },
+      { collapsed: true, position: "topright" }
+    ).addTo(this.map);
     this.track = L.polyline([], { color: "#ffb703", weight: 4, opacity: .9 }).addTo(this.map);
     try {
       const savedTrack = JSON.parse(localStorage.getItem("bs10_track") || "[]");
@@ -32,6 +39,8 @@ const MapApp = {
     document.getElementById("btnRainOverlay").addEventListener("click", () => this.toggleRain());
     document.getElementById("btnHazardOverlay").addEventListener("click", () => this.toggleHazards());
     document.getElementById("btnStormOverlay").addEventListener("click", () => this.toggleLayer(this.stormLayer, "Indikasi badai"));
+    const freeMapStatus = document.getElementById("freeMapStatus");
+    if (freeMapStatus) freeMapStatus.textContent = "Gratis/open-data: OSM • OpenSeaMap • GEBCO • CARTO; layanan lain mengikuti syarat providernya.";
     this.startGPS();
   },
   startGPS() {
