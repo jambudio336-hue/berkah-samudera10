@@ -28,7 +28,8 @@ const MapApp = {
     this.map.on("click", (e) => { this.cekKedalaman(e.latlng.lat, e.latlng.lng); this.deteksiKarang(e.latlng.lat, e.latlng.lng); const a = document.getElementById("routeLat"), b = document.getElementById("routeLon"); if (a && b) { a.value = e.latlng.lat.toFixed(6); b.value = e.latlng.lng.toFixed(6); } });
     document.getElementById("btnGlobal").addEventListener("click", () => this.map.fitWorld({ animate: true }));
     document.getElementById("btnGoogleMaps").addEventListener("click", () => this.openGoogleMaps());
-    document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));\n    document.querySelectorAll("[data-windy-overlay]").forEach((b)=>b.addEventListener("click",()=>this.updateWindy(true,b.dataset.windyOverlay)));
+    document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));
+    document.querySelectorAll("[data-windy-overlay]").forEach((b)=>b.addEventListener("click",()=>this.updateWindy(true,b.dataset.windyOverlay)));
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
     document.getElementById("btnDepth").addEventListener("click", () => this.lat !== null ? this.cekKedalaman(this.lat, this.lon) : alert("GPS belum aktif."));
     document.getElementById("btn3D").addEventListener("click", () => this.toggle3D());
