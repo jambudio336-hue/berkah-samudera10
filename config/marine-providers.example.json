@@ -1,6 +1,28 @@
 {
   "map": {
     "base": "leaflet",
+    "freeOpenData": {
+      "openStreetMap": {
+        "enabled": true,
+        "license": "ODbL",
+        "note": "Use an allowed tile provider or self-hosted tiles for production/bulk/offline use."
+      },
+      "openSeaMap": {
+        "enabled": true,
+        "license": "ODbL + chart tile license",
+        "note": "Attribute OpenSeaMap/OpenStreetMap and follow tile/data terms."
+      },
+      "gebco": {
+        "enabled": true,
+        "wms": "https://wms.gebco.net/mapserv?",
+        "layer": "GEBCO_LATEST",
+        "note": "Official GEBCO WMS; current service is based on GEBCO 2026."
+      },
+      "carto": {
+        "enabled": true,
+        "note": "Public tiles are subject to CARTO service terms and attribution."
+      }
+    },
     "nautical": {
       "navionics": {
         "enabled": false,
@@ -29,11 +51,16 @@
     "note": "A phone cannot become a physical marine radar through software alone."
   },
   "bathymetry": {
-    "batnas": { "enabled": true },
+    "batnas": { "enabled": false, "note": "Enable only after authorized dataset access is confirmed." },
     "gebco": { "enabled": true }
   },
   "weather": {
-    "bmkg": { "enabled": true },
+    "bmkg": {
+      "enabled": true,
+      "mode": "official-public-api",
+      "baseUrl": "https://maritim.bmkg.go.id/marine2026-data/",
+      "note": "Automated access must use the official API. Commercial third-party integration requires written permission."
+    },
     "openMeteo": { "enabled": true }
   },
   "ai": {
