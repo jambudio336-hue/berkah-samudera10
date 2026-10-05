@@ -1,0 +1,46 @@
+{
+  "map": {
+    "base": "leaflet",
+    "nautical": {
+      "navionics": {
+        "enabled": false,
+        "mode": "official-sdk",
+        "developerTokenEnv": "NAVIONICS_DEVELOPER_TOKEN",
+        "licenseStatus": "not-configured"
+      },
+      "avenzaStyleOffline": {
+        "enabled": true,
+        "formats": ["GeoPDF", "GeoTIFF", "MBTiles", "GPX", "KML", "KMZ"],
+        "note": "Only use maps/data for which the user or operator has rights."
+      }
+    }
+  },
+  "ais": {
+    "marineTraffic": {
+      "enabled": false,
+      "mode": "official-api",
+      "apiKeyEnv": "MARINETRAFFIC_API_KEY",
+      "licenseStatus": "not-configured"
+    }
+  },
+  "radar": {
+    "enabled": false,
+    "mode": "hardware-gateway",
+    "note": "A phone cannot become a physical marine radar through software alone."
+  },
+  "bathymetry": {
+    "batnas": { "enabled": true },
+    "gebco": { "enabled": true }
+  },
+  "weather": {
+    "bmkg": { "enabled": true },
+    "openMeteo": { "enabled": true }
+  },
+  "ai": {
+    "mazkiplay": {
+      "enabled": false,
+      "provider": "user-configured-or-server",
+      "apiKeyStorage": "Android Keystore/local secure storage"
+    }
+  }
+}
