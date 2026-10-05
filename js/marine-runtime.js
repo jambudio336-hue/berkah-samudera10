@@ -6,7 +6,7 @@ const uid=p=>p+"-"+Date.now()+"-"+Math.random().toString(36).slice(2,7);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=n=>Number.isFinite(Number(n))?Number(n).toFixed(2):"—";
 const add=(type,data)=>{(state[type]||(state[type]=[])).unshift({id:uid(type),createdAt:new Date().toISOString(),...data});save();sync(type,state[type][0]);return state[type][0]};
-async function sync(type,item){try{if(window.SupabaseSync?.ready){const safe={id:item?.id||uid(type),...item};await SupabaseSync.pushCollection(type,[safe])}}catch(e){console.warn("Marine sync",e)}}catch(e){console.warn("Marine sync",e)}}
+async function sync(type,item){try{if(window.SupabaseSync?.ready){const safe={id:item?.id||uid(type),...item};await SupabaseSync.pushCollection(type,[safe])}}catch(e){console.warn("Marine sync",e)}}
 async function bmkg(path){if(window.MarineExternal?.bmkg?.json)return MarineExternal.bmkg.json(path);const r=await fetch("https://maritim.bmkg.go.id/marine2026-data/"+path,{headers:{Accept:"application/json"}});if(!r.ok)throw new Error("BMKG HTTP "+r.status);return r.json()}});if(!r.ok)throw new Error("BMKG HTTP "+r.status);return r.json()}
 function download(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function list(c,id,arr,fn){const e=c.querySelector("#"+id);if(e)e.innerHTML=(arr||[]).slice(0,30).map(x=>'<div class="mw-item">'+fn(x)+'</div>').join("")||'<span class="mw-muted">Belum ada data.</span>'}
