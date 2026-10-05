@@ -34,6 +34,8 @@ const MarineOS = {
     carto: {name:"CARTO", enabled:true, mode:"public map tiles subject to provider terms", env:""},
     overpass: {name:"OpenStreetMap Overpass", enabled:true, mode:"community OSM query service; fair-use/availability applies", env:""},
     rainviewer: {name:"RainViewer", enabled:true, mode:"public weather radar tiles subject to provider terms", env:""},
+    openMeteoMarine: {name:"Open-Meteo Marine", enabled:true, mode:"free non-commercial marine forecast; CC BY 4.0", env:""},
+    noaaNowCoast: {name:"NOAA nowCOAST", enabled:true, mode:"public NOAA marine map/services; coverage primarily U.S. waters", env:""},
     navionics: {name:"Navionics / Garmin", enabled:false, mode:"official SDK + license", env:"NAVIONICS_DEVELOPER_TOKEN"},
     marineTraffic: {name:"MarineTraffic / Kpler", enabled:false, mode:"official API + license", env:"MARINETRAFFIC_API_KEY"},
     radar: {name:"Onboard Marine Radar", enabled:false, mode:"hardware gateway", env:"RADAR_GATEWAY_URL"},
