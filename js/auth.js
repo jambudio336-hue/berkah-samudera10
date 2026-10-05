@@ -4,24 +4,47 @@ const SupabaseAuth = {
   followingIds: [],
   init() {
     const client = SupabaseSync.client; if (!client) return;
-    document.getElementById("btnEmailOtp")?.addEventListener("click", () => this.sendEmail());
-    document.getElementById("btnVerifyEmail")?.addEventListener("click", () => this.verifyEmail());
-    document.getElementById("btnPhoneOtp")?.addEventListener("click", () => this.sendPhone("sms"));
-    document.getElementById("btnWhatsappOtp")?.addEventListener("click", () => this.sendPhone("whatsapp"));
-    document.getElementById("btnVerifyPhone")?.addEventListener("click", () => this.verifyPhone());
-    document.getElementById("btnGoogleLogin")?.addEventListener("click", () => this.google());
-    document.getElementById("btnSignOut")?.addEventListener("click", () => client.auth.signOut());
+    document.getElementById("btnGuestSave")?.addEventListener("click", () => this.registerContact());
     document.getElementById("btnSaveProfile")?.addEventListener("click", () => this.saveProfile());
     document.getElementById("btnSearchFriends")?.addEventListener("click", () => this.search());
     client.auth.onAuthStateChange((_event, session) => setTimeout(() => this.setSession(session), 0));
     client.auth.getSession().then(({ data }) => this.setSession(data.session));
   },
   async setSession(session) {
-    this.user = session?.user || null; const out = document.getElementById("authSignedOut"), inside = document.getElementById("authSignedIn");
-    if (out) out.classList.toggle("hidden", !!this.user); if (inside) inside.classList.toggle("hidden", !this.user);
-    if (this.user) { await this.ensureProfile(); await this.loadProfile(); if (typeof SupabaseSync !== "undefined") { SupabaseSync.client.removeAllChannels(); SupabaseSync.connect(); } await this.refreshFollowing(); await this.loadSocialStats(); if (typeof SupabaseSync !== "undefined") SupabaseSync.setStatus("🟢 Login & Supabase Realtime aktif"); if (typeof StoryApp !== "undefined") StoryApp.init(); } else if (typeof SupabaseSync !== "undefined" && SupabaseSync.client) { SupabaseSync.client.removeAllChannels(); SupabaseSync.connect(); }
+    if (!session?.user && SupabaseSync.client) {
+      const { data } = await SupabaseSync.client.auth.signInAnonymously();
+      session = data?.session || null;
+    }
+    this.user = session?.user || null;
+    document.getElementById("authSignedOut")?.classList.add("hidden");
+    document.getElementById("authSignedIn")?.classList.remove("hidden");
+    if (this.user) {
+      await this.ensureProfile(); await this.loadProfile();
+      SupabaseSync.client.removeAllChannels(); SupabaseSync.connect();
+      await this.refreshFollowing(); await this.loadSocialStats();
+      SupabaseSync.setStatus("🟢 ID otomatis & Realtime aktif");
+      if (typeof StoryApp !== "undefined") StoryApp.init();
+    }
   },
-  status(text) { const el = document.getElementById("authStatus"); if (el) el.textContent = text; },
+  status(text) { const el=document.getElementById("authStatus"); if(el) el.textContent=text; },
+  async registerContact() {
+    if (!this.user) return this.status("Menyiapkan ID otomatis…");
+    const contact=document.getElementById("guestContact")?.value.trim()||"";
+    const isEmail=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(contact);
+    const isPhone=/^\\+?[0-9][0-9\\s-]{7,20}$/.test(contact);
+    if(!isEmail&&!isPhone) return this.status("Masukkan email atau nomor HP yang valid.");
+    const payload={id:this.user.id,email:isEmail?contact:null,phone:isPhone?contact.replace(/[\\s-]/g,""):null,display_name:document.getElementById("profileName")?.value.trim()||"Pelaut "+this.user.id.slice(0,8),updated_at:new Date().toISOString()};
+    const {error}=await SupabaseSync.client.from("profiles").upsert(payload);
+    if(error) return this.status("Profil gagal disimpan: "+error.message);
+    this.profile={...(this.profile||{}),...payload};
+    const id=document.getElementById("guestId"); if(id) id.textContent=this.user.id;
+    this.status("✅ Profil aktif. ID otomatis dibuat. Kontak belum diverifikasi.");
+    await this.loadProfile();
+  },
+  async ensureProfile() { if(!this.user)return; await SupabaseSync.client.from("profiles").upsert({id:this.user.id,email:this.user.email||null,phone:this.user.phone||null,display_name:"Pelaut "+this.user.id.slice(0,8)},{onConflict:"id",ignoreDuplicates:true}); },
+  async loadProfile() { const {data}=await SupabaseSync.client.from("profiles").select("*").eq("id",this.user.id).maybeSingle(); this.profile=data||{}; const p=this.profile; const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||""}; set("profileName",p.display_name); set("guestContact",p.email||p.phone||""); set("profileBio",p.bio); set("profileRole",p.role||"abk"); set("profileAvatar",p.avatar_url); set("profileVessel",p.vessel_name); set("profileCargo",p.vessel_cargo); const share=document.getElementById("profileShareLocation");if(share)share.checked=p.share_location!==false; const h=document.getElementById("profileHeading");if(h)h.textContent=p.display_name||"Profil Saya"; const id=document.getElementById("guestId");if(id)id.textContent=this.user.id; },
+  async saveProfile() { if(!this.user)return; const contact=document.getElementById("guestContact")?.value.trim()||""; const isEmail=/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(contact); const isPhone=/^\\+?[0-9][0-9\\s-]{7,20}$/.test(contact); const payload={id:this.user.id,email:isEmail?contact:(this.profile?.email||null),phone:isPhone?contact.replace(/[\\s-]/g,""):(this.profile?.phone||null),display_name:document.getElementById("profileName").value.trim()||"Pelaut "+this.user.id.slice(0,8),bio:document.getElementById("profileBio").value.trim(),role:document.getElementById("profileRole").value,avatar_url:document.getElementById("profileAvatar").value.trim(),vessel_name:document.getElementById("profileVessel").value.trim(),vessel_cargo:document.getElementById("profileCargo").value.trim(),share_location:document.getElementById("profileShareLocation").checked,updated_at:new Date().toISOString()}; const {error}=await SupabaseSync.client.from("profiles").upsert(payload); const st=document.getElementById("profileStatus");if(st)st.textContent=error?"Gagal menyimpan: "+error.message:"Profil tersimpan.";if(!error){this.profile=payload;await this.refreshFollowing();await this.loadSocialStats();} },
+ { const el = document.getElementById("authStatus"); if (el) el.textContent = text; },
   async sendEmail() { const email = document.getElementById("authEmail")?.value.trim(); if (!email) return this.status("Masukkan email terlebih dahulu."); const { error } = await SupabaseSync.client.auth.signInWithOtp({ email, options: { shouldCreateUser: true } }); this.status(error ? "Gagal mengirim OTP email: " + error.message : "OTP email sudah dikirim. Periksa inbox dan spam."); },
   async verifyEmail() { const email = document.getElementById("authEmail")?.value.trim(), token = document.getElementById("authEmailCode")?.value.trim(); if (!email || !token) return this.status("Masukkan email dan kode OTP."); const { error } = await SupabaseSync.client.auth.verifyOtp({ email, token, type: "email" }); this.status(error ? "OTP email tidak valid: " + error.message : "Email berhasil diverifikasi."); },
   async sendPhone(channel = "sms") { const phone = document.getElementById("authPhone")?.value.trim(); if (!phone) return this.status("Masukkan nomor telepon format internasional."); const { error } = await SupabaseSync.client.auth.signInWithOtp({ phone, options: { shouldCreateUser: true, channel } }); this.status(error ? "Gagal mengirim OTP " + channel + ": " + error.message : "OTP " + channel + " sudah dikirim. Periksa pesan masuk Anda."); },
