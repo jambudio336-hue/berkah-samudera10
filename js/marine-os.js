@@ -32,6 +32,8 @@ const MarineOS = {
     gebco: {name:"GEBCO 2026", enabled:true, mode:"official public WMS / open bathymetry", env:""},
     bmkg: {name:"BMKG Maritim", enabled:true, mode:"official public API; commercial integration requires permission", env:""},
     carto: {name:"CARTO", enabled:true, mode:"public map tiles subject to provider terms", env:""},
+    overpass: {name:"OpenStreetMap Overpass", enabled:true, mode:"community OSM query service; fair-use/availability applies", env:""},
+    rainviewer: {name:"RainViewer", enabled:true, mode:"public weather radar tiles subject to provider terms", env:""},
     navionics: {name:"Navionics / Garmin", enabled:false, mode:"official SDK + license", env:"NAVIONICS_DEVELOPER_TOKEN"},
     marineTraffic: {name:"MarineTraffic / Kpler", enabled:false, mode:"official API + license", env:"MARINETRAFFIC_API_KEY"},
     radar: {name:"Onboard Marine Radar", enabled:false, mode:"hardware gateway", env:"RADAR_GATEWAY_URL"},
@@ -76,6 +78,7 @@ const MarineOS = {
   showProviders(){
     const box=document.getElementById("marineProviderStatus");if(!box)return;
     box.innerHTML=Object.values(this.providers).map(p=>'<div class="marine-provider-row"><b>'+this.esc(p.name)+'</b><span>'+(p.enabled?"🟢 Aktif":"🟡 Belum terhubung")+" • "+this.esc(p.mode)+(p.env?" • "+this.esc(p.env):"")+"</span></div>").join("");
+    if(window.MarineExternal?.health){MarineExternal.health().then(h=>{const labels={bmkg:"BMKG",gebco:"GEBCO",osm:"OSM tiles",openseamap:"OpenSeaMap",carto:"CARTO"};Object.keys(labels).forEach(k=>{const row=[...box.querySelectorAll(".marine-provider-row")].find(x=>x.textContent.includes(labels[k]));if(row){const span=row.querySelector("span");if(span)span.textContent=(h[k]?"🟢 Reachable":"🔴 Unreachable")+" • "+span.textContent.replace(/^.*? • /,"")}})}).catch(()=>{});}
   },
   esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 };
