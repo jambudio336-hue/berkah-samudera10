@@ -113,6 +113,16 @@
     <div id="marineProviderStatus"><p class="muted">Tekan “Provider” untuk melihat status integrasi.</p></div>
   </div>
 
+  <div class="card marine-free-card">
+    <div class="section-head">
+      <div><span class="eyebrow">MARINE OS FREE CORE</span><h3>🆓 Semua fitur tanpa API berbayar</h3></div>
+      <span class="marine-free-badge" id="marineFreeStatus">ZERO-COST CORE</span>
+    </div>
+    <p class="muted">Mode ini memprioritaskan GPS, sensor HP, penyimpanan lokal, open-data, algoritma lokal, dan provider publik. Provider premium tidak wajib untuk menjalankan core Marine OS.</p>
+    <div id="marineFreeFeatureGrid" class="marine-free-feature-grid"></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="marineFreeExport">💾 Ekspor data lokal</button></div>
+  </div>
+
   <div class="marine-lower-grid">
     <div class="card marine-safety-card"><span class="eyebrow">SAFETY FIRST</span><h3>🛟 Safety Guardian</h3><p>Hazard, weather, AIS, route, anchor watch, SOS dan emergency assistant akan terhubung di sini.</p><button class="btn" id="marineOpenSafety">Buka pusat keselamatan</button></div>
     <div class="card marine-ai-card"><span class="eyebrow">MARINE COPILOT</span><h3>🤖 Mazkiplay.ai</h3><p>AI multimodal untuk membaca konteks kapal, peta, cuaca, AIS, dokumen dan data operasi melalui tools yang diizinkan.</p><button class="btn" id="marineOpenAI">Buka Marine Copilot</button></div>
@@ -398,5 +408,6 @@
 <script src="js/kru.js" defer></script>
 <script src="js/app.js" defer></script>
 <script src="js/marine-os.js" defer></script>
+<script src="js/marine-free.js" defer></script>
 </body>
 </html>
