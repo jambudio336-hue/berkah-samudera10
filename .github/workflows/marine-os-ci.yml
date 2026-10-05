@@ -1,0 +1,34 @@
+name: Marine OS CI
+
+on:
+  push:
+    branches: ["feature/marine-os-expansion", "main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - run: npm ci
+      - name: JavaScript syntax check
+        run: |
+          set -e
+          for f in js/*.js sw.js; do
+            node --check "$f"
+          done
+      - name: Capacitor sync
+        run: npx cap sync android
+      - name: Android debug build
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
