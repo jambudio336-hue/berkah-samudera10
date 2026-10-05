@@ -5,6 +5,8 @@ const SupabaseAuth = {
   init() {
     const client = SupabaseSync.client; if (!client) return;
     document.getElementById("btnGuestSave")?.addEventListener("click", () => this.registerContact());
+    document.getElementById("guestContact")?.addEventListener("change", () => this.registerContact());
+    document.getElementById("guestContact")?.addEventListener("keydown", (e) => { if (e.key === "Enter") this.registerContact(); });
     document.getElementById("btnSaveProfile")?.addEventListener("click", () => this.saveProfile());
     document.getElementById("btnSearchFriends")?.addEventListener("click", () => this.search());
     client.auth.onAuthStateChange((_event, session) => setTimeout(() => this.setSession(session), 0));
