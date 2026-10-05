@@ -28,7 +28,7 @@ const MapApp = {
     this.map.on("click", (e) => { this.cekKedalaman(e.latlng.lat, e.latlng.lng); this.deteksiKarang(e.latlng.lat, e.latlng.lng); const a = document.getElementById("routeLat"), b = document.getElementById("routeLon"); if (a && b) { a.value = e.latlng.lat.toFixed(6); b.value = e.latlng.lng.toFixed(6); } });
     document.getElementById("btnGlobal").addEventListener("click", () => this.map.fitWorld({ animate: true }));
     document.getElementById("btnGoogleMaps").addEventListener("click", () => this.openGoogleMaps());
-    document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));
+    document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));\n    document.querySelectorAll("[data-windy-overlay]").forEach((b)=>b.addEventListener("click",()=>this.updateWindy(true,b.dataset.windyOverlay)));
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
     document.getElementById("btnDepth").addEventListener("click", () => this.lat !== null ? this.cekKedalaman(this.lat, this.lon) : alert("GPS belum aktif."));
     document.getElementById("btn3D").addEventListener("click", () => this.toggle3D());
@@ -131,14 +131,14 @@ const MapApp = {
     this.cekKedalaman(this.lat, this.lon, true);
     this.deteksiKarang(this.lat, this.lon, true);
   },
-  updateWindy(force) {
+  updateWindy(force, overlayOverride) {
     const frame = document.getElementById("windyFrame"); if (!frame) return;
     if (!force && !this.windyLoaded) return;
     this.windyLoaded = true;
     const lat = this.lat === null ? -2.5 : this.lat, lon = this.lon === null ? 118 : this.lon;
     const now = Date.now(), changed = !this.lastWindy || Math.abs(lat - this.lastWindy.lat) > .01 || Math.abs(lon - this.lastWindy.lon) > .01;
     if (!force && (!changed || now - (this.lastWindy && this.lastWindy.time || 0) < 15000)) return;
-    const params = "lat=" + lat.toFixed(4) + "&lon=" + lon.toFixed(4) + "&detailLat=" + lat.toFixed(4) + "&detailLon=" + lon.toFixed(4) + "&zoom=" + (this.lat === null ? 3 : 8) + "&level=surface&overlay=wind&product=ecmwf&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=kt&metricTemp=%C2%B0C";
+    const overlay = overlayOverride || "wind"; const params = "lat=" + lat.toFixed(4) + "&lon=" + lon.toFixed(4) + "&detailLat=" + lat.toFixed(4) + "&detailLon=" + lon.toFixed(4) + "&zoom=" + (this.lat === null ? 3 : 8) + "&level=surface&overlay=" + overlay + "&product=ecmwf&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=kt&metricTemp=%C2%B0C";
     frame.src = "https://embed.windy.com/embed2.html?" + params; this.lastWindy = { lat, lon, time: now };
   },
   openGoogleMaps() {
