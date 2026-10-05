@@ -1,5 +1,5 @@
 const MarineOS = {
-  version: "0.2.0",
+  version: "0.3.0",
   modules: [
     ["sea-map","🗺️","Sea Map / Nautical Chart","Peta laut, nautical layers, seamarks, depth contours, satellite & night mode.","peta"],
     ["navigation","🧭","Navigation & Voyage","Route, waypoint, bearing, NM/km, ETA, track replay, voyage log & anchor watch.","peta"],
@@ -27,12 +27,15 @@ const MarineOS = {
     ["digital-twin","🧩","Digital Twin","Status digital kapal, equipment, trips, maintenance and operational context.","akun"]
   ],
   providers: {
+    osm: {name:"OpenStreetMap", enabled:true, mode:"open data / ODbL; tile service terms apply", env:""},
+    openseamap: {name:"OpenSeaMap", enabled:true, mode:"open marine data / ODbL + chart tile license", env:""},
+    gebco: {name:"GEBCO 2026", enabled:true, mode:"official public WMS / open bathymetry", env:""},
+    bmkg: {name:"BMKG Maritim", enabled:true, mode:"official public API; commercial integration requires permission", env:""},
+    carto: {name:"CARTO", enabled:true, mode:"public map tiles subject to provider terms", env:""},
     navionics: {name:"Navionics / Garmin", enabled:false, mode:"official SDK + license", env:"NAVIONICS_DEVELOPER_TOKEN"},
     marineTraffic: {name:"MarineTraffic / Kpler", enabled:false, mode:"official API + license", env:"MARINETRAFFIC_API_KEY"},
     radar: {name:"Onboard Marine Radar", enabled:false, mode:"hardware gateway", env:"RADAR_GATEWAY_URL"},
-    batnas: {name:"BATNAS", enabled:false, mode:"licensed/authorized dataset", env:"BATNAS_ENDPOINT"},
-    gebco: {name:"GEBCO", enabled:true, mode:"existing depth adapter", env:""},
-    bmkg: {name:"BMKG Maritim", enabled:true, mode:"official/public source", env:""},
+    batnas: {name:"BATNAS", enabled:false, mode:"authorized dataset/access required", env:"BATNAS_ENDPOINT"},
     ai: {name:"Mazkiplay.ai / OpenAI", enabled:false, mode:"user key or server gateway", env:"OPENAI_API_KEY"}
   },
   init() {
