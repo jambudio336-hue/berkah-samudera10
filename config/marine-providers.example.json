@@ -78,10 +78,13 @@
     }
   },
   "ai": {
-    "mazkiplay": {
-      "enabled": false,
-      "provider": "user-configured-or-server",
-      "apiKeyStorage": "Android Keystore/local secure storage"
+    "jarvisOpenRouter": {
+      "enabled": true,
+      "provider": "OpenRouter",
+      "model": "openrouter/free",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+      "apiKeyStorage": "user-configured local storage; never hard-code in APK",
+      "voice": "Android/WebView SpeechSynthesis + SpeechRecognition when supported"
     }
   },
   "worldIntegrations": {
