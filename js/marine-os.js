@@ -103,7 +103,7 @@ const MarineOS = {
       const card=b.closest("[data-world-provider]"), out=card?.querySelector("[data-world-result]"), id=b.dataset.worldTest;
       b.disabled=true; b.textContent="⏳ Mengecek...";
       try{
-        const fn=window.MarineExternal?.integrations?.[id.replace(/-live|-/g,"")]||null;
+        const provider={"ais-live":"ais","radar-hw":"radar","navionics":"navionics","marinetraffic":"marineTraffic","windy-api":"windy","windy-map":"windyMap"}[id]; const fn=provider?window.MarineExternal?.integrations?.[provider]:null;
         if(id==="windy-map"){out.textContent="🟢 Windy map surface tersedia melalui iframe resmi; API penuh tetap memerlukan izin/key.";return;}
         if(fn&&typeof fn.test==="function"){const x=await fn.test();out.textContent=(x.ok?"🟢 ":"🟡 ")+(x.message||"Adapter siap.");}
         else out.textContent="🟡 Adapter sudah disiapkan. Hubungkan credential/gateway resmi untuk data live.";
