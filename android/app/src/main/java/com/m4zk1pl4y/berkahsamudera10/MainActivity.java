@@ -72,8 +72,8 @@ public class MainActivity extends BridgeActivity {
                     && info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
                 appUpdateManager.startUpdateFlowForResult(
                     info,
-                    AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
                     this,
+                    AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
                     PLAY_UPDATE_REQUEST
                 );
             }
@@ -81,13 +81,13 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         checkPlayUpdate();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if (appUpdateManager != null) {
             appUpdateManager.unregisterListener(updateListener);
         }
