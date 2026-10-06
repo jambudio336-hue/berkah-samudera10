@@ -19,7 +19,7 @@ Saat pertama kali aplikasi dibuka, pengguna dapat memilih **Daftar/Masuk Akun** 
 
 [**Download APK Release Terbaru**](https://github.com/jambudio336-hue/berkah-samudera10/releases/latest)
 
-Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera10/releases) dan pilih asset `Berkah-Samudera10-release.apk`.
+Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera10/releases) dan pilih asset `berkah-samudera10-release.apk`.
 
 ## Marine Toolkit, Windy, background tracking, dan update
 
