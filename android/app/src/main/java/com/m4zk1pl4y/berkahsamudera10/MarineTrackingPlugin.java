@@ -54,7 +54,7 @@ public class MarineTrackingPlugin extends Plugin {
         String deviceId=call.getString("deviceId","android-"+System.currentTimeMillis());
         String vesselId=call.getString("vesselId","kapal-utama");
         SharedPreferences p=getContext().getSharedPreferences("marine_tracking", Context.MODE_PRIVATE);
-        p.edit().putString("device_id",deviceId).putString("vessel_id",vesselId).apply();
+        p.edit().putString("device_id",deviceId).putString("vessel_id",vesselId).putBoolean("enabled",true).apply();
         Intent i=new Intent(getContext(), MarineTrackingService.class);
         ContextCompat.startForegroundService(getContext(), i);
         JSObject out=new JSObject(); out.put("ok",true); out.put("running",true); call.resolve(out);
@@ -62,13 +62,15 @@ public class MarineTrackingPlugin extends Plugin {
 
     @PluginMethod public void stop(PluginCall call) {
         getContext().stopService(new Intent(getContext(), MarineTrackingService.class));
+        getContext().getSharedPreferences("marine_tracking", Context.MODE_PRIVATE).edit().putBoolean("enabled", false).putBoolean("running", false).apply();
         JSObject out=new JSObject(); out.put("ok",true); out.put("running",false); call.resolve(out);
     }
 
     @PluginMethod public void status(PluginCall call) {
         SharedPreferences p=getContext().getSharedPreferences("marine_tracking", Context.MODE_PRIVATE);
         JSObject out=new JSObject();
-        out.put("running", p.getLong("updated_at",0)>0);
+        out.put("running", p.getBoolean("running", false));
+        out.put("enabled", p.getBoolean("enabled", false));
         out.put("lat", p.getFloat("lat", Float.NaN));
         out.put("lon", p.getFloat("lon", Float.NaN));
         out.put("speed", p.getFloat("speed", 0));
