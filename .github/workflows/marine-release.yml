@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - uses: actions/setup-java@v4
         with:
@@ -53,6 +53,8 @@ jobs:
           TAG="${{ github.event.inputs.tag || github.ref_name }}"
           if [[ "$TAG" == release/* ]]; then TAG="${TAG#release/}"; fi
           VERSION="${TAG#v}"
+          PACKAGE_VERSION="$(node -p 'require("./package.json").version')"
+          [[ "$VERSION" == "$PACKAGE_VERSION" ]] || { echo "Release tag $VERSION does not match package.json $PACKAGE_VERSION"; exit 1; }
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
           PATCH_NUM="${PATCH:-0}"
           CODE=$((10#$MAJOR * 10000 + 10#$MINOR * 100 + 10#$PATCH_NUM))
@@ -62,6 +64,10 @@ jobs:
           echo "code=$CODE" >> "$GITHUB_OUTPUT"
 
       - run: npm ci
+      - name: Sync web sources into Capacitor webDir
+        run: npm run build:web
+      - name: Project integrity tests
+        run: npm test
       - run: npx cap sync android
 
       - name: Decode signing keystore

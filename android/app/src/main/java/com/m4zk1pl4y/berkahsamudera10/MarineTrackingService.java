@@ -6,7 +6,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,11 +18,6 @@ import android.os.Looper;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.ServiceCompat;
-
-import org.json.JSONObject;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class MarineTrackingService extends Service implements LocationListener {
     private static final String CHANNEL_ID = "marine_tracking";
@@ -38,9 +32,18 @@ public class MarineTrackingService extends Service implements LocationListener {
     }
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null && !prefs.getBoolean("enabled", false)) {
+            stopSelf(startId);
+            return START_NOT_STICKY;
+        }
         prefs.edit().putBoolean("running", true).apply();
         startForegroundNotification();
-        startLocationUpdates();
+        if (!startLocationUpdates()) {
+            prefs.edit().putBoolean("running", false).apply();
+            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE);
+            stopSelf(startId);
+            return START_NOT_STICKY;
+        }
         return START_STICKY;
     }
 
@@ -51,7 +54,7 @@ public class MarineTrackingService extends Service implements LocationListener {
             PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0));
         Notification n = new NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Berkah Samudera • Marine Tracking")
-            .setContentText("Pelacakan kapal aktif di latar belakang")
+            .setContentText("GPS latar belakang disimpan lokal di perangkat")
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -65,72 +68,46 @@ public class MarineTrackingService extends Service implements LocationListener {
         }
     }
 
-    private void startLocationUpdates() {
+    private boolean startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) return;
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) return false;
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000L, 5f, this, Looper.getMainLooper());
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000L, 20f, this, Looper.getMainLooper());
-        } catch (Exception ignored) {}
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
-    @Override public void onLocationChanged(Location l) {
+    @Override public void onLocationChanged(Location location) {
+        // Background tracking is local-only. Public GPS sharing is handled by the active
+        // WebView/Supabase client, which checks the explicit opt-in and authenticated RLS.
         prefs.edit()
-            .putFloat("lat", (float)l.getLatitude())
-            .putFloat("lon", (float)l.getLongitude())
-            .putFloat("speed", l.hasSpeed() ? l.getSpeed() : 0f)
-            .putFloat("accuracy", l.hasAccuracy() ? l.getAccuracy() : -1f)
-            .putFloat("heading", l.hasBearing() ? l.getBearing() : -1f)
+            .putFloat("lat", (float) location.getLatitude())
+            .putFloat("lon", (float) location.getLongitude())
+            .putFloat("speed", location.hasSpeed() ? location.getSpeed() : 0f)
+            .putFloat("accuracy", location.hasAccuracy() ? location.getAccuracy() : -1f)
+            .putFloat("heading", location.hasBearing() ? location.getBearing() : -1f)
             .putLong("updated_at", System.currentTimeMillis())
             .putBoolean("running", true)
             .apply();
-        new Thread(() -> publish(l)).start();
-    }
-
-    private void publish(Location l) {
-        HttpURLConnection c = null;
-        try {
-            String supabaseUrl = "https://volhmpsomtjnaroylmwe.supabase.co";
-            String anonKey = "sb_publishable_5wuisICF0Ia8YXwf1McOkg_lMZU9d6g";
-            String vesselId = getSharedPreferences("marine_tracking", MODE_PRIVATE).getString("vessel_id", "kapal-utama");
-            String deviceId = getSharedPreferences("marine_tracking", MODE_PRIVATE).getString("device_id", "android-" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID));
-            JSONObject row = new JSONObject();
-            row.put("vessel_id", vesselId);
-            row.put("device_id", deviceId);
-            row.put("lat", l.getLatitude());
-            row.put("lon", l.getLongitude());
-            row.put("speed_knots", l.hasSpeed() ? l.getSpeed() * 1.94384449 : 0);
-            row.put("accuracy_m", l.hasAccuracy() ? l.getAccuracy() : JSONObject.NULL);
-            row.put("heading", l.hasBearing() ? l.getBearing() : JSONObject.NULL);
-            row.put("updated_at", new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", java.util.Locale.US).format(new java.util.Date()));
-            c = (HttpURLConnection)new URL(supabaseUrl + "/rest/v1/live_positions?on_conflict=vessel_id").openConnection();
-            c.setRequestMethod("POST");
-            c.setDoOutput(true);
-            c.setRequestProperty("apikey", anonKey);
-            c.setRequestProperty("Authorization", "Bearer " + anonKey);
-            c.setRequestProperty("Content-Type", "application/json");
-            c.setRequestProperty("Prefer", "resolution=merge-duplicates,return=minimal");
-            byte[] body = row.toString().getBytes("UTF-8");
-            c.setFixedLengthStreamingMode(body.length);
-            try(OutputStream os=c.getOutputStream()){ os.write(body); }
-            c.getResponseCode();
-        } catch(Exception ignored) {
-        } finally { if(c!=null) c.disconnect(); }
     }
 
     private void createChannel() {
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel ch = new NotificationChannel(CHANNEL_ID, "Marine Tracking", NotificationManager.IMPORTANCE_LOW);
-            ((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(ch);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Marine Tracking", NotificationManager.IMPORTANCE_LOW);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(channel);
         }
     }
 
     @Override public void onDestroy() {
         if (locationManager != null) locationManager.removeUpdates(this);
-        prefs.edit().putBoolean("running", false).apply();
+        if (prefs != null) prefs.edit().putBoolean("running", false).apply();
         super.onDestroy();
     }
+
     @Override public IBinder onBind(Intent intent) { return null; }
     @Override public void onProviderEnabled(String provider) {}
     @Override public void onProviderDisabled(String provider) {}

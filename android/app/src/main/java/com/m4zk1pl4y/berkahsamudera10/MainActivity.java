@@ -1,6 +1,7 @@
 package com.m4zk1pl4y.berkahsamudera10;
 
 import android.os.Bundle;
+import android.webkit.WebView;
 import com.getcapacitor.BridgeActivity;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
@@ -30,8 +31,22 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(MarineTrackingPlugin.class);
         registerPlugin(MarineUpdatePlugin.class);
         super.onCreate(savedInstanceState);
+        configureTileUserAgent();
         setupPlayUpdates();
         scheduleBackgroundUpdateCheck();
+    }
+
+    private void configureTileUserAgent() {
+        try {
+            WebView webView = getBridge() != null ? getBridge().getWebView() : null;
+            if (webView == null) return;
+            String current = webView.getSettings().getUserAgentString();
+            if (current == null || current.contains("BerkahSamudera10/")) return;
+            String appIdentity = " BerkahSamudera10/" + BuildConfig.VERSION_NAME
+                + " (+https://github.com/jambudio336-hue/berkah-samudera10)";
+            webView.getSettings().setUserAgentString(current + appIdentity);
+        } catch (Exception ignored) {
+        }
     }
 
     private void setupPlayUpdates() {

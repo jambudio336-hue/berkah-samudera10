@@ -1,7 +1,33 @@
 # Changelog — Berkah Samudera10
 
-## [1.0.32] - 2026-10-06
+## [1.1.0] - 2026-10-06
 
+### Ditambahkan
+- Peta potret imersif/layar penuh, kontrol GPS, pemilih sumber peta, katalog audit 25 provider, dan lima style vektor MapLibre/OpenFreeMap.
+- Layer peta global beratribusi: OpenStreetMap, OpenTopoMap, NASA GIBS Blue Marble, OpenSeaMap, GEBCO, serta RainViewer dengan pembatasan layanan masing-masing.
+- Model Open-Meteo Marine untuk gelombang/arus dan pembacaan angin/cuaca pada HUD; status UI membedakan prakiraan model dari sensor lokal.
+- Pemeriksaan objek reef/batu/wreck OSM otomatis di sekitar GNSS hingga radius 1 mil laut, dengan peringatan bahwa data komunitas bukan sonar.
+- Profil kapal Supabase Anonymous Auth tanpa form login/email/password; UUID aplikasi otomatis, nama kapal, direktori kapal online, dan GPS real-time opt-in.
+- Migrasi RLS untuk profil kapal/lokasi publik yang disetujui pemilik dan rekaman cloud privat per perangkat.
+- Kiplay dengan jawaban TTS perangkat, checklist keselamatan lokal, ikon biru samudra, dan status modul jujur.
+
+### Diperbaiki
+- Menghapus layar serta modul akun/login, Story, dan kru; semua target navigasi yang tersisa mengarah ke halaman yang tersedia.
+- Menghilangkan upload GPS dari Android foreground service; tracking latar belakang kini local-only, sedangkan publikasi ke kapal lain dilakukan oleh WebView terautentikasi saat aplikasi aktif dan setelah opt-in.
+- Menghapus endpoint CARTO/Esri/OSM-France dari layer aktif dan tidak lagi menyimpan tile eksternal di service worker.
+- Memperbaiki URL RainViewer agar memakai host/path frame terbaru, membatasi zoom, dan mencegah request duplikat.
+- Mengganti efek miring CSS palsu dengan renderer vektor MapLibre 3D; marker kapal, rute, cuaca, dan objek yang didukung disinkronkan.
+- Menambahkan build web kanonis dan pemeriksaan project sebelum APK dibuat; versi dinaikkan menjadi **1.1.0 / versionCode 10100**.
+- QA: 173 assertion project, 27 JavaScript files syntax-checked, browser Chromium peta 2D/3D dan katalog 25 sumber tanpa exception JavaScript.
+
+### Catatan
+- Hanya enam dari 25 sumber yang ditinjau dipasang sebagai layer aktif/bersyarat. Provider lain ditampilkan sebagai katalog berstatus tidak aktif karena lisensi/key, cakupan, tanggal data, atau batas layanan.
+- Berbagi GPS default mati dan baru berjalan setelah persetujuan perangkat; sinkronisasi posisi cloud berlaku saat aplikasi aktif. Tracking latar belakang Android menyimpan data secara lokal saja.
+- ID aplikasi bukan IMEI atau nomor seri hardware; policy profil di project Supabase membatasi insert/update ke UUID auth pemilik.
+- 3D adalah peta vektor/bangunan, bukan batimetri bawah laut 3D. GEBCO, karang OSM, cuaca, dan arus bersifat indikatif.
+- AIS live, radar perangkat keras, chat, peta offline, document vault, dan prediksi hotspot belum tersedia pada rilis ini.
+
+## [1.0.32] - 2026-10-06
 ### Ditambahkan
 - **Ocean Command Center** dengan quick mode Navigation, Weather, Fishing, HUD, dan AI Briefing hook.
 - **Marine Risk Score** lokal dari status GNSS, akurasi, koneksi jaringan, dan pergerakan kapal.

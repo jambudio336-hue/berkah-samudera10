@@ -3,7 +3,7 @@ name: Marine OS CI
 on:
   workflow_dispatch:
   push:
-    branches: ["feature/marine-os-expansion", "main"]
+    branches: ["feature/**", "main"]
   pull_request:
     branches: ["main"]
 
@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - uses: actions/setup-java@v4
         with:
@@ -24,6 +24,10 @@ jobs:
         with:
           packages: "platform-tools platforms;android-35 build-tools;35.0.0"
       - run: npm ci
+      - name: Sync web sources into Capacitor webDir
+        run: npm run build:web
+      - name: Project integrity tests
+        run: npm test
       - name: JavaScript syntax check
         shell: bash
         run: |
@@ -52,7 +56,15 @@ jobs:
           retention-days: 14
       - name: Archive full source tree
         shell: bash
-        run: git archive --format=zip --output=berkah-samudera10-fullstack-source.zip HEAD
+        run: git archive --format=zip --output=berkah-samudera10-fullstack-source.zip HEAD -- . ':(exclude)Berkah-Samudera10-release.apk'
+      - name: Verify key source files are committed and archived
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in js/device-profile.js js/map-provider-catalog.js js/safety-checklist.js js/marine-native-tracking.js scripts/check-project.mjs scripts/sync-web.mjs docs/map-provider-audit.md supabase/migrations/20261006193400_anonymous_vessel_presence.sql supabase/migrations/20261006195100_private_cloud_records.sql supabase/migrations/20261006204600_anonymous_profile_owner_writes.sql; do
+            git ls-files --error-unmatch "$path" >/dev/null
+            unzip -Z1 berkah-samudera10-fullstack-source.zip | grep -Fxq "$path"
+          done
       - name: Upload full-stack source
         uses: actions/upload-artifact@v4
         with:

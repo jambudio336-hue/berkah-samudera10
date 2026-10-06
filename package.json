@@ -1,11 +1,13 @@
 {
   "name": "berkah-samudera10",
-  "version": "1.0.31",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
-    "cap:sync": "npx cap sync android",
+    "cap:sync": "npm run build:web && npx cap sync android",
     "cap:open": "npx cap open android",
-    "build:web": "node -e \"console.log('static web app ready')\""
+    "build:web": "node scripts/sync-web.mjs",
+    "sync:web": "node scripts/sync-web.mjs",
+    "test": "node scripts/check-project.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^7.4.3",

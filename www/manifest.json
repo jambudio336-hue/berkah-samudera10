@@ -1,10 +1,10 @@
 {
-  "name": "Berkah Samoedra 10 • by.m4zk1pl4y",
-  "short_name": "Samoedra10",
+  "name": "Berkah Samudera 10 • by.m4zk1pl4y",
+  "short_name": "Samudera10",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#061a33",
-  "theme_color": "#061a33",
+  "background_color": "#06284F",
+  "theme_color": "#087FA5",
   "icons": [
     {
       "src": "icon-192.png",

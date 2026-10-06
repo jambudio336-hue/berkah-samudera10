@@ -20,15 +20,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-
 ## Third-party services and data
 
-The MIT license applies to this project's original code. Third-party maps, data, SDKs, fonts, APIs, tiles, imagery, and services remain subject to their own licenses, attribution requirements, usage limits, and terms. This includes, where used, OpenStreetMap, OpenSeaMap, GEBCO, CARTO, Esri, Windy, BMKG, Open-Meteo, Supabase, OpenRouter, Aladhan, EQuran, RainViewer, NOAA, and other providers documented by the project. The project does not grant rights to redistribute third-party data beyond the permissions of those providers.
+The MIT license applies only to original project code and documentation that the project owns. It does not grant rights to third-party maps, tiles, imagery, bathymetry, weather data, APIs, SDKs, fonts, audio, trademarks, or other content. OpenStreetMap, OpenTopoMap, OpenSeaMap, NASA GIBS, GEBCO, RainViewer, Open-Meteo, BMKG, Supabase, OpenRouter, MapLibre/OpenFreeMap, Leaflet, Windy, Aladhan, EQuran, and any other provider retain their own license terms, attribution rules, access limits, and usage policies. See `docs/map-provider-audit.md` and `docs/MARINE_OS_ZERO_COST_DATA.md`; provider terms control if they differ from project documentation. The project does not authorize redistribution or offline storage of third-party content unless the provider permits it.
 
 ## Project-specific safety and privacy notice
 
-- The MIT license covers the original source code only. The application is decision-support software and is not a certified navigation system, ECDIS, radar, AIS, sonar, emergency beacon, or vessel-control system.
-- GPS, weather, bathymetry, AIS, hazard, route, MOB, SOS, and AI outputs can be incomplete, delayed, unavailable, or inaccurate. Users remain responsible for lookout, navigation decisions, communications, and compliance with local maritime rules.
-- Do not use the application as the sole basis for emergency, navigation, medical, legal, or financial decisions. MOB/SOS tools prepare local information but do not automatically contact emergency services.
-- Users are responsible for API keys, credentials, personal data, vessel data, and any third-party content they enter or transmit. Never commit secrets to this repository.
-- Logos, names, artwork, QRIS assets, and trademarks are not granted under the MIT license unless explicitly stated by their respective owners.
+- This application is decision-support software, not a certified navigation system, official nautical chart, ECDIS, radar, AIS receiver, sonar, emergency beacon, or vessel-control system. It is provided without a guarantee of accuracy, availability, or fitness for safe navigation.
+- GNSS, weather, current, wave, bathymetry, reef objects, route, MOB, SOS, and AI outputs may be incomplete, delayed, unavailable, or inaccurate. Users remain responsible for lookout, navigation decisions, communications, and applicable maritime procedures. MOB/SOS tools prepare local information; they do not automatically contact emergency services.
+- The anonymous profile UUID is an application identifier, not a hardware serial number or IMEI. Live GPS sharing is disabled by default and requires explicit user consent. When enabled, precise position and vessel details may be visible to other online users; the owner is responsible for enabling, reviewing, and stopping that publication. Location sharing with AI is a separate permission.
+- Users are responsible for API keys, credentials, personal/vessel data, and third-party content they enter or transmit. Never commit secrets, release keystores, passwords, or service-role keys to this repository.
+- Project name, logos, artwork, sponsor marks, QRIS assets, and other trademarks are not granted under the MIT license unless explicitly stated by their respective owners.

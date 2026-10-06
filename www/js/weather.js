@@ -38,7 +38,7 @@ const Weather = {
 
   muatMarine(q) {
     fetch("https://marine-api.open-meteo.com/v1/marine?" + q +
-      "&current=wave_height,wave_direction,wave_period,wind_wave_height,sea_surface_temperature" +
+      "&current=wave_height,wave_direction,wave_period,wind_wave_height,sea_surface_temperature,ocean_current_velocity,ocean_current_direction,sea_level_height_msl" +
       "&timezone=auto")
       .then((r) => r.json())
       .then((d) => Weather.tampilMarine(d))
@@ -79,15 +79,24 @@ const Weather = {
   },
 
   tampilMarine(d) {
-    const c = d.current;
+    const c = d && d.current;
+    if (!c) { document.getElementById("marineNow").textContent = "Data kondisi laut belum tersedia untuk koordinat ini."; const wave = document.getElementById("mapWaveSummary"); if (wave) wave.textContent = "tidak tersedia"; return; }
     if (typeof MapApp !== "undefined") MapApp.updateStormOverlay(c.wave_height, Weather.lastWeatherCode);
-    const html = "<p>🌊 Tinggi ombak: <b>" + c.wave_height + " m</b></p>" +
-      "<p>🧭 Arah ombak: <b>" + Weather.arahAngin(c.wave_direction) + "</b></p>" +
-      "<p>⏱️ Periode ombak: <b>" + c.wave_period + " s</b></p>" +
-      "<p>🌀 Ombak angin: <b>" + c.wind_wave_height + " m</b></p>" +
-      "<p>🌡️ Suhu laut: <b>" + c.sea_surface_temperature + " °C</b></p>";
+    const num = (value, digits) => Number.isFinite(Number(value)) ? Number(value).toFixed(digits) : "—";
+    const currentSpeed = Number(c.ocean_current_velocity), currentDirection = Number(c.ocean_current_direction);
+    const currentText = Number.isFinite(currentSpeed) && Number.isFinite(currentDirection) ? num(currentSpeed, 1) + " km/j menuju " + Weather.arahAngin(currentDirection) + " (" + Math.round(currentDirection) + "°)" : "data arus tidak tersedia";
+    const seaLevel = Number.isFinite(Number(c.sea_level_height_msl)) ? num(c.sea_level_height_msl, 2) + " m relatif MSL" : "—";
+    const html = "<p>🌊 Tinggi ombak: <b>" + num(c.wave_height, 2) + " m</b></p>" +
+      "<p>🧭 Arah ombak: <b>" + (Number.isFinite(Number(c.wave_direction)) ? Weather.arahAngin(c.wave_direction) : "—") + "</b> • ⏱️ Periode: <b>" + num(c.wave_period, 1) + " s</b></p>" +
+      "<p>🌀 Ombak angin: <b>" + num(c.wind_wave_height, 2) + " m</b></p>" +
+      "<p>🌊 Arus laut: <b>" + currentText + "</b></p>" +
+      "<p>📏 Tinggi muka laut model: <b>" + seaLevel + "</b></p>" +
+      "<p>🌡️ Suhu laut: <b>" + num(c.sea_surface_temperature, 1) + " °C</b></p>" +
+      "<p class='muted'>Arus/muka laut model global beresolusi sekitar 8 km; akurasi dekat pantai terbatas dan tidak untuk navigasi pesisir.</p>";
     document.getElementById("marineNow").innerHTML = html;
     document.getElementById("dashWave").innerHTML = "Ombak " + c.wave_height + " m • Periode " + c.wave_period + " s • arah " + Weather.arahAngin(c.wave_direction);
+    const waveSummary = document.getElementById("mapWaveSummary"); if (waveSummary) waveSummary.textContent = Number.isFinite(Number(c.wave_height)) ? num(c.wave_height, 1) + " m • " + num(c.wave_period, 0) + " s" : "tidak tersedia";
+    if (typeof MapApp !== "undefined") MapApp.updateMarineCurrentOverlay(currentSpeed, currentDirection, c.time);
     const area = document.getElementById("dashWaveArea"); if (area) { const p = Weather.pos(); area.textContent = "Area ombak: sekitar " + Number(p.lat).toFixed(3) + "°, " + Number(p.lon).toFixed(3) + "° (posisi kapal)"; }
     let alarm = [];
     if (c.wave_height >= 2.5) alarm.push("Ombak tinggi " + c.wave_height + " m — WASPADA!");

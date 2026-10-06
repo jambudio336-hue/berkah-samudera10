@@ -51,10 +51,8 @@ public class MarineTrackingPlugin extends Plugin {
     }
 
     private void startService(PluginCall call) {
-        String deviceId=call.getString("deviceId","android-"+System.currentTimeMillis());
-        String vesselId=call.getString("vesselId","kapal-utama");
         SharedPreferences p=getContext().getSharedPreferences("marine_tracking", Context.MODE_PRIVATE);
-        p.edit().putString("device_id",deviceId).putString("vessel_id",vesselId).putBoolean("enabled",true).apply();
+        p.edit().putBoolean("enabled",true).apply();
         Intent i=new Intent(getContext(), MarineTrackingService.class);
         ContextCompat.startForegroundService(getContext(), i);
         JSObject out=new JSObject(); out.put("ok",true); out.put("running",true); call.resolve(out);
