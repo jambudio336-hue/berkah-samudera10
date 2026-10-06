@@ -32,7 +32,14 @@
       },
       "avenzaStyleOffline": {
         "enabled": true,
-        "formats": ["GeoPDF", "GeoTIFF", "MBTiles", "GPX", "KML", "KMZ"],
+        "formats": [
+          "GeoPDF",
+          "GeoTIFF",
+          "MBTiles",
+          "GPX",
+          "KML",
+          "KMZ"
+        ],
         "note": "Only use maps/data for which the user or operator has rights."
       }
     }
@@ -51,8 +58,13 @@
     "note": "A phone cannot become a physical marine radar through software alone."
   },
   "bathymetry": {
-    "batnas": { "enabled": false, "note": "Enable only after authorized dataset access is confirmed." },
-    "gebco": { "enabled": true }
+    "batnas": {
+      "enabled": false,
+      "note": "Enable only after authorized dataset access is confirmed."
+    },
+    "gebco": {
+      "enabled": true
+    }
   },
   "weather": {
     "bmkg": {
@@ -61,13 +73,61 @@
       "baseUrl": "https://maritim.bmkg.go.id/marine2026-data/",
       "note": "Automated access must use the official API. Commercial third-party integration requires written permission."
     },
-    "openMeteo": { "enabled": true }
+    "openMeteo": {
+      "enabled": true
+    }
   },
   "ai": {
     "mazkiplay": {
       "enabled": false,
       "provider": "user-configured-or-server",
       "apiKeyStorage": "Android Keystore/local secure storage"
+    }
+  },
+  "worldIntegrations": {
+    "aisLive": {
+      "enabled": false,
+      "mode": "authorized-provider-gateway",
+      "provider": "Kpler AIS / MarineTraffic",
+      "endpointEnv": "AIS_GATEWAY_URL",
+      "credentialEnv": "AIS_PROVIDER_TOKEN",
+      "note": "Do not put provider secrets in the APK bundle. Use a server/native secure gateway."
+    },
+    "radarHardware": {
+      "enabled": false,
+      "mode": "hardware-gateway",
+      "endpointEnv": "RADAR_GATEWAY_URL",
+      "protocols": [
+        "vendor gateway",
+        "NMEA/UDP/TCP where supported"
+      ],
+      "note": "Requires compatible onboard radar hardware and network gateway."
+    },
+    "navionicsGarmin": {
+      "enabled": false,
+      "mode": "Garmin Navionics Mobile SDK",
+      "developerTokenEnv": "NAVIONICS_DEVELOPER_TOKEN",
+      "note": "Requires Garmin approval, SDK, developer token and applicable chart/content rights."
+    },
+    "marineTrafficApi": {
+      "enabled": false,
+      "mode": "official-api",
+      "endpointEnv": "MARINETRAFFIC_API_GATEWAY_URL",
+      "credentialEnv": "MARINETRAFFIC_API_KEY",
+      "note": "MarineTraffic API services are separately authorized; current MarineTraffic/Kpler products may differ by service."
+    },
+    "windyApi": {
+      "enabled": false,
+      "mode": "official-api",
+      "endpointEnv": "WINDY_API_GATEWAY_URL",
+      "credentialEnv": "WINDY_API_KEY",
+      "note": "Use the current official Windy API and terms. Never ship a private API key in public APK code."
+    },
+    "windyMap": {
+      "enabled": true,
+      "mode": "official-web-map/embed",
+      "url": "https://www.windy.com/",
+      "note": "Full API parity requires the applicable Windy API access/terms."
     }
   }
 }
