@@ -1,13 +1,28 @@
-## 1.0.32
-
-- Added Ocean Command quick modes: Navigation, Weather, Fishing, HUD, and AI briefing hook.
-- Added local Marine Risk score from GNSS, network, accuracy, and motion telemetry.
-- Added confirmation-gated MOB logging and SOS message preparation with local clipboard support.
-- Added Ocean Dark, Red Night, and Blackout display modes.
-- Added Jarvis v2: OpenRouter free-model discovery, local conversation history, hands-free voice mode, and contextual recommendations.
-- Added offline service-worker cache v9 for the new command module.
-
 # Changelog — Berkah Samudera10
+
+## [1.0.32] - 2026-10-06
+
+### Ditambahkan
+- **Ocean Command Center** dengan quick mode Navigation, Weather, Fishing, HUD, dan AI Briefing hook.
+- **Marine Risk Score** lokal dari status GNSS, akurasi, koneksi jaringan, dan pergerakan kapal.
+- Mode tampilan **Ocean Dark, Red Night, dan Blackout** untuk operasi malam.
+- Fitur **MOB** dengan konfirmasi manusia, pencatatan koordinat/waktu/heading, dan status titik darurat.
+- Fitur **SOS preparation** yang menyusun pesan koordinat, kecepatan, dan waktu lalu menyalinnya ke clipboard jika tersedia.
+- **Jarvis v2**: pencarian katalog model gratis OpenRouter, local conversation history, hands-free voice, dan rekomendasi berbasis telemetry.
+- Service worker cache dinaikkan ke **v9** agar modul Ocean Command tersedia saat offline.
+- Dokumentasi privasi API key, izin lokasi, status provider, lisensi data, dan batasan keselamatan diperjelas.
+
+### Diperbaiki
+- Mirror `www/` disinkronkan dengan source utama sebelum build Android.
+- Versioning Android dinaikkan ke **1.0.32 / versionCode 10032**.
+- APK release signed diverifikasi dengan `apksigner`, metadata `aapt`, dan pemeriksaan isi ZIP.
+- Pemeriksaan syntax seluruh JavaScript dan `git diff --check` dijalankan sebelum rilis.
+
+### Catatan
+- GPS/GNSS, MOB, SOS, risk score, dan Jarvis adalah alat bantu; pengguna tetap memegang kendali dan harus mengikuti prosedur keselamatan resmi.
+- MOB/SOS tidak menghubungi layanan darurat secara otomatis.
+- `openrouter/free` dan model gratis dapat berubah, memiliki rate limit, dan bergantung pada ketersediaan OpenRouter.
+- Provider komersial/berlisensi tidak dianggap aktif tanpa SDK, kredensial, izin, atau perangkat resmi.
 
 ## 1.0.31
 

@@ -17,13 +17,21 @@ Saat pertama kali aplikasi dibuka, pengguna dapat memilih **Daftar/Masuk Akun** 
 
 ## Rilis terbaru — 1.0.32
 
-Release 1.0.32 membawa **Jarvis Voice Captain Assistant** berbasis OpenRouter free router, snapshot konteks Marine OS per pertanyaan, voice input/output Bahasa Indonesia, serta peningkatan validasi dan dokumentasi release. API key tetap harus dimasukkan oleh pengguna dan tidak disertakan di source code.
+Release 1.0.32 membawa **Ocean Command Center**, Jarvis v2 berbasis OpenRouter, mode keselamatan MOB/SOS, Marine Risk Score, mode tampilan malam/HUD, dan cache offline terbaru. API key tetap harus dimasukkan oleh pengguna dan tidak disertakan di source code.
 
 ## Download APK
 
 [**Download APK Release Terbaru**](https://github.com/jambudio336-hue/berkah-samudera10/releases/latest)
 
 Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera10/releases) dan pilih asset `berkah-samudera10-release.apk`.
+
+## Ocean Command Center dan keselamatan
+
+- Quick mode **Navigation, Weather, Fishing, HUD, dan AI Briefing** untuk mengubah fokus dashboard tanpa memalsukan data provider.
+- **Marine Risk Score** lokal berdasarkan status GNSS, akurasi, koneksi, dan pergerakan kapal. Skor ini adalah indikator bantuan, bukan sertifikasi kondisi pelayaran.
+- Mode tampilan **Ocean Dark, Red Night, dan Blackout** untuk mengurangi gangguan visual saat operasi malam.
+- **MOB** menyimpan titik manusia jatuh ke laut setelah konfirmasi pengguna. **SOS** menyiapkan pesan berisi koordinat, kecepatan, dan waktu untuk disalin/dikirim pengguna.
+- MOB/SOS tidak melakukan panggilan otomatis, tidak mengendalikan kapal, dan tidak menggantikan prosedur darurat resmi.
 
 ## Marine Toolkit, Windy, background tracking, dan update
 
@@ -42,6 +50,8 @@ Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera1
 - Membaca snapshot konteks Marine OS terbaru saat pertanyaan diajukan: GNSS, jaringan, modul, provider, status tracking, telemetry UI, dan data lokal yang aman untuk dibagikan.
 - Tidak mengarang posisi, AIS, radar, kedalaman, cuaca, harga, atau data kapal.
 - Mode percakapan tetap read-only; tindakan berisiko tidak dijalankan otomatis.
+- Tombol **Cari model gratis** mengambil katalog OpenRouter dan memfilter model dengan harga prompt/completion nol; `openrouter/free` tetap menjadi fallback router.
+- Riwayat percakapan disimpan lokal dan dapat dihapus dari Pengaturan.
 - Fitur suara bergantung pada dukungan Speech Recognition/Speech Synthesis Android WebView/perangkat.
 - Jangan masukkan API key OpenRouter ke repository atau log aplikasi.
 
@@ -87,12 +97,26 @@ Provider yang perlu diaktifkan di Supabase Dashboard:
 3. **Twilio WhatsApp** untuk tombol OTP WhatsApp. WhatsApp tidak dapat mengirim OTP tanpa sender/provider WhatsApp yang valid.
 4. **Google OAuth** dengan Client ID, Client Secret, dan redirect URL project.
 
+## GPS/GNSS dan lokasi terkini
+
+- Tekan **Izinkan akses lokasi**, berikan lokasi presisi, lalu buka Peta atau Dashboard untuk melihat latitude, longitude, akurasi, kecepatan, dan heading terkini.
+- Untuk tracking ketika aplikasi berada di latar belakang: buka **Pengaturan → Mulai Tracking 24/7**, berikan izin lokasi **Izinkan sepanjang waktu**, dan izinkan notifikasi bila diminta Android.
+- Android dapat membatasi background service karena baterai, izin, mode hemat daya, atau sinyal GPS. UI menampilkan posisi terakhir dan waktu update; posisi stale tidak boleh dianggap live.
+- Koordinat disimpan lokal untuk operasi dan dapat dikirim ke sinkronisasi Supabase jika konfigurasi/izin jaringan tersedia.
+
 ## Akurasi dan keselamatan
 
 - Koordinat berasal dari GNSS HP, bukan GPS satelit khusus atau citra satelit.
 - Kedalaman GEBCO dan deteksi karang bersifat indikatif; bukan pengganti sonar, peta navigasi resmi, atau keputusan keselamatan pelayaran.
 - Hasil kosong pada deteksi karang tidak berarti area bebas karang.
 - Data online memerlukan internet; cache lokal tetap digunakan untuk data operasi dan tampilan yang sudah tersimpan.
+
+## Privasi, API key, dan provider
+
+- API key OpenRouter dimasukkan langsung oleh pengguna dan tidak ditanam dalam APK, repository, atau dokumentasi.
+- Jangan memasukkan API key, token, password, atau data rahasia ke issue, log, screenshot, atau commit.
+- Data provider komersial seperti Garmin, MarineTraffic/Kpler, Navionics, radar hardware, NMEA, dan AIS berlisensi hanya aktif jika kredensial/SDK resmi tersedia. Status **LIVE-READY** bukan klaim bahwa provider tersebut sedang online.
+- Data publik, peta, tile, forecast, dan layanan sosial mengikuti lisensi, atribusi, rate limit, dan ketentuan masing-masing penyedia.
 
 ## Build dari source
 
@@ -113,8 +137,9 @@ APK release berada di `Berkah-Samudera10-release.apk`. Build membutuhkan Android
 - `js/story.js` — Story, upload media, viewer history, dan feed mutual follow.
 - `android/` — wrapper Capacitor Android.
 - `CHANGELOG.md` — riwayat perubahan release dan catatan versi.
-- `js/jarvis-openrouter.js` — Jarvis voice AI, konteks Marine OS, dan OpenRouter adapter.
-- `LICENSE` — lisensi MIT.
+- `js/jarvis-openrouter.js` — Jarvis voice AI, konteks Marine OS, model gratis OpenRouter, dan riwayat percakapan.
+- `js/marine-command.js` — quick modes, Marine Risk Score, mode visual, MOB, dan SOS preparation.
+- `LICENSE` — lisensi MIT dan pemberitahuan layanan pihak ketiga.
 
 ## Lisensi dan atribusi
 

@@ -24,3 +24,11 @@ SOFTWARE.
 ## Third-party services and data
 
 The MIT license applies to this project's original code. Third-party maps, data, SDKs, fonts, APIs, tiles, imagery, and services remain subject to their own licenses, attribution requirements, usage limits, and terms. This includes, where used, OpenStreetMap, OpenSeaMap, GEBCO, CARTO, Esri, Windy, BMKG, Open-Meteo, Supabase, OpenRouter, Aladhan, EQuran, RainViewer, NOAA, and other providers documented by the project. The project does not grant rights to redistribute third-party data beyond the permissions of those providers.
+
+## Project-specific safety and privacy notice
+
+- The MIT license covers the original source code only. The application is decision-support software and is not a certified navigation system, ECDIS, radar, AIS, sonar, emergency beacon, or vessel-control system.
+- GPS, weather, bathymetry, AIS, hazard, route, MOB, SOS, and AI outputs can be incomplete, delayed, unavailable, or inaccurate. Users remain responsible for lookout, navigation decisions, communications, and compliance with local maritime rules.
+- Do not use the application as the sole basis for emergency, navigation, medical, legal, or financial decisions. MOB/SOS tools prepare local information but do not automatically contact emergency services.
+- Users are responsible for API keys, credentials, personal data, vessel data, and any third-party content they enter or transmit. Never commit secrets to this repository.
+- Logos, names, artwork, QRIS assets, and trademarks are not granted under the MIT license unless explicitly stated by their respective owners.
