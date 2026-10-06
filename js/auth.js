@@ -18,8 +18,8 @@ const SupabaseAuth = {
       session = data?.session || null;
     }
     this.user = session?.user || null;
-    document.getElementById("authSignedOut")?.classList.add("hidden");
-    document.getElementById("authSignedIn")?.classList.remove("hidden");
+    document.getElementById("authSignedOut")?.classList.toggle("hidden", !!this.user);
+    document.getElementById("authSignedIn")?.classList.toggle("hidden", !this.user);
     if (this.user) {
       await this.ensureProfile(); await this.loadProfile();
       SupabaseSync.client.removeAllChannels(); SupabaseSync.connect();

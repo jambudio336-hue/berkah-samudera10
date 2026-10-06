@@ -169,7 +169,7 @@ const SupabaseSync = {
     const { error } = await this.client.from("live_positions").upsert(row);
     if (!error) this.setStatus(this.realtime ? "🟢 REALTIME • posisi kapal tersinkron" : "🟡 Posisi tersimpan • menunggu Realtime");
     else this.scheduleReconnect();
-    
+
     if (typeof SupabaseAuth !== "undefined" && SupabaseAuth.user) {
       await this.client.from("user_locations").upsert({
         user_id: SupabaseAuth.user.id,

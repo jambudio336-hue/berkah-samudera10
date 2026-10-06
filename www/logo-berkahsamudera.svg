@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<defs>
+ <linearGradient id="ocean" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#06172f"/><stop offset=".6" stop-color="#0d4070"/><stop offset="1" stop-color="#061d3e"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff3a4"/><stop offset=".35" stop-color="#ffc42e"/><stop offset="1" stop-color="#b76a00"/></linearGradient>
+ <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="8" flood-color="#000" flood-opacity=".6"/></filter>
+</defs>
+<rect width="1024" height="1024" rx="210" fill="url(#ocean)"/>
+<path d="M98 800c130-76 234 50 360-2s227-67 350 0 168 45 218 9" fill="none" stroke="#4fd4ff" stroke-width="24" opacity=".8"/>
+<path d="M86 867c145-79 240 44 365-4s232-62 350 1 169 47 227 3" fill="none" stroke="#05d6a0" stroke-width="13" opacity=".85"/>
+<g filter="url(#shadow)">
+ <path d="M196 604h616l-74 130H286z" fill="url(#gold)" stroke="#fff0a0" stroke-width="9"/>
+ <path d="M248 604l24-118h420l32 118" fill="#f8f4df" stroke="#ffcf48" stroke-width="10"/>
+ <path d="M300 486h310v-74H300z" fill="#eaf3ff" stroke="#ffc42e" stroke-width="9"/>
+ <path d="M454 412V188" stroke="#ffc42e" stroke-width="13"/>
+ <path d="M468 210l174 104H468z" fill="#ef476f" stroke="#fff0a0" stroke-width="8"/>
+ <path d="M442 252L306 340h136z" fill="#06d6a0" stroke="#fff0a0" stroke-width="8"/>
+ <circle cx="366" cy="530" r="22" fill="#0b2547" stroke="#ffc42e" stroke-width="8"/><circle cx="486" cy="530" r="22" fill="#0b2547" stroke="#ffc42e" stroke-width="8"/><circle cx="606" cy="530" r="22" fill="#0b2547" stroke="#ffc42e" stroke-width="8"/>
+</g>
+<g transform="rotate(-5 512 900)">
+ <text x="512" y="912" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="900" font-style="italic" font-size="82" letter-spacing="-4" fill="#fff3a4" stroke="#08192f" stroke-width="18" paint-order="stroke">BERKAH</text>
+ <text x="512" y="980" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="900" font-style="italic" font-size="58" letter-spacing="2" fill="#4fd4ff" stroke="#08192f" stroke-width="14" paint-order="stroke">SAMUDERA</text>
+</g>
+</svg>

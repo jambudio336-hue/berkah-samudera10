@@ -31,47 +31,14 @@ const App = {
   },
 
   initSplash() {
-    const splash = document.getElementById("splash");
-    const video = document.getElementById("splashVideo");
-    const tap = document.getElementById("splashTap");
-
-    const mulai = () => {
-      splash.classList.add("playing");
-      video.play().catch(() => {});
-    };
-
-    video.addEventListener("ended", () => {
-      splash.style.transition = "opacity .6s";
-      splash.style.opacity = "0";
-      setTimeout(() => { splash.remove(); App.showAccessGate(); }, 650);
-    });
-
-    // Coba autoplay penuh dengan suara
-    video.play().then(() => {
-      splash.classList.add("playing");
-    }).catch(() => {
-      // Browser blokir autoplay bersuara → minta ketuk dulu
-      tap.addEventListener("click", mulai);
-      video.addEventListener("click", mulai);
-    });
+    const splash=document.getElementById("splash"), tap=document.getElementById("splashTap");
+    const enter=()=>{ if(!splash)return; splash.classList.add("is-hidden"); setTimeout(()=>splash.remove(),650); };
+    tap?.addEventListener("click",enter);
+    setTimeout(enter,5000);
   },
 
-  accessGate() {
-    document.getElementById("btnGateAccount")?.addEventListener("click", () => {
-      localStorage.removeItem("bs10_guest_mode");
-      document.getElementById("accessGate")?.classList.add("hidden");
-      document.querySelector('.tab[data-page="akun"]')?.click();
-    });
-    document.getElementById("btnGateGuest")?.addEventListener("click", () => {
-      localStorage.setItem("bs10_guest_mode", "true");
-      document.getElementById("accessGate")?.classList.add("hidden");
-    });
-  },
-  showAccessGate() {
-    const gate = document.getElementById("accessGate");
-    if (gate && !localStorage.getItem("bs10_guest_mode") && !(typeof SupabaseAuth !== "undefined" && SupabaseAuth.user)) gate.classList.remove("hidden");
-  },
-
+  accessGate() {},
+  showAccessGate() {},
   jamRealtime() {
     const d = new Date();
     document.getElementById("jam").textContent = d.toLocaleTimeString("id-ID", { hour12: false });

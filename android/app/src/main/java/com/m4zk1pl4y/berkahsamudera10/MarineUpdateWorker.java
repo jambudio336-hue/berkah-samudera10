@@ -30,7 +30,7 @@ public class MarineUpdateWorker extends Worker {
             c.setConnectTimeout(10000);
             c.setReadTimeout(15000);
             c.setRequestProperty("Accept", "application/vnd.github+json");
-            c.setRequestProperty("User-Agent", "Berkah-Samoedra-MarineOS");
+            c.setRequestProperty("User-Agent", "Berkah-Samudera-MarineOS");
             if (c.getResponseCode() != 200) return Result.retry();
 
             JSONObject release = new JSONObject(readAll(c.getInputStream()));
@@ -71,7 +71,7 @@ public class MarineUpdateWorker extends Worker {
 
         NotificationCompat.Builder b = new NotificationCompat.Builder(ctx, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.stat_sys_download_done)
-            .setContentTitle("Berkah Samoedra update tersedia")
+            .setContentTitle("Berkah Samudera update tersedia")
             .setContentText("Versi " + version + " siap diunduh.")
             .setAutoCancel(true)
             .setContentIntent(pi)

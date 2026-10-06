@@ -32,7 +32,7 @@ public class MarineUpdatePlugin extends Plugin {
                 c.setConnectTimeout(10000);
                 c.setReadTimeout(15000);
                 c.setRequestProperty("Accept", "application/vnd.github+json");
-                c.setRequestProperty("User-Agent", "Berkah-Samoedra-MarineOS");
+                c.setRequestProperty("User-Agent", "Berkah-Samudera-MarineOS");
                 if (c.getResponseCode() != 200) { call.reject("Update server HTTP " + c.getResponseCode()); return; }
 
                 JSONObject release = new JSONObject(readAll(c.getInputStream()));
@@ -84,7 +84,7 @@ public class MarineUpdatePlugin extends Plugin {
                 c.setRequestMethod("GET");
                 c.setConnectTimeout(15000);
                 c.setReadTimeout(60000);
-                c.setRequestProperty("User-Agent", "Berkah-Samoedra-MarineOS");
+                c.setRequestProperty("User-Agent", "Berkah-Samudera-MarineOS");
                 if (c.getResponseCode() != 200) { call.reject("Download update HTTP " + c.getResponseCode()); return; }
 
                 File apk = new File(getContext().getCacheDir(), "berkah-samudera10-release.apk");

@@ -1,6 +1,6 @@
 {
   "name": "berkah-samudera10",
-  "version": "1.0.0",
+  "version": "1.0.30",
   "private": true,
   "scripts": {
     "cap:sync": "npx cap sync android",

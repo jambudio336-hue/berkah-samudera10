@@ -1,5 +1,12 @@
 # Changelog — Berkah Samudera10
 
+## 1.0.30
+
+- Sinkronisasi build `www/` dari source utama secara lengkap, termasuk semua modul Marine OS, Jarvis, updater, tracking, dan aset splash.
+- Memperbaiki newline literal pada tag script, cache offline yang tidak lengkap, branding `Samudera`, dan state UI auth guest.
+- Build script menghasilkan artifact unsigned yang diberi nama jelas serta meneruskan version code/name secara konsisten.
+
+
 ## [1.0.29] - 2026-10-06
 ### Ditambahkan
 - **Jarvis Voice Captain Assistant** berbasis OpenRouter free router.

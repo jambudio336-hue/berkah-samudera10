@@ -50,7 +50,7 @@ public class MarineTrackingService extends Service implements LocationListener {
         PendingIntent pi = PendingIntent.getActivity(this, 0, open,
             PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0));
         Notification n = new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Berkah Samoedra • Marine Tracking")
+            .setContentTitle("Berkah Samudera • Marine Tracking")
             .setContentText("Pelacakan kapal aktif di latar belakang")
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
             .setOngoing(true)

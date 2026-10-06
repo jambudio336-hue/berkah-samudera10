@@ -7,29 +7,35 @@
 <title>Berkah Samudera10</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo-berkahsamudera.svg">
+<style>.photo-splash{position:fixed;inset:0;z-index:9999;background:#061a33;display:grid;place-items:center;overflow:hidden}.splash-photo{position:absolute;inset:0;background:url("assets/marine-splash.jpg") center/cover no-repeat}.splash-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,15,30,.8))}.splash-content{position:relative;z-index:2;text-align:center;color:#fff;padding:24px}.splash-content h1{font-size:clamp(2.2rem,9vw,5rem);margin:8px 0}.splash-content h1 span{color:#55d6ff}.splash-content p{margin:0 0 24px;opacity:.9}.photo-splash.is-hidden{opacity:0;pointer-events:none;transition:opacity .6s}</style>
 <link rel="apple-touch-icon" href="logo-berkahsamudera.svg">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ============ SPLASH SCREEN VIDEO ============ -->
-<div id="splash">
-  <video id="splashVideo" src="ssstik.io_%40masssellon_1790849297225.mp4"
-    playsinline preload="metadata"></video>
-  <div id="splashTap">📱 Ketuk untuk memulai Berkah Samudera10</div>
+
+<!-- ============ MARINE OS WELCOME ============ -->
+<div id="marineWelcome" class="marine-welcome is-hidden" aria-hidden="true">
+  <div class="marine-welcome-card">
+    <div class="marine-welcome-kicker">⚓ BERKAH SAMUDERA10 • MARINE OS</div>
+    <h2><span data-welcome-greeting>Selamat datang</span></h2>
+    <p class="marine-welcome-user" data-welcome-user>Kapten 👋</p>
+    <div class="marine-quote-box">
+      <p class="marine-quote" data-marine-quote>“Laut memanggil mereka yang siap berlayar.”</p>
+      <span class="marine-quote-author" data-marine-author>— Pelaut</span>
+    </div>
+    <div class="marine-welcome-meta"><span>🧭 Navigasi siap</span><span>🌊 Kondisi laut</span><span>🛟 Safety-first</span><span>📡 Online + offline</span></div>
+    <div class="marine-daily-brief" data-daily-brief>Marine Brief: memeriksa kondisi aplikasi...</div>
+    <div class="marine-welcome-actions"><button class="btn primary" data-welcome-enter>🌊 Mulai Berlayar</button><button class="btn" data-welcome-skip>Lewati</button></div>
+    <div class="marine-welcome-next">Kutipan pelaut dipilih ulang otomatis setiap kali aplikasi dibuka.</div>
+  </div>
 </div>
 
-<div id="accessGate" class="access-gate hidden" role="dialog" aria-modal="true" aria-labelledby="accessGateTitle">
-  <div class="access-card">
-    <div class="access-emblem">⚓</div>
-    <span class="eyebrow">SELAMAT DATANG DI LAUT</span>
-    <h2 id="accessGateTitle">Berkah Samudera10</h2>
-    <p>Daftar atau masuk untuk memakai profil, follow, lokasi teman, dan Story. Anda juga dapat lanjut sebagai pengguna biasa tanpa akun.</p>
-    <button class="btn primary access-btn" id="btnGateAccount">👤 Daftar / Masuk Akun</button>
-    <button class="btn access-btn" id="btnGateGuest">🌊 Lanjut sebagai Pengguna Biasa</button>
-    <small>Data operasi lokal tetap dapat dipakai tanpa akun.</small>
-  </div>
+<!-- ============ SPLASH SCREEN VIDEO ============ -->
+<div id="splash" class="photo-splash" aria-label="Berkah Samudera10">
+  <div class="splash-photo"></div><div class="splash-shade"></div>
+  <div class="splash-content"><span class="eyebrow">MARINE OS</span><h1>Berkah Samudera<span>10</span></h1><p>Komando kapal • cuaca • peta • navigasi • operasi</p><button id="splashTap" class="btn primary">🌊 Masuk ke Laut</button></div>
 </div>
 
 <header class="topbar">
@@ -49,7 +55,8 @@
 <div id="alertBanner" class="alert-banner hidden"></div>
 
 <nav class="tabs" id="tabs">
-  <button class="tab active" data-page="dashboard">🏠 Dashboard</button>
+  <button class="tab active" data-page="marine-command">⚓ Marine OS</button>
+  <button class="tab" data-page="dashboard">🏠 Operasi</button>
   <button class="tab" data-page="peta">🗺️ Peta</button>
   <button class="tab" data-page="cuaca">🌊 Cuaca</button>
   <button class="tab" data-page="quran">📖 Al-Qur’an</button>
@@ -66,7 +73,78 @@
 <main>
 
 <!-- ============ DASHBOARD ============ -->
-<section id="page-dashboard" class="page active">
+<section id="page-marine-command" class="page active marine-dashboard-page">
+  <div class="marine-dashboard-hero">
+    <div>
+      <span class="eyebrow">BERKAH SAMUDERA10 • MARINE OS</span>
+      <h2>🌊 Marine Command Center</h2>
+      <p>Semua informasi kapal, laut, navigasi, traffic, keselamatan, operasi, sosial, dan AI dalam satu dashboard map-first.</p>
+    </div>
+    <div class="marine-status-pill"><i></i><span id="marineNetwork">OFFLINE</span></div>
+  </div>
+
+  <div class="marine-telemetry-grid">
+    <div class="marine-telemetry"><span>📍 GNSS</span><b id="marineFix">Menunggu</b><small>Posisi kapal</small></div>
+    <div class="marine-telemetry"><span>⚡ SOG</span><b id="marineSpeed">—</b><small>Speed over ground</small></div>
+    <div class="marine-telemetry"><span>🧭 COG</span><b id="marineHeading">—</b><small>Course / heading</small></div>
+    <div class="marine-telemetry"><span>🌊 DEPTH</span><b id="marineDepth">—</b><small>Bathymetry tersedia</small></div>
+  </div>
+
+  <div class="marine-map-card">
+    <div class="marine-map-overlay">
+      <div><span class="eyebrow">LIVE SEA SITUATION</span><h3>🗺️ Sea Map</h3><p>GPS • nautical chart • bathymetry • AIS • hazards • weather • radar overlay</p></div>
+      <button class="btn primary" id="marineCenterMap">Buka Peta Laut →</button>
+    </div>
+    <div class="marine-map-preview">
+      <div class="marine-radar-ring r1"></div><div class="marine-radar-ring r2"></div><div class="marine-radar-ring r3"></div>
+      <div class="marine-map-ship">🚢</div><span class="marine-map-dot d1">🚢</span><span class="marine-map-dot d2">⚓</span><span class="marine-map-dot d3">🪸</span>
+      <div class="marine-map-gridlines"></div>
+      <div class="marine-map-caption">LIVE MAP PREVIEW • Data tampil penuh di menu Peta</div>
+    </div>
+  </div>
+
+  <div class="marine-command-actions">
+    <button class="btn primary-inline" id="marineOpenWeather">🌦️ Cuaca & Ocean</button>
+    <button class="btn" id="marineProviderInfo">🔌 Provider</button>
+    <button class="btn" id="marineRefresh">🔄 Refresh</button>
+    <button class="btn" id="marineOpenAccount">👤 Kapal & Social</button>
+    <button class="btn" id="marineOpenSettings">⚙️ Safety & Settings</button>
+  </div>
+
+  <div class="marine-section-head"><div><span class="eyebrow">MARINE OS MODULES</span><h3>⚓ Semua rencana kita</h3></div><span class="chip">24 modul</span></div>
+  <div id="marineModuleGrid" class="marine-module-grid"></div>
+
+  <div class="card marine-status-card">
+    <div class="section-head"><div><span class="eyebrow">INTEGRATION STATUS</span><h3>🔌 Data source & perangkat</h3></div></div>
+    <div id="marineProviderStatus"><p class="muted">Tekan “Provider” untuk melihat status integrasi.</p></div>
+    <div class="marine-world-integrations">
+      <div class="section-head"><div><span class="eyebrow">WORLD / LICENSED INTEGRATIONS</span><h3>🌐 Sumber dunia nyata</h3></div><span class="chip">LIVE-READY</span></div>
+      <p class="muted">Enam konektor berikut sengaja ditampilkan penuh di APK. Saat kredensial/izin/perangkat tersedia, adapter yang sama dipakai untuk data live. Tanpa sumber tersebut aplikasi tidak memalsukan target, chart, radar, atau forecast.</p>
+      <div id="marineWorldIntegrations" class="marine-world-grid"></div>
+      <div class="section-head" style="margin-top:16px"><div><span class="eyebrow">PUBLIC DATA SOURCES</span><h3>📡 Sumber publik yang bisa diaktifkan</h3></div><span class="chip">OPEN / PUBLIC</span></div>
+      <div id="marinePublicSources" class="marine-world-grid"></div>
+    </div>
+  </div>
+
+  <div class="card marine-free-card">
+    <div class="section-head">
+      <div><span class="eyebrow">MARINE OS FREE CORE</span><h3>🆓 Semua fitur tanpa API berbayar</h3></div>
+      <span class="marine-free-badge" id="marineFreeStatus">ZERO-COST CORE</span>
+    </div>
+    <p class="muted">Mode ini memprioritaskan GPS, sensor HP, penyimpanan lokal, open-data, algoritma lokal, dan provider publik. Provider premium tidak wajib untuk menjalankan core Marine OS.</p>
+    <div id="marineFreeFeatureGrid" class="marine-free-feature-grid"></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="marineFreeExport">💾 Ekspor data lokal</button></div>
+  </div>
+
+  <div class="marine-lower-grid">
+    <div class="card marine-safety-card"><span class="eyebrow">SAFETY FIRST</span><h3>🛟 Safety Guardian</h3><p>Hazard, weather, AIS, route, anchor watch, SOS dan emergency assistant akan terhubung di sini.</p><button class="btn" id="marineOpenSafety">Buka pusat keselamatan</button></div>
+    <div class="card marine-ai-card"><span class="eyebrow">MARINE COPILOT</span><h3>🤖 Mazkiplay.ai</h3><p>AI multimodal untuk membaca konteks kapal, peta, cuaca, AIS, dokumen dan data operasi melalui tools yang diizinkan.</p><button class="btn" id="marineOpenAI">Buka Marine Copilot</button></div>
+  </div>
+
+  <div class="marine-warning">⚠️ Marine OS adalah decision-support. Kedalaman, AIS, radar, cuaca, hazard dan route tidak boleh dianggap pengganti official nautical charts, ECDIS, radar/AIS tersertifikasi, visual lookout, atau prosedur keselamatan pelayaran.</div>
+</section>
+
+<section id="page-dashboard" class="page">
   <div class="card hero">
     <h2>Selamat Bekerja, Bos Kapal! 🚢</h2>
     <p class="hero-sub">Semoga cuaca aman dan hasil tangkapan berlimpah.</p>
@@ -124,9 +202,59 @@
     <h3>🗺️ Peta Laut Real-Time</h3>
     <div id="map"></div>
     <div class="row map-actions"><button class="btn" id="btnGlobal">🌍 Lihat dunia</button><button class="btn" id="btnGoogleMaps">🗺️ Google Maps</button><button class="btn" id="btnWindyFocus">🌬️ Fokus Windy ke GPS</button></div>
-    <div class="windy-panel">
+    <div class="card marine-tools-card">
+  <div class="section-head"><div><span class="eyebrow">MARINE TOOLKIT</span><h3>🧰 Tools Kapal</h3></div><span class="chip">Offline</span></div>
+  <select id="marineToolMode">
+    <option value="convert">Konverter satuan</option>
+    <option value="fuel">Kalkulator BBM perjalanan</option>
+    <option value="bearing">Jarak & bearing antar koordinat</option>
+  </select>
+  <div data-tool-group="convert" class="tool-group">
+    <input id="toolValue" type="number" inputmode="decimal" placeholder="Nilai">
+    <select id="toolUnit"><option value="kn-kmh">knot → km/j</option><option value="kmh-kn">km/j → knot</option><option value="nm-km">NM → km</option><option value="km-nm">km → NM</option></select>
+  </div>
+  <div data-tool-group="fuel" class="tool-group">
+    <input id="toolDistanceNm" type="number" inputmode="decimal" placeholder="Jarak (NM)">
+    <input id="toolSpeedKn" type="number" inputmode="decimal" placeholder="Kecepatan (kn)">
+    <input id="toolFuelLph" type="number" inputmode="decimal" placeholder="Konsumsi BBM (L/jam)">
+    <input id="toolReserve" type="number" inputmode="decimal" value="20" placeholder="Cadangan (%)">
+  </div>
+  <div data-tool-group="bearing" class="tool-group">
+    <input id="toolALat" type="number" step="any" placeholder="A Lat">
+    <input id="toolALon" type="number" step="any" placeholder="A Lon">
+    <input id="toolBLat" type="number" step="any" placeholder="B Lat">
+    <input id="toolBLon" type="number" step="any" placeholder="B Lon">
+  </div>
+  <div class="row"><button class="btn primary-inline" id="btnMarineToolCalc">🧮 Hitung</button><button class="btn" id="btnMarineToolGps">📍 Isi GPS ke A</button><button class="btn" id="btnMarineToolCopyGps">📋 Salin GPS</button></div>
+  <p class="muted" id="marineToolsResult">Pilih tool lalu hitung.</p>
+</div>
+<div class="windy-panel">
       <div class="section-head"><div><span class="eyebrow">WINDY GLOBAL</span><h3>🌬️ Angin, ombak & prakiraan waktu</h3></div><a class="btn sm" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">Buka Windy ↗</a></div>
-      <p class="muted">Windy resmi global dengan animasi angin, hujan, ombak, tekanan, suhu, dan prakiraan. Titik pusat otomatis mengikuti GPS HP.</p>
+      <p class="muted">Windy global dengan layer angin, hujan, gelombang, swell, suhu, tekanan, awan, radar, dan timeline. Titik pusat mengikuti GPS HP.</p><div class="row windy-layer-buttons">
+<button class="btn sm" data-windy-overlay="wind">💨 Angin</button>
+<button class="btn sm" data-windy-overlay="gustAccu">💨 Hembusan</button>
+<button class="btn sm" data-windy-overlay="rain">🌧️ Hujan</button>
+<button class="btn sm" data-windy-overlay="rainAccu">🌧️ Akumulasi hujan</button>
+<button class="btn sm" data-windy-overlay="waves">🌊 Gelombang</button>
+<button class="btn sm" data-windy-overlay="swell1">〰️ Swell 1</button>
+<button class="btn sm" data-windy-overlay="swell2">〰️ Swell 2</button>
+<button class="btn sm" data-windy-overlay="swell3">〰️ Swell 3</button>
+<button class="btn sm" data-windy-overlay="windWaves">🌊 Wind waves</button>
+<button class="btn sm" data-windy-overlay="currents">🌀 Arus</button>
+<button class="btn sm" data-windy-overlay="tidalCurrents">🌊 Arus pasang</button>
+<button class="btn sm" data-windy-overlay="sst">🌡️ Suhu laut</button>
+<button class="btn sm" data-windy-overlay="temp">🌡️ Suhu udara</button>
+<button class="btn sm" data-windy-overlay="dewpoint">💧 Titik embun</button>
+<button class="btn sm" data-windy-overlay="rh">💦 Kelembapan</button>
+<button class="btn sm" data-windy-overlay="clouds">☁️ Awan</button>
+<button class="btn sm" data-windy-overlay="fog">🌫️ Kabut</button>
+<button class="btn sm" data-windy-overlay="cape">⚡ CAPE</button>
+<button class="btn sm" data-windy-overlay="pressure">📈 Tekanan</button>
+<button class="btn sm" data-windy-overlay="visibility">👁️ Visibilitas</button>
+<button class="btn sm" data-windy-overlay="satellite">🛰️ Satelit</button>
+<a class="btn sm" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">🌐 Semua layer Windy ↗</a>
+<a class="btn sm" href="https://nowcoast.noaa.gov/" target="_blank" rel="noopener noreferrer">🇺🇸 NOAA nowCOAST ↗</a>
+</div>
       <iframe id="windyFrame" title="Windy global weather map" loading="lazy" allow="fullscreen; geolocation" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <div class="row">
@@ -139,10 +267,10 @@
     </div>
     <p class="muted" id="mapDepth">Klik peta / tombol untuk ukur kedalaman laut.</p>
     <div class="row"><span class="chip">Mode: <b id="mapMode">Mode datar aktif</b></span><span class="chip">Kecepatan: <b id="mapSpeed">-</b></span></div>
-    <p class="muted" id="mapTelemetry">Ketinggian - • Arah -</p>
+    <p class="muted" id="mapTelemetry">Ketinggian - • Arah -</p><p class="muted" id="tripTelemetry">Waktu perjalanan: belum dimulai</p>
     <p class="muted" id="mapSeaTelemetry">Kecepatan - knot • Suhu - • Angin -</p>
     <div class="row map-tool-row"><button class="btn" id="btn3D">🧭 Mode peta 3D</button><button class="btn" id="btnReef">🪸 Karang Laut</button></div>
-    <p class="muted" id="reefStatus">Cek apakah ada karang laut terpetakan dalam radius 100 m dari titik kapal.</p>
+    <p class="muted" id="reefStatus">Cek apakah ada karang, batu, terumbu, atau kapal karam terpetakan dalam radius 1 km.</p><div class="depth-legend"><b>🌊 Legenda kedalaman model</b><span>0–5 m sangat dangkal</span><span>5–20 m dangkal</span><span>20–50 m sedang</span><span>50–200 m dalam</span><span>&gt;200 m sangat dalam</span></div>
     <div class="card route-panel"><h4>🎯 Router Perjalanan</h4><div class="row"><input id="routeLat" type="number" step="any" placeholder="Latitude tujuan"><input id="routeLon" type="number" step="any" placeholder="Longitude tujuan"></div><div class="row"><button class="btn primary-inline" id="btnSetRoute">Tetapkan rute</button><button class="btn" id="btnClearRoute">Hapus rute</button><span class="chip" id="routeSpeedInfo">Kecepatan: -</span></div><p class="muted" id="routeStatus">Masukkan koordinat tujuan atau ketuk peta.</p></div>
     <div class="card overlay-panel"><h4>🌦️ Overlay Laut</h4><div class="row"><button class="btn" id="btnWindOverlay">💨 Arah angin</button><button class="btn" id="btnRainOverlay">🌧️ Radar hujan</button><button class="btn" id="btnHazardOverlay">🪸 Karang/kapal karam</button><button class="btn" id="btnStormOverlay">⛈️ Badai</button></div><p class="muted" id="overlayStatus">Overlay dapat diaktifkan saat online.</p></div>
   </div>
@@ -179,19 +307,13 @@
 </section>
 <!-- ============ AKUN & TEMAN ============ -->
 <section id="page-akun" class="page">
-  <div id="authSignedOut">
-    <div class="card hero"><span class="eyebrow">SUPABASE AUTH</span><h2>👤 Masuk atau Daftar</h2><p class="hero-sub">Pengguna dapat masuk tanpa password menggunakan OTP email, OTP nomor telepon, atau Google.</p></div>
-    <div class="card auth-card"><h3>✉️ Email OTP</h3><input id="authEmail" type="email" placeholder="nama@email.com"><div class="row"><button class="btn primary-inline" id="btnEmailOtp">Kirim OTP Email</button><input id="authEmailCode" inputmode="numeric" maxlength="6" placeholder="Kode OTP"></div><button class="btn" id="btnVerifyEmail">Verifikasi Email</button></div>
-    <div class="card auth-card"><h3>📱 Nomor Telepon OTP</h3><input id="authPhone" type="tel" placeholder="+628123456789"><p class="muted">Format internasional. Supabase mengirim OTP melalui provider SMS yang aktif. WhatsApp memerlukan provider WhatsApp tambahan.</p><div class="row"><button class="btn primary-inline" id="btnPhoneOtp">Kirim OTP SMS</button><button class="btn" id="btnWhatsappOtp">Kirim OTP WhatsApp</button><input id="authPhoneCode" inputmode="numeric" maxlength="6" placeholder="Kode OTP"></div><button class="btn" id="btnVerifyPhone">Verifikasi Telepon</button></div>
-    <div class="card"><button class="btn google-btn" id="btnGoogleLogin">🔐 Lanjutkan dengan Google</button><p id="authStatus" class="muted">Belum masuk.</p></div>
-  </div>
-  <div id="authSignedIn" class="hidden">
-    <div class="card profile-stats"><div class="social-stat"><b id="followersCount">0</b><span>Pengikut</span></div><div class="social-stat"><b id="followingCount">0</b><span>Mengikuti</span></div><button class="btn" id="btnShowFollowers">Lihat pengikut</button></div>
-    <div class="card profile-card"><div class="section-head><div><span class="eyebrow">PROFIL PENGGUNA</span><h2 id="profileHeading">Profil Saya</h2></div><button class="btn" id="btnSignOut">Keluar</button></div><div class="profile-grid"><div><label>Nama tampilan</label><input id="profileName" type="text" placeholder="Nama Anda"><label>Bio</label><textarea id="profileBio" rows="3" placeholder="Ceritakan tentang Anda..."></textarea><label>Peran</label><select id="profileRole"><option value="nahkoda">Nahkoda</option><option value="abk">ABK</option></select></div><div><label>URL foto profil</label><input id="profileAvatar" type="url" placeholder="https://..."><label>Nama kapal</label><input id="profileVessel" type="text" placeholder="Nama kapal"><label>Kapal membawa</label><input id="profileCargo" type="text" placeholder="Ikan, logistik, penumpang..."><label class="switch-row"><span>Bagikan lokasi ke teman yang diikuti</span><input id="profileShareLocation" type="checkbox" checked></label></div></div><button class="btn primary" id="btnSaveProfile">💾 Simpan profil</button><p id="profileStatus" class="muted"></p></div>
-    <div class="card"><h3>🔎 Cari pengguna</h3><div class="row"><input id="friendSearch" type="search" placeholder="Cari nama pengguna atau nama kapal"><button class="btn" id="btnSearchFriends">Cari</button></div><div id="friendResults"></div></div>
-    <div class="card"><h3>👥 Daftar pengikut</h3><div id="followersList"><p class="muted">Memuat pengikut...</p></div></div>
-    <div class="card"><h3>🧭 Teman yang diikuti</h3><p class="muted">Lokasi teman yang Anda ikuti dan mengaktifkan berbagi lokasi akan muncul di peta.</p><div id="followingList"></div></div>
-  </div>
+  <div class="card hero guest-hero"><span class="eyebrow">IDENTITAS OTOMATIS</span><h2>👤 Profil Pelaut</h2><p class="hero-sub">Tidak ada login, password, OTP, atau Google. Masukkan <b>email atau nomor HP</b>, lalu Marine OS membuat ID profil otomatis.</p></div>
+  <div class="card auth-card guest-register"><h3>⚓ Buat ID otomatis</h3><input id="guestContact" type="text" inputmode="email" placeholder="Email atau nomor HP"><div class="row"><button class="btn primary-inline" id="btnGuestSave">✨ Aktifkan Profil</button><span class="chip">ID: <b id="guestId">menyiapkan…</b></span></div><p id="authStatus" class="muted">Identitas perangkat dibuat otomatis. Kontak belum diverifikasi.</p></div>
+  <div id="authSignedOut" class="hidden"></div>
+  <div id="authSignedIn"><div class="card profile-card"><div class="section-head"><div><span class="eyebrow">PROFIL PENGGUNA</span><h2 id="profileHeading">Profil Saya</h2></div><span class="chip">AUTO-ID</span></div>
+  <div class="profile-grid"><div><label>Nama tampilan</label><input id="profileName" type="text" placeholder="Nama Anda"><label>Bio</label><textarea id="profileBio" rows="3" placeholder="Ceritakan tentang Anda..."></textarea><label>Peran</label><select id="profileRole"><option value="nahkoda">Nahkoda</option><option value="abk">ABK</option></select></div>
+  <div><label>URL foto profil</label><input id="profileAvatar" type="url" placeholder="https://..."><label>Nama kapal</label><input id="profileVessel" type="text" placeholder="Nama kapal"><label>Kapal membawa</label><input id="profileCargo" type="text" placeholder="Ikan, logistik, penumpang..."><label class="switch-row"><span>Bagikan lokasi ke teman yang diikuti</span><input id="profileShareLocation" type="checkbox" checked></label></div></div>
+  <button class="btn primary" id="btnSaveProfile">💾 Simpan profil</button><p id="profileStatus" class="muted"></p></div></div>
 </section>
 <!-- ============ STORY ============ -->
 <section id="page-story" class="page">
@@ -299,9 +421,27 @@
   <div class="card notification-settings"><h3>🔔 Notifikasi Berita Resmi</h3><p class="muted">Aktifkan izin notifikasi Android. Aplikasi memeriksa sumber resmi saat online dan memberi notifikasi hanya jika data berubah.</p><label class="switch-row"><span>Peringatan BMKG Maritim</span><input id="settingNotifMaritim" type="checkbox" checked></label><label class="switch-row"><span>Gempa terbaru BMKG</span><input id="settingNotifGempa" type="checkbox" checked></label><div class="row"><button class="btn primary-inline" id="btnEnableNotifications">🔔 Aktifkan notifikasi</button><button class="btn" id="btnCheckNotifications">🔄 Cek sekarang</button></div><p class="muted" id="notificationSettingsNote">Pemeriksaan otomatis setiap 10 menit saat aplikasi online.</p></div>
   <div class="card local-storage-card"><h3>📱 Penyimpanan Lokal HP</h3><p class="muted">Semua data aplikasi disimpan di penyimpanan HP pengguna: rute, GPS, kru, tangkapan, perbekalan, riwayat, jadwal sholat, dan pengaturan. Aplikasi tidak membutuhkan backend atau akun.</p><span class="chip">✅ Mode lokal aktif • offline-first</span></div>
   <div class="card"><h3>🧭 Navigasi</h3><label class="switch-row"><span>Ikuti posisi kapal otomatis</span><input id="settingAutoCenter" type="checkbox" checked></label><label class="switch-row"><span>Tampilkan jalur perjalanan</span><input id="settingShowTrack" type="checkbox" checked></label><button class="btn" id="btnClearTrack">🧹 Bersihkan jalur perjalanan</button><button class="btn" id="btnRefreshData">🔄 Segarkan cuaca & peta</button></div>
-  <div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
+  <div class="card"><h3>📡 24/7 Marine Tracking</h3><p class="muted">Tracking native Android berjalan sebagai foreground service saat Anda menyalakannya. Posisi terakhir tetap tersimpan di HP dan dikirim ke sinkronisasi posisi ketika koneksi tersedia.</p><div class="row"><button class="btn primary" id="btnStartNativeTracking">▶️ Mulai Tracking 24/7</button><button class="btn" id="btnStopNativeTracking">⏹️ Hentikan</button></div><p class="muted" id="nativeTrackingStatus">Memeriksa status tracking native...</p><small>Android dapat menghentikan pekerjaan tertentu karena kebijakan baterai/OS; aplikasi menampilkan status posisi terakhir agar kondisi stale terlihat.</small></div><div class="card">
+    <h3>🔄 Pembaruan Otomatis Marine OS</h3>
+    <p class="muted">Google Play menangani update otomatis untuk instalasi Play. Untuk APK langsung, Marine OS mengecek GitHub Release dan dapat mengunduh update yang ditandatangani dengan sertifikat yang sama.</p>
+    <div class="row"><button class="btn" id="btnMarineUpdate" hidden>⬇️ Unduh Update</button></div>
+    <p class="muted" id="marineUpdateStatus">Memeriksa pembaruan...</p>
+  </div>
+  <div class="card jarvis-card">
+  <div class="section-head"><div><span class="eyebrow">MARINE AI • OPENROUTER</span><h3>🤖 Jarvis — Voice Captain Assistant</h3></div><div class="jarvis-orb">J</div></div>
+  <p class="muted">Jarvis membaca snapshot realtime Marine OS saat Anda bertanya: GNSS, kapal, runtime, fitur, provider, dan data lokal yang aman. Jawaban AI tidak ditampilkan sebagai chat; Jarvis membacakannya dengan suara.</p>
+  <label class="switch-row"><span>Aktifkan Jarvis</span><input id="jarvisEnabled" type="checkbox"></label>
+  <label>OpenRouter API key</label><input id="jarvisApiKey" class="jarvis-input jarvis-secret" type="password" autocomplete="off" placeholder="sk-or-v1-...">
+  <div class="row"><label>Kecepatan suara <input id="jarvisRate" type="number" min=".6" max="1.5" step=".1" value="1"></label><label>Pitch <input id="jarvisPitch" type="number" min=".5" max="1.5" step=".1" value="1"></label></div>
+  <div class="jarvis-controls"><button class="btn primary" id="btnJarvisSave">💾 Simpan Jarvis</button><button class="btn" id="btnJarvisTest">🔊 Tes suara</button><button class="btn" id="btnJarvisMic">🎙️ Aktifkan pendengar</button><button class="btn" id="btnJarvisStop">⏹️ Stop</button></div>
+  <label class="switch-row"><span>Mode dengar berulang</span><input id="jarvisVoiceToggle" type="checkbox"></label>
+  <div class="row"><input id="jarvisAsk" class="jarvis-input" placeholder="Tulis pertanyaan untuk tes Jarvis…"><button class="btn primary-inline" id="btnJarvisAsk">Tanya</button></div>
+  <p id="jarvisStatus" class="muted jarvis-status">⚪ Masukkan API key OpenRouter</p>
+  <p class="jarvis-note jarvis-voice-only">Contoh: tekan “Aktifkan pendengar”, lalu ucapkan “Halo Jarvis”. Jarvis menjawab: “Iya Captain, ada yang perlu ditanyakan?” Pengenalan suara bergantung dukungan Android/WebView. Untuk privasi, konteks hanya dikirim ketika Captain mengajukan pertanyaan.</p>
+  <small>Model default: <b>openrouter/free</b>. API key tidak ditanam di source APK; pengguna memasukkannya sendiri. Penyimpanan saat ini lokal di perangkat.</small>
+</div><div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
   <div class="card donation-card"><span class="eyebrow">DUKUNG PENGEMBANGAN</span><h3>💝 Donasi untuk Pengembangan APK</h3><p class="donation-copy">Dukungan Anda membantu kami merawat server, memperbaiki fitur, dan terus mengembangkan Berkah Samudera agar semakin nyaman digunakan para pengguna.</p><img class="donation-qr" src="donasi-qris.png" alt="QRIS donasi pengembangan Berkah Samudera" loading="lazy"><p class="muted center">Scan QRIS di atas menggunakan aplikasi pembayaran Anda. Terima kasih atas dukungan dan kepercayaannya.</p></div>
-  <div class="card about-card"><span class="eyebrow">TENTANG APLIKASI</span><h3>🚢 Berkah Samudera10</h3><p>Aplikasi pendamping operasi kapal untuk memantau GPS, rute perjalanan, cuaca laut, gelombang, Windy global, kedalaman GEBCO, karang terpetakan, kompas, kru, tangkapan, perbekalan, dan log riwayat.</p><p class="thanks">Terima kasih telah menggunakan aplikasi kami. Semoga Berkah Samudera membantu perjalanan Anda menjadi lebih aman, rapi, dan nyaman.</p><p class="sponsor center">Dikembangkan dan disponsori by.m4zk1pl4y</p><p class="muted center">Versi aplikasi 1.0.18</p></div>
+  <div class="card about-card"><span class="eyebrow">TENTANG APLIKASI</span><h3>🚢 Berkah Samudera10</h3><p>Aplikasi pendamping operasi kapal untuk memantau GPS, rute perjalanan, cuaca laut, gelombang, Windy global, kedalaman GEBCO, karang terpetakan, kompas, kru, tangkapan, perbekalan, dan log riwayat.</p><p class="thanks">Terima kasih telah menggunakan aplikasi kami. Semoga Berkah Samudera membantu perjalanan Anda menjadi lebih aman, rapi, dan nyaman.</p><p class="sponsor center">Dikembangkan dan disponsori by.m4zk1pl4y</p><p class="muted center">Versi aplikasi 1.0.30</p></div>
 </section>
 <!-- ============ RIWAYAT ============ -->
 <section id="page-riwayat" class="page">
@@ -324,10 +464,10 @@
 
 </main>
 
-<footer class="footer">Berkah Samudera10 © 2026 — Dibuat untuk nelayan Indonesia 🇮🇩<br><b class="sponsor">Disponsori by.m4zk1pl4y</b><br><span id="syncState">Supabase Realtime • data tersimpan lokal sebagai cache</span></footer>
+<footer class="footer">Berkah Samudera10 © 2026 — Dibuat untuk nelayan Indonesia 🇮🇩<br><b class="sponsor">Dikembangkan & disponsori by.m4zk1pl4y</b><br><span id="syncState">Supabase Realtime • data tersimpan lokal sebagai cache</span></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="js/storage.js" defer></script>
+<link rel="stylesheet" href="css/marine-os.css"><link rel="stylesheet" href="css/jarvis.css"><link rel="stylesheet" href="css/marine-runtime.css"><link rel="stylesheet" href="css/marine-welcome.css"><script src="js/storage.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="js/supabase-sync.js" defer></script>
 <script src="js/auth.js" defer></script>
@@ -341,6 +481,17 @@
 <script src="js/kolekting.js" defer></script>
 <script src="js/perbekalan.js" defer></script>
 <script src="js/kru.js" defer></script>
+<script src="js/marine-welcome.js" defer></script>
 <script src="js/app.js" defer></script>
+<script src="js/marine-capabilities.js" defer></script>
+<script src="js/marine-os.js" defer></script>
+<script src="js/marine-free.js" defer></script>
+<script src="js/marine-external.js" defer></script>
+<script src="js/marine-runtime.js" defer></script>
+<script src="js/garmin-activecaptain.js" defer></script>
+<script src="js/marine-native-tracking.js" defer></script>
+<script src="js/marine-updater.js" defer></script>
+<script src="js/marine-tools.js" defer></script>
+<script src="js/jarvis-openrouter.js" defer></script>
 </body>
 </html>
