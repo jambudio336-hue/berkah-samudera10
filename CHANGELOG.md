@@ -1,5 +1,9 @@
 # Changelog — Berkah Samudera10
 
+## 1.0.31
+
+- Membuat sertifikat signing release baru untuk instalasi baru dan menyiapkan build signed lokal.
+
 ## 1.0.30
 
 - Sinkronisasi build `www/` dari source utama secara lengkap, termasuk semua modul Marine OS, Jarvis, updater, tracking, dan aset splash.

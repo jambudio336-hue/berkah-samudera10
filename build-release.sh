@@ -5,8 +5,8 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 export ANDROID_HOME
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
 export JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk-amd64}"
-: "${VERSION_NAME:=1.0.30}"
-: "${VERSION_CODE:=10030}"
+: "${VERSION_NAME:=1.0.31}"
+: "${VERSION_CODE:=10031}"
 
 # Build www from the canonical source tree; never ship a stale partial copy.
 rm -rf "$ROOT/www"
@@ -19,5 +19,12 @@ cp -a "$ROOT/assets" "$ROOT/css" "$ROOT/js" "$ROOT/www/"
 printf 'sdk.dir=%s\n' "$ANDROID_HOME" > "$ROOT/android/local.properties"
 (cd "$ROOT/android" && ./gradlew assembleRelease --no-daemon -PVERSION_NAME="$VERSION_NAME" -PVERSION_CODE="$VERSION_CODE")
 APK="$ROOT/android/app/build/outputs/apk/release/app-release-unsigned.apk"
-cp -f "$APK" "$ROOT/Berkah-Samudera10-release-unsigned.apk"
-printf '\nUnsigned APK: %s\n' "$ROOT/Berkah-Samudera10-release-unsigned.apk"
+if [[ -f "$ROOT/android/marine-release.keystore" && -n "${STORE_PASSWORD:-}" && -n "${KEY_ALIAS:-}" && -n "${KEY_PASSWORD:-}" ]]; then
+  SIGNED="$ROOT/Berkah-Samudera10-release.apk"
+  "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign --ks "$ROOT/android/marine-release.keystore" --ks-pass "pass:$STORE_PASSWORD" --ks-key-alias "$KEY_ALIAS" --key-pass "pass:$KEY_PASSWORD" --out "$SIGNED" "$APK"
+  "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "$SIGNED" >/dev/null
+  printf '\nSigned APK: %s\n' "$SIGNED"
+else
+  cp -f "$APK" "$ROOT/Berkah-Samudera10-release-unsigned.apk"
+  printf '\nUnsigned APK: %s\n' "$ROOT/Berkah-Samudera10-release-unsigned.apk"
+fi
