@@ -42,8 +42,17 @@ const MarineOS = {
     batnas: {name:"BATNAS", enabled:false, mode:"authorized dataset/access required", env:"BATNAS_ENDPOINT"},
     ai: {name:"Mazkiplay.ai / OpenAI", enabled:false, mode:"user key or server gateway", env:"OPENAI_API_KEY"}
   },
+  worldIntegrations: [
+    {id:"ais-live",icon:"🚢",name:"AIS Realtime / MarineTraffic → Kpler",kind:"AIS",status:"LICENSE / API",detail:"Real-time vessel positions, static data, history and live stream when an authorized Kpler/MarineTraffic feed is connected.",action:"https://www.kpler.com/product/maritime/data-services",adapter:"MarineExternal.integrations.ais"},
+    {id:"radar-hw",icon:"📡",name:"Marine Radar Hardware",kind:"RADAR",status:"HARDWARE",detail:"Real radar targets/PPI require an onboard radar plus a supported network/gateway. The app never invents radar targets.",action:"https://www.garmin.com/en-US/marine/",adapter:"MarineExternal.integrations.radar"},
+    {id:"navionics",icon:"🗺️",name:"Navionics / Garmin Charts",kind:"CHARTS",status:"LICENSE / SDK",detail:"Navionics nautical charts, HD bathymetry, tides/currents and chart objects through Garmin's authorized Mobile SDK.",action:"https://developer.garmin.com/marine-charts/mobile/",adapter:"MarineExternal.integrations.navionics"},
+    {id:"marinetraffic",icon:"🌐",name:"MarineTraffic API",kind:"MARINETRAFFIC",status:"API KEY / PLAN",detail:"Dedicated MarineTraffic API services can be connected for authorized AIS and vessel-data use cases.",action:"https://servicedocs.marinetraffic.com/",adapter:"MarineExternal.integrations.marineTraffic"},
+    {id:"windy-api",icon:"🌬️",name:"Windy API",kind:"WINDY",status:"LICENSE / API KEY",detail:"Official Windy API connector for forecast/map services. The public Windy map remains available separately.",action:"https://api.windy.com/",adapter:"MarineExternal.integrations.windy"},
+    {id:"windy-map",icon:"🌀",name:"Windy Map / Full Web Experience",kind:"WINDY MAP",status:"WEB / TERMS",detail:"Official Windy map surface with layer switching, timeline and global visualization; full API parity is subject to Windy terms.",action:"https://www.windy.com/",adapter:"MarineExternal.integrations.windyMap"}
+  ],
   init() {
     this.renderDashboard();
+    this.renderWorldIntegrations();
     this.bind();
     this.refreshTelemetry();
     setInterval(()=>this.refreshTelemetry(),5000);
@@ -63,6 +72,7 @@ const MarineOS = {
     document.getElementById("marineOpenAI")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineProviderInfo")?.addEventListener("click",()=>this.showProviders());
     document.getElementById("marineRefresh")?.addEventListener("click",()=>this.refreshTelemetry());
+    this.bindWorldIntegrations();
   },
   go(page) {
     const tab=document.querySelector('.tab[data-page="'+page+'"]'); if(tab) tab.click();
@@ -76,6 +86,30 @@ const MarineOS = {
     if(depth)depth.textContent=document.getElementById("dashDepth")?.textContent?.replace("Kedalaman: ","")||"—";
     if(heading)heading.textContent=Number.isFinite(m?.heading)?Math.round(m.heading)+"°":"—";
     if(net)net.textContent=navigator.onLine?"ONLINE":"OFFLINE";
+  },
+  renderWorldIntegrations(){
+    const box=document.getElementById("marineWorldIntegrations"); if(!box)return;
+    box.innerHTML=this.worldIntegrations.map(p=>`
+      <article class="marine-world-card" data-world-provider="${this.esc(p.id)}">
+        <div class="marine-world-top"><span class="marine-world-icon">${p.icon}</span><div><b>${this.esc(p.name)}</b><small>${this.esc(p.kind)}</small></div><span class="marine-world-status">${this.esc(p.status)}</span></div>
+        <p>${this.esc(p.detail)}</p>
+        <div class="marine-world-actions"><button class="btn sm" data-world-test="${this.esc(p.id)}">🔌 Cek konektor</button><a class="btn sm" href="${this.esc(p.action)}" target="_blank" rel="noopener noreferrer">↗ Dokumentasi / akses</a></div>
+        <div class="marine-world-result muted" data-world-result>${this.esc(p.adapter)}</div>
+      </article>`).join("");
+  },
+  bindWorldIntegrations(){
+    document.getElementById("marineWorldIntegrations")?.addEventListener("click",async e=>{
+      const b=e.target.closest("[data-world-test]"); if(!b)return;
+      const card=b.closest("[data-world-provider]"), out=card?.querySelector("[data-world-result]"), id=b.dataset.worldTest;
+      b.disabled=true; b.textContent="⏳ Mengecek...";
+      try{
+        const fn=window.MarineExternal?.integrations?.[id.replace(/-live|-/g,"")]||null;
+        if(id==="windy-map"){out.textContent="🟢 Windy map surface tersedia melalui iframe resmi; API penuh tetap memerlukan izin/key.";return;}
+        if(fn&&typeof fn.test==="function"){const x=await fn.test();out.textContent=(x.ok?"🟢 ":"🟡 ")+(x.message||"Adapter siap.");}
+        else out.textContent="🟡 Adapter sudah disiapkan. Hubungkan credential/gateway resmi untuk data live.";
+      }catch(err){out.textContent="🔴 "+(err?.message||"Koneksi gagal.");}
+      finally{b.disabled=false;b.textContent="🔌 Cek konektor";}
+    });
   },
   showProviders(){
     const box=document.getElementById("marineProviderStatus");if(!box)return;
