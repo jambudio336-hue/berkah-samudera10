@@ -1,7 +1,7 @@
 <p align="center"><img src="assets/berkah-samudera-animated.svg" alt="Berkah Samudera10" width="100%"></p>
 
 <h1 align="center">Berkah Samudera10</h1>
-<p align="center"><b>Navigasi laut, operasi kapal, komunitas nelayan, dan informasi maritim dalam satu APK.</b></p>
+<p align="center"><b>Navigasi laut, operasi kapal, komunitas nelayan, AI suara Jarvis, dan informasi maritim dalam satu APK.</b></p>
 
 <p align="center">
   <a href="https://github.com/jambudio336-hue/berkah-samudera10/releases/latest"><img src="https://img.shields.io/github/v/release/jambudio336-hue/berkah-samudera10?style=for-the-badge&color=0b6e99" alt="Release"></a>
@@ -14,6 +14,10 @@
 ## Akses awal dan mode pengguna biasa
 
 Saat pertama kali aplikasi dibuka, pengguna dapat memilih **Daftar/Masuk Akun** untuk mengaktifkan profil, follow, lokasi teman, dan Story, atau memilih **Lanjut sebagai Pengguna Biasa** untuk memakai navigasi, cuaca, catatan, Al-Qur’an, dan fitur lokal tanpa akun.
+
+## Rilis terbaru — 1.0.29
+
+Release 1.0.29 membawa **Jarvis Voice Captain Assistant** berbasis OpenRouter free router, snapshot konteks Marine OS per pertanyaan, voice input/output Bahasa Indonesia, serta peningkatan validasi dan dokumentasi release. API key tetap harus dimasukkan oleh pengguna dan tidak disertakan di source code.
 
 ## Download APK
 
@@ -31,6 +35,15 @@ Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera1
 - Release production wajib memakai signing certificate yang sama; private keystore tidak disimpan di repository.
 
 ## Fitur utama
+
+### 🤖 Jarvis Voice Captain Assistant
+- Voice assistant Bahasa Indonesia dengan input suara dan output Speech Synthesis perangkat.
+- OpenRouter `openrouter/free` sebagai router model gratis yang dapat berubah sesuai ketersediaan provider.
+- Membaca snapshot konteks Marine OS terbaru saat pertanyaan diajukan: GNSS, jaringan, modul, provider, status tracking, telemetry UI, dan data lokal yang aman untuk dibagikan.
+- Tidak mengarang posisi, AIS, radar, kedalaman, cuaca, harga, atau data kapal.
+- Mode percakapan tetap read-only; tindakan berisiko tidak dijalankan otomatis.
+- Fitur suara bergantung pada dukungan Speech Recognition/Speech Synthesis Android WebView/perangkat.
+- Jangan masukkan API key OpenRouter ke repository atau log aplikasi.
 
 ### Navigasi dan data laut
 - GPS/GNSS HP dengan lat/lon, akurasi, heading, rute, dan kecepatan knot.
@@ -99,7 +112,8 @@ APK release berada di `Berkah-Samudera10-release.apk`. Build membutuhkan Android
 - `js/auth.js` — Auth, profil, pencarian, follow, follower, dan lokasi teman.
 - `js/story.js` — Story, upload media, viewer history, dan feed mutual follow.
 - `android/` — wrapper Capacitor Android.
-- `CHANGELOG.md` — riwayat perubahan release.
+- `CHANGELOG.md` — riwayat perubahan release dan catatan versi.
+- `js/jarvis-openrouter.js` — Jarvis voice AI, konteks Marine OS, dan OpenRouter adapter.
 - `LICENSE` — lisensi MIT.
 
 ## Lisensi dan atribusi
