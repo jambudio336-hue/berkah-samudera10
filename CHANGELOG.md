@@ -1,5 +1,25 @@
 # Changelog — Berkah Samudera10
 
+## [1.0.29] - 2026-10-06
+### Ditambahkan
+- **Jarvis Voice Captain Assistant** berbasis OpenRouter free router.
+- Input suara Bahasa Indonesia melalui Speech Recognition dan output suara melalui Speech Synthesis perangkat.
+- Snapshot konteks Marine OS terbaru pada setiap pertanyaan: GNSS, jaringan, modul, provider, status tracking, telemetry UI, dan data lokal yang aman.
+- Prompt keselamatan agar Jarvis tidak mengarang AIS, radar, posisi, kedalaman, cuaca, harga, atau data kapal.
+- Pengaturan Jarvis: API key pengguna, kecepatan suara, pitch, enable/disable, test, microphone, stop, repeat listening, dan input teks.
+- README, lisensi, dan dokumentasi release diperbarui untuk fitur AI dan layanan pihak ketiga.
+
+### Diperbaiki
+- Versioning Android dinaikkan menjadi 1.0.29 / versionCode 10029.
+- Release workflow dapat dipicu dari branch `release/*` selain tag `v*`, lalu membuat GitHub Release bertag versi secara otomatis.
+- Dokumentasi download dan catatan release diselaraskan dengan artefak APK yang benar-benar dipublikasikan.
+
+### Catatan
+- Jarvis membutuhkan API key OpenRouter milik pengguna untuk akses model online.
+- `openrouter/free` menggunakan model/provider gratis yang dapat berubah; ketersediaan dan rate limit mengikuti OpenRouter.
+- API key pada implementasi ini tidak di-hardcode. Pada Android, penyimpanan key masih perlu ditingkatkan ke secure native storage/Keystore untuk hardening produksi.
+- Speech Recognition berbasis WebView tidak dijamin selalu aktif/24 jam.
+
 ## [1.0.28] - 2026-10-06
 ### Ditambahkan
 - Windy marine layer controls diperluas: angin, hembusan, hujan, akumulasi hujan, gelombang, beberapa swell, wind waves, arus, arus pasang, suhu laut, suhu udara, titik embun, kelembapan, awan, kabut, CAPE, tekanan, visibilitas, dan satelit.
