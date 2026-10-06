@@ -14,6 +14,24 @@
 </head>
 <body>
 
+
+<!-- ============ MARINE OS WELCOME ============ -->
+<div id="marineWelcome" class="marine-welcome is-hidden" aria-hidden="true">
+  <div class="marine-welcome-card">
+    <div class="marine-welcome-kicker">⚓ BERKAH SAMUDERA10 • MARINE OS</div>
+    <h2><span data-welcome-greeting>Selamat datang</span></h2>
+    <p class="marine-welcome-user" data-welcome-user>Kapten 👋</p>
+    <div class="marine-quote-box">
+      <p class="marine-quote" data-marine-quote>“Laut memanggil mereka yang siap berlayar.”</p>
+      <span class="marine-quote-author" data-marine-author>— Pelaut</span>
+    </div>
+    <div class="marine-welcome-meta"><span>🧭 Navigasi siap</span><span>🌊 Kondisi laut</span><span>🛟 Safety-first</span><span>📡 Online + offline</span></div>
+    <div class="marine-daily-brief" data-daily-brief>Marine Brief: memeriksa kondisi aplikasi...</div>
+    <div class="marine-welcome-actions"><button class="btn primary" data-welcome-enter>🌊 Mulai Berlayar</button><button class="btn" data-welcome-skip>Lewati</button></div>
+    <div class="marine-welcome-next">Kutipan pelaut dipilih ulang otomatis setiap kali aplikasi dibuka.</div>
+  </div>
+</div>
+
 <!-- ============ SPLASH SCREEN VIDEO ============ -->
 <div id="splash" class="photo-splash" aria-label="Berkah Samudera10">
   <div class="splash-photo"></div><div class="splash-shade"></div>
@@ -381,7 +399,7 @@
 <footer class="footer">Berkah Samudera10 © 2026 — Dibuat untuk nelayan Indonesia 🇮🇩<br><b class="sponsor">Disponsori by.m4zk1pl4y</b><br><span id="syncState">Supabase Realtime • data tersimpan lokal sebagai cache</span></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<link rel="stylesheet" href="css/marine-os.css"><link rel="stylesheet" href="css/marine-runtime.css"><script src="js/storage.js" defer></script>
+<link rel="stylesheet" href="css/marine-os.css"><link rel="stylesheet" href="css/marine-runtime.css"><link rel="stylesheet" href="css/marine-welcome.css"><script src="js/storage.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="js/supabase-sync.js" defer></script>
 <script src="js/auth.js" defer></script>
@@ -395,7 +413,7 @@
 <script src="js/kolekting.js" defer></script>
 <script src="js/perbekalan.js" defer></script>
 <script src="js/kru.js" defer></script>
-<script src="js/app.js" defer></script>
+<script src="js/marine-welcome.js" defer></script>\n<script src="js/app.js" defer></script>
 <script src="js/marine-os.js" defer></script>
 <script src="js/marine-free.js" defer></script>
 <script src="js/marine-external.js" defer></script>
