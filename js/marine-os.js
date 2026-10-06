@@ -40,7 +40,7 @@ const MarineOS = {
     marineTraffic: {name:"MarineTraffic / Kpler", enabled:false, mode:"official API + license", env:"MARINETRAFFIC_API_KEY"},
     radar: {name:"Onboard Marine Radar", enabled:false, mode:"hardware gateway", env:"RADAR_GATEWAY_URL"},
     batnas: {name:"BATNAS", enabled:false, mode:"authorized dataset/access required", env:"BATNAS_ENDPOINT"},
-    ai: {name:"Mazkiplay.ai / OpenAI", enabled:false, mode:"user key or server gateway", env:"OPENAI_API_KEY"}
+    ai: {name:"Jarvis / OpenRouter", enabled:true, mode:"user-configured free router", env:"OPENROUTER_API_KEY"}
   },
   worldIntegrations: [
     {id:"ais-live",icon:"🚢",name:"AIS Realtime / MarineTraffic → Kpler",kind:"AIS",status:"LICENSE / API",detail:"Real-time vessel positions, static data, history and live stream when an authorized Kpler/MarineTraffic feed is connected.",action:"https://www.kpler.com/product/maritime/data-services",adapter:"MarineExternal.integrations.ais"},
