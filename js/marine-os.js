@@ -53,6 +53,7 @@ const MarineOS = {
   init() {
     this.renderDashboard();
     this.renderWorldIntegrations();
+    this.renderPublicSources();
     this.bind();
     this.refreshTelemetry();
     setInterval(()=>this.refreshTelemetry(),5000);
@@ -86,6 +87,20 @@ const MarineOS = {
     if(depth)depth.textContent=document.getElementById("dashDepth")?.textContent?.replace("Kedalaman: ","")||"—";
     if(heading)heading.textContent=Number.isFinite(m?.heading)?Math.round(m.heading)+"°":"—";
     if(net)net.textContent=navigator.onLine?"ONLINE":"OFFLINE";
+  },
+  renderPublicSources(){
+    const box=document.getElementById("marinePublicSources"); if(!box)return;
+    const s=window.MarineExternal?.publicSources||{};
+    const rows=[
+      ["aisStream","🚢","AISStream Realtime AIS","LIVE*","WebSocket AIS realtime; key server-side."],
+      ["gfw","🐟","Global Fishing Watch","DYNAMIC","Vessel activity, identity/history, fishing effort."],
+      ["noaaAis","🛰️","NOAA MarineCadastre AIS","HISTORICAL","Public U.S. AIS traffic archive."],
+      ["emodnetBathymetry","🌊","EMODnet Bathymetry","OPEN","OGC bathymetry services."],
+      ["noaaErddap","🌡️","NOAA ERDDAP","OBSERVATION","Oceanographic datasets, freshness varies."],
+      ["dataGoId","🇮🇩","data.go.id","PUBLIC","Indonesia government open datasets."],
+      ["kkp","🎣","KKP Portal Data","PUBLIC","WPP/fisheries and maritime datasets."]
+    ];
+    box.innerHTML=rows.map(x=>`<article class="marine-world-card"><div class="marine-world-top"><span class="marine-world-icon">${x[1]}</span><div><b>${x[2]}</b><small>${x[3]}</small></div></div><p>${x[4]}</p><a class="btn sm" href="${this.esc(s[x[0]]||"#")}" target="_blank" rel="noopener noreferrer">↗ Sumber publik</a></article>`).join("");
   },
   renderWorldIntegrations(){
     const box=document.getElementById("marineWorldIntegrations"); if(!box)return;
