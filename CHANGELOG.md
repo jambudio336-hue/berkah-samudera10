@@ -1,5 +1,23 @@
 # Changelog — Berkah Samudera10
 
+## [1.0.28] - 2026-10-06
+### Ditambahkan
+- Windy marine layer controls diperluas: angin, hembusan, hujan, akumulasi hujan, gelombang, beberapa swell, wind waves, arus, arus pasang, suhu laut, suhu udara, titik embun, kelembapan, awan, kabut, CAPE, tekanan, visibilitas, dan satelit.
+- Marine Toolkit offline: konverter knot/km/j dan NM/km, kalkulator BBM perjalanan dengan cadangan, kalkulator jarak dan bearing antar koordinat, serta salin koordinat GPS.
+- Background tracking Android dengan persistent state, restart setelah reboot/app replacement, dan WorkManager untuk pemeriksaan update.
+- Google Play In-App Updates dan updater GitHub Release untuk instalasi APK langsung.
+- Signed release workflow dengan verifikasi signature dan versionCode otomatis.
+
+### Diperbaiki
+- Memperbaiki syntax error updater JavaScript yang membuat CI berhenti pada pemeriksaan sintaks.
+- Memperbaiki lifecycle MainActivity untuk Play Update dan WorkManager.
+- Memperkeras CI dengan pemeriksaan sintaks semua JavaScript dan build Android debug.
+- Menyatukan versioning Android menjadi 1.0.28 / versionCode 10028.
+- Menjaga pembaruan APK langsung tetap tunduk pada verifikasi dan konfirmasi installer Android.
+
+### Catatan Windy
+- Marine OS menggunakan embed/map resmi Windy dan membuka layer yang tersedia melalui konfigurasi map. Windy menyediakan 40+ layer pada Map Forecast API; ketersediaan layer/model tertentu tetap mengikuti produk dan ketentuan Windy.
+
 ## [1.0.27] - 2026-10-04
 ### Diperbaiki
 - Memperbaiki UI lambat/macet saat startup dengan lazy-load iframe Windy; Windy kini baru dimuat saat menu Peta dibuka atau tombol fokus ditekan.
