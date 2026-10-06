@@ -3,12 +3,10 @@
   "use strict";
   const CFG={
     openMeteoMarine:"https://marine-api.open-meteo.com/v1/marine",
-    noaaNowCoast:"https://nowcoast.noaa.gov",
     bmkg:"https://maritim.bmkg.go.id/marine2026-data/",
     gebco:"https://wms.gebco.net/mapserv?",
     osm:"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    openseamap:"https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
-    carto:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+    openseamap:"https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
   };
   const cacheKey="bs10_external_cache_v1";
   const read=()=>{try{return JSON.parse(localStorage.getItem(cacheKey)||"{}")}catch(_){return {}}};
@@ -79,10 +77,10 @@
     return CFG.gebco+qs.toString();
   }
   async function health(){
-    const out={bmkg:false,gebco:false,openMeteoMarine:false,noaaNowCoast:true,osm:true,openseamap:true,carto:true};
-    try{const r=await fetch(CFG.bmkg+"meta/area_province.json",{headers:{Accept:"application/json"},cache:"no-store"});out.bmkg=r.ok}catch(_){}
-    try{const r=await fetch(CFG.openMeteoMarine+"?latitude=0&longitude=120&hourly=wave_height&forecast_days=1",{cache:"no-store"});out.openMeteoMarine=r.ok}catch(_){}
-    try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
+    const out={bmkg:null,gebco:null,openMeteoMarine:null,noaaNowCoast:null,osm:null,openseamap:null};
+    try{const r=await fetch(CFG.bmkg+"meta/area_province.json",{headers:{Accept:"application/json"},cache:"no-store"});out.bmkg=r.ok}catch(_){out.bmkg=false}
+    try{const r=await fetch(CFG.openMeteoMarine+"?latitude=0&longitude=120&hourly=wave_height&forecast_days=1",{cache:"no-store"});out.openMeteoMarine=r.ok}catch(_){out.openMeteoMarine=false}
+    try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){out.gebco=false}
     return out;
   }
   const PUBLIC={

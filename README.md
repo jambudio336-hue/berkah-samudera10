@@ -1,148 +1,89 @@
 <p align="center"><img src="assets/berkah-samudera-animated.svg" alt="Berkah Samudera10" width="100%"></p>
 
 <h1 align="center">Berkah Samudera10</h1>
-<p align="center"><b>Navigasi laut, operasi kapal, komunitas nelayan, AI suara Jarvis, dan informasi maritim dalam satu APK.</b></p>
+<p align="center"><b>Aplikasi operasi kapal untuk Android: peta laut, GPS, cuaca model, profil kapal anonim, checklist, dan asisten suara.</b></p>
 
 <p align="center">
-  <a href="https://github.com/jambudio336-hue/berkah-samudera10/releases/latest"><img src="https://img.shields.io/github/v/release/jambudio336-hue/berkah-samudera10?style=for-the-badge&color=0b6e99" alt="Release"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/status-release%20ready-d6a83a?style=for-the-badge" alt="Release ready"></a>
+  <a href="https://github.com/jambudio336-hue/berkah-samudera10/releases/latest"><img src="https://img.shields.io/github/v/release/jambudio336-hue/berkah-samudera10?style=for-the-badge&color=087FA5" alt="Rilis terbaru"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/status-v1.1.0-087FA5?style=for-the-badge" alt="Versi 1.1.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1f8b4c?style=for-the-badge" alt="MIT license"></a>
 </p>
 
-> **Disponsori by.m4zk1pl4y** — dibuat untuk membantu nelayan dan pelaut Indonesia. Banner animasi di atas menampilkan kapal, ombak, dan identitas aplikasi.
+> **Berkah Samudera10** adalah alat bantu informasi dan operasi. Aplikasi ini bukan sistem navigasi tersertifikasi dan tidak menggantikan chart resmi, ECDIS, radar, sonar, lookout, atau prosedur keselamatan.
 
-## Akses awal dan mode pengguna biasa
+## Unduh APK
 
-Saat pertama kali aplikasi dibuka, pengguna dapat memilih **Daftar/Masuk Akun** untuk mengaktifkan profil, follow, lokasi teman, dan Story, atau memilih **Lanjut sebagai Pengguna Biasa** untuk memakai navigasi, cuaca, catatan, Al-Qur’an, dan fitur lokal tanpa akun.
-
-## Rilis terbaru — 1.0.32
-
-Release 1.0.32 membawa **Ocean Command Center**, Jarvis v2 berbasis OpenRouter, mode keselamatan MOB/SOS, Marine Risk Score, mode tampilan malam/HUD, dan cache offline terbaru. API key tetap harus dimasukkan oleh pengguna dan tidak disertakan di source code.
-
-## Download APK
-
-[**Download APK Release Terbaru**](https://github.com/jambudio336-hue/berkah-samudera10/releases/latest)
-
-Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera10/releases) dan pilih asset `berkah-samudera10-release.apk`.
-
-## Ocean Command Center dan keselamatan
-
-- Quick mode **Navigation, Weather, Fishing, HUD, dan AI Briefing** untuk mengubah fokus dashboard tanpa memalsukan data provider.
-- **Marine Risk Score** lokal berdasarkan status GNSS, akurasi, koneksi, dan pergerakan kapal. Skor ini adalah indikator bantuan, bukan sertifikasi kondisi pelayaran.
-- Mode tampilan **Ocean Dark, Red Night, dan Blackout** untuk mengurangi gangguan visual saat operasi malam.
-- **MOB** menyimpan titik manusia jatuh ke laut setelah konfirmasi pengguna. **SOS** menyiapkan pesan berisi koordinat, kecepatan, dan waktu untuk disalin/dikirim pengguna.
-- MOB/SOS tidak melakukan panggilan otomatis, tidak mengendalikan kapal, dan tidak menggantikan prosedur darurat resmi.
-
-## Marine Toolkit, Windy, background tracking, dan update
-
-- Windy global dengan pilihan layer laut/cuaca yang diperluas: angin, gust, hujan, akumulasi hujan, gelombang, swell, wind waves, arus, arus pasang, suhu laut, suhu udara, titik embun, kelembapan, awan, kabut, CAPE, tekanan, visibilitas, dan satelit. Windy menyediakan 40+ layer pada Map Forecast API; sebagian layer/model bergantung pada produk dan ketentuan Windy.
-- Marine Toolkit offline untuk konversi satuan, perhitungan BBM + cadangan, jarak/bearing, dan penyalinan koordinat GPS.
-- Android foreground tracking untuk pemantauan kapal saat aplikasi tidak sedang dibuka, dengan persistent state dan restart setelah reboot/app replacement jika diizinkan Android.
-- Google Play In-App Updates untuk distribusi Play.
-- GitHub Release updater untuk APK sideload; Android tetap mengontrol izin dan konfirmasi instalasi.
-- Release production wajib memakai signing certificate yang sama; private keystore tidak disimpan di repository.
+Buka [GitHub Releases](https://github.com/jambudio336-hue/berkah-samudera10/releases/latest) dan unduh `berkah-samudera10-release.apk`. Instalasi sideload tetap memerlukan persetujuan Android. APK signed harus dibangun dengan sertifikat rilis yang sama agar dapat memperbarui instalasi sebelumnya.
 
 ## Fitur utama
 
-### 🤖 Jarvis Voice Captain Assistant
-- Voice assistant Bahasa Indonesia dengan input suara dan output Speech Synthesis perangkat.
-- OpenRouter `openrouter/free` sebagai router model gratis yang dapat berubah sesuai ketersediaan provider.
-- Membaca snapshot konteks Marine OS terbaru saat pertanyaan diajukan: GNSS, jaringan, modul, provider, status tracking, telemetry UI, dan data lokal yang aman untuk dibagikan.
-- Tidak mengarang posisi, AIS, radar, kedalaman, cuaca, harga, atau data kapal.
-- Mode percakapan tetap read-only; tindakan berisiko tidak dijalankan otomatis.
-- Tombol **Cari model gratis** mengambil katalog OpenRouter dan memfilter model dengan harga prompt/completion nol; `openrouter/free` tetap menjadi fallback router.
-- Riwayat percakapan disimpan lokal dan dapat dihapus dari Pengaturan.
-- Fitur suara bergantung pada dukungan Speech Recognition/Speech Synthesis Android WebView/perangkat.
-- Jangan masukkan API key OpenRouter ke repository atau log aplikasi.
+### Peta laut potret dan GPS
 
-### Navigasi dan data laut
-- GPS/GNSS HP dengan lat/lon, akurasi, heading, rute, dan kecepatan knot.
-- Peta global Leaflet dengan mode standar, satelit, topografi, medan, gelap, nautika, bathymetry GEBCO, mode 3D visual, serta tombol Google Maps yang mengikuti koordinat GPS.
-- Router titik saat ini ke tujuan dengan jarak, kecepatan, dan estimasi tiba.
-- Kedalaman GEBCO indikatif, objek karang/terumbu/batu/kapal karam dari data publik dalam radius hingga 1 km, serta peringatan akurasi untuk keselamatan.
-- Cuaca laut, angin, ombak, hujan, radar, dan indikasi badai.
-- Kompas 3D dengan sensor perangkat dan fallback heading GPS.
-- Panel Windy global responsif dengan menu embed resmi, pusat GPS otomatis, angin, ombak, hujan, tekanan, suhu, dan prakiraan waktu.
+- Peta Leaflet dengan mode imersif potret/layar penuh, pusat GPS, track lokal, rute garis lurus, bearing dan estimasi jarak/waktu.
+- Katalog audit berisi **25 provider**; enam sumber publik dipasang sebagai layer aktif/bersyarat. Provider lain tetap terlihat dengan alasan tidak diaktifkan, misalnya lisensi/key, cakupan, service legacy, atau batas penggunaan.
+- Layer aktif meliputi OpenStreetMap, OpenTopoMap, NASA GIBS Blue Marble, OpenSeaMap, GEBCO bathymetry, dan RainViewer dengan ketentuan masing-masing.
+- Mode peta vektor 3D MapLibre/OpenFreeMap menyediakan lima style: Bright, Liberty, Positron, Dark, dan Fiord. Ini menampilkan geometri/bangunan vektor bila tersedia, **bukan** terrain 3D dasar laut.
+- Overlay model laut/cuaca mencakup angin, gelombang, arus dan hujan sesuai ketersediaan layanan. Angka arus/gelombang adalah prakiraan model, bukan pengukuran sensor kapal.
+- Pemeriksaan otomatis objek `reef`, batu dangkal, dan wreck dari OpenStreetMap/Overpass dalam radius **1 mil laut** dari posisi GPS. Hasilnya hanya objek yang dipetakan komunitas; bukan sensor/sonar dan hasil kosong tidak membuktikan area aman.
+- Marker kapal lain menampilkan nama kapal dan ID anonim jika perangkat pemilik mengaktifkan berbagi lokasi dan sedang online.
 
-### Komunitas online Supabase
-- Login email OTP, SMS OTP, channel WhatsApp OTP, dan Google OAuth.
-- Profil Nahkoda/ABK, bio, foto profil URL, nama kapal, dan muatan.
-- Pencarian pengguna berdasarkan nama akun atau nama kapal.
-- Follow/unfollow, daftar pengikut, jumlah followers/following, dan lokasi teman yang saling follow.
-- Batas maksimal **5.000 pengikut per akun** yang ditegakkan di aplikasi dan database.
-- Supabase Realtime untuk posisi, notifikasi, data operasi, story, dan view story.
+Rincian endpoint, lisensi, batas, dan sumber rujukan tersedia di [`docs/map-provider-audit.md`](docs/map-provider-audit.md) dan menu **Katalog 25 sumber** di Peta. Layer yang tidak diaktifkan tidak otomatis menjadi gratis atau boleh dipakai hanya karena endpoint publik dapat diakses.
 
-### Story 24 jam
-- Story teks, foto, dan video maksimal **60 detik**.
-- Menu Al-Qur’an menampilkan seluruh 114 surat; tiap surat memuat Arab, latin, arti, dan tombol putar audio langsung.
-- Story hanya muncul pada pengguna yang saling follow.
-- Media disimpan di bucket privat Supabase Storage.
-- Riwayat tontonan mencatat akun yang menonton story.
+### Profil kapal tanpa form login
 
-### Operasi kapal dan spiritual
-- Catatan tangkapan dengan pilihan jenis ikan.
-- Catatan kolekting, BBM, logistik, dan kru dengan riwayat edit/hapus.
-- Jadwal sholat mengikuti zona waktu lokasi, notifikasi, quotes Islami/pelaut, dan suara adzan.
-- Al-Qur’an online 114 surat dengan Arab, latin, terjemahan, dan audio.
-- QRIS donasi di Pengaturan serta ucapan terima kasih dan sponsor.
+Aplikasi tidak menyediakan halaman daftar/masuk, Story, atau kru. Saat koneksi tersedia, Supabase Anonymous Auth membuat profil tanpa email dan kata sandi. ID tersebut adalah UUID aplikasi, **bukan** IMEI, nomor seri perangkat, atau identitas hardware; nama kapal dapat diubah di Pengaturan.
 
-## Supabase dan OTP
+Berbagi GPS bersifat **off secara default**. Untuk mengirim posisi real-time ke peta pengguna lain, pemilik harus mengaktifkannya dan menyetujui konfirmasi yang menjelaskan nama kapal, ID, koordinat presisi, kecepatan, akurasi, arah, dan waktu update. Pengiriman cloud berlangsung saat aplikasi/WebView aktif, memperoleh GPS, dan online; berbagi dapat dihentikan kembali. Service tracking 24/7 Android hanya menyimpan posisi lokal di perangkat dan tidak mengirim GPS ke cloud di latar belakang. Jika offline, aplikasi menghentikan pengiriman dan mencoba mencabut posisi cloud saat koneksi pulih. Jangan aktifkan di kapal/perangkat orang lain tanpa izin pemilik.
 
-Project sudah menggunakan Supabase. APK **tidak meminta pengguna membuat akun aplikasi terpisah**, tetapi pengguna yang ingin memakai profil, follow, lokasi teman, dan Story perlu login melalui Supabase Auth.
+### Kiplay, operasi, dan keselamatan
 
-Provider yang perlu diaktifkan di Supabase Dashboard:
+- Kiplay menyediakan percakapan AI dan membacakan jawaban menggunakan text-to-speech perangkat. Tersedia/tidaknya suara laki-laki tertentu bergantung pada voice pack Android; aplikasi tidak mengkloning suara anak tertentu. Model online memerlukan API key OpenRouter milik pengguna.
+- Lokasi tidak dikirim ke AI kecuali izin lokasi untuk AI diaktifkan secara terpisah. API key tidak disimpan di repo atau dimasukkan ke release build.
+- Checklist keselamatan disimpan lokal tanpa akun; catatan tangkapan, perbekalan, dan riwayat tetap mengikuti modul lokal yang tersedia.
+- Foreground service Android untuk tracking latar belakang menyimpan koordinat di penyimpanan privat perangkat saja; status posisi stale ditampilkan dan tidak dianggap live share.
+- Tombol MOB menyimpan titik darurat setelah konfirmasi. SOS menyiapkan teks yang dapat disalin pengguna; keduanya **tidak** menghubungi layanan darurat secara otomatis.
+- Aplikasi juga menyediakan halaman prakiraan/cuaca, kompas/telemetri perangkat, Al-Qur’an, dan notifikasi sesuai layanan dan izin perangkat.
+- Dashboard menandai secara jujur modul roadmap yang belum tersedia. AIS live, radar perangkat keras, chat, panggilan, peta offline, document vault, dan prediksi hotspot tidak boleh dianggap aktif pada rilis ini.
 
-1. **Email Provider** untuk Email OTP. Template email harus memakai `{{ .Token }}` jika ingin kode OTP, bukan hanya magic link.
-2. **Phone/SMS Provider** untuk OTP SMS.
-3. **Twilio WhatsApp** untuk tombol OTP WhatsApp. WhatsApp tidak dapat mengirim OTP tanpa sender/provider WhatsApp yang valid.
-4. **Google OAuth** dengan Client ID, Client Secret, dan redirect URL project.
+## Batas data dan keselamatan
 
-## GPS/GNSS dan lokasi terkini
+- GPS berasal dari perangkat; akurasi dipengaruhi antena, izin, cuaca, dan lingkungan.
+- GEBCO adalah model batimetri grid global, bukan sounding lokal. Objek terumbu berasal dari pemetaan OSM, bukan UNEP-WCMC real-time atau sensor bawah air.
+- OpenSeaMap adalah seamark komunitas dengan cakupan tidak merata. RainViewer menunjukkan radar lampau dengan batas zoom/ketentuan provider.
+- OSM tiles diminta sesuai area yang dilihat, tanpa bulk download atau cache offline. Atribusi ditampilkan; APK memakai User-Agent yang mengidentifikasi aplikasi.
+- Peta, model cuaca/arus, kedalaman, dan AI tidak boleh menjadi satu-satunya dasar keputusan navigasi atau darurat. Rincian penggunaan data ada di [`docs/MARINE_OS_ZERO_COST_DATA.md`](docs/MARINE_OS_ZERO_COST_DATA.md).
 
-- Tekan **Izinkan akses lokasi**, berikan lokasi presisi, lalu buka Peta atau Dashboard untuk melihat latitude, longitude, akurasi, kecepatan, dan heading terkini.
-- Untuk tracking ketika aplikasi berada di latar belakang: buka **Pengaturan → Mulai Tracking 24/7**, berikan izin lokasi **Izinkan sepanjang waktu**, dan izinkan notifikasi bila diminta Android.
-- Android dapat membatasi background service karena baterai, izin, mode hemat daya, atau sinyal GPS. UI menampilkan posisi terakhir dan waktu update; posisi stale tidak boleh dianggap live.
-- Koordinat disimpan lokal untuk operasi dan dapat dikirim ke sinkronisasi Supabase jika konfigurasi/izin jaringan tersedia.
+## Supabase dan konfigurasi
 
-## Akurasi dan keselamatan
+Untuk membuat profil anonim, project Supabase harus mengaktifkan **Allow anonymous sign-ins**. Migrasi skema dan RLS terkait profil kapal/lokasi serta rekaman privat ada di `supabase/migrations/`. Posisi publik hanya dapat dibaca sebagai direktori kapal aktif; berbagi GPS memerlukan opt-in perangkat. Review kebijakan dan skema sebelum mengubah project produksi.
 
-- Koordinat berasal dari GNSS HP, bukan GPS satelit khusus atau citra satelit.
-- Kedalaman GEBCO dan deteksi karang bersifat indikatif; bukan pengganti sonar, peta navigasi resmi, atau keputusan keselamatan pelayaran.
-- Hasil kosong pada deteksi karang tidak berarti area bebas karang.
-- Data online memerlukan internet; cache lokal tetap digunakan untuk data operasi dan tampilan yang sudah tersimpan.
+Sinkronisasi catatan cloud tidak diaktifkan otomatis. Credential Supabase yang memang bersifat publik untuk client disimpan pada konfigurasi aplikasi; jangan pernah menambahkan service-role key, password, keystore, atau API key pribadi ke repository.
 
-## Privasi, API key, dan provider
+## Menjalankan pemeriksaan dan membangun
 
-- API key OpenRouter dimasukkan langsung oleh pengguna dan tidak ditanam dalam APK, repository, atau dokumentasi.
-- Jangan memasukkan API key, token, password, atau data rahasia ke issue, log, screenshot, atau commit.
-- Data provider komersial seperti Garmin, MarineTraffic/Kpler, Navionics, radar hardware, NMEA, dan AIS berlisensi hanya aktif jika kredensial/SDK resmi tersedia. Status **LIVE-READY** bukan klaim bahwa provider tersebut sedang online.
-- Data publik, peta, tile, forecast, dan layanan sosial mengikuti lisensi, atribusi, rate limit, dan ketentuan masing-masing penyedia.
-
-## Build dari source
+Memerlukan Node.js 22, Java 21, Android SDK, Android build-tools yang sesuai, dan Gradle wrapper.
 
 ```bash
-npm install
+npm ci
+npm run build:web
+npm test
 npx cap sync android
 ./build-release.sh
 ```
 
-APK release berada di `Berkah-Samudera10-release.apk`. Build membutuhkan Android SDK, Java 21, Gradle wrapper, dan keystore release.
+`npm test` memeriksa sintaks JavaScript, ID HTML, aset lokal/service worker, sinkronisasi `www/`, provider peta, default version, dan beberapa aturan integrasi. Skrip build lokal menghasilkan APK unsigned bila keystore rilis tidak tersedia; APK unsigned tidak dapat melakukan pembaruan mulus atas APK signed yang sudah terpasang. Build publik signed dilakukan melalui workflow release repo dan memerlukan secrets keystore yang dikelola pemilik repo.
 
-## Struktur singkat
+## Struktur penting
 
-- `index.html` — UI dan halaman aplikasi.
-- `js/map.js` — peta, GPS, rute, overlay, dan marker kapal.
-- `js/supabase-sync.js` — Realtime, posisi, operasi, dan cache online.
-- `js/auth.js` — Auth, profil, pencarian, follow, follower, dan lokasi teman.
-- `js/story.js` — Story, upload media, viewer history, dan feed mutual follow.
-- `android/` — wrapper Capacitor Android.
-- `CHANGELOG.md` — riwayat perubahan release dan catatan versi.
-- `js/jarvis-openrouter.js` — Jarvis voice AI, konteks Marine OS, model gratis OpenRouter, dan riwayat percakapan.
-- `js/marine-command.js` — quick modes, Marine Risk Score, mode visual, MOB, dan SOS preparation.
-- `LICENSE` — lisensi MIT dan pemberitahuan layanan pihak ketiga.
+- `index.html`, `css/` — UI Marine OS dan peta potret.
+- `js/map.js`, `js/weather.js` — GPS, layer, rute, data cuaca/laut, karang OSM, dan mode 3D.
+- `js/map-provider-catalog.js` — katalog audit 25 sumber peta.
+- `js/device-profile.js`, `js/supabase-sync.js` — profil anonim dan berbagi lokasi opt-in.
+- `js/jarvis-openrouter.js`, `js/safety-checklist.js` — Kiplay dan checklist lokal.
+- `scripts/check-project.mjs`, `scripts/sync-web.mjs` — QA dan sinkronisasi source ke `www/`.
+- `android/` — wrapper Capacitor Android; `.github/workflows/` — CI dan workflow release.
+- `supabase/migrations/` — skema dan kebijakan RLS versi repository.
 
-## Lisensi dan atribusi
+## Lisensi
 
-Kode dirilis di bawah [MIT License](LICENSE). Data dan layanan pihak ketiga mengikuti ketentuan masing-masing penyedia: Supabase, OpenStreetMap/OpenSeaMap, GEBCO, Esri, BMKG, Open-Meteo, Aladhan, EQuran, dan Windy.
-
-Terima kasih sudah menggunakan **Berkah Samudera10**. Semoga nyaman, aman, dan bermanfaat untuk perjalanan laut Anda.
+Kode sumber asli memakai [MIT License](LICENSE). Peta, tile, citra, dataset, SDK, API, merek, serta konten pihak ketiga **tidak** otomatis dilisensikan oleh MIT; ketentuan provider dan atribusinya berlaku secara terpisah. Aplikasi bersifat decision-support dan diberikan tanpa jaminan keselamatan/akurasi.

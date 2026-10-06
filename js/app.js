@@ -8,10 +8,11 @@ const App = {
     App.onlineStatus();
     App.quoteDashboard();
     App.settings();
+    if (typeof DeviceProfile !== "undefined") DeviceProfile.init();
+    if (typeof SafetyChecklist !== "undefined") SafetyChecklist.init();
     App.accessGate();
     setTimeout(() => {
       if (typeof SupabaseSync !== "undefined") SupabaseSync.init();
-      if (typeof SupabaseAuth !== "undefined") SupabaseAuth.init();
       if (typeof NotificationCenter !== "undefined") NotificationCenter.init();
       if (typeof PrayerTimes !== "undefined") PrayerTimes.init();
       if (typeof QuranApp !== "undefined") QuranApp.init();
@@ -24,7 +25,6 @@ const App = {
       if (confirm("Yakin hapus SEMUA data? Ini tidak bisa dibatalkan!")) {
         Store.clearAll();
         renderSemuaList();
-        Kru.render();
         alert("Semua data terhapus.");
       }
     });
@@ -107,12 +107,32 @@ const App = {
     }));
   },
   settings() {
-    const name = document.getElementById("settingVesselName"), id = document.getElementById("settingVesselId");
+    const name = document.getElementById("settingVesselName"), id = document.getElementById("settingDeviceId");
     if (!name) return;
-    name.value = localStorage.getItem("bs10_vessel_name") || "Berkah Samudera 10"; id.value = localStorage.getItem("bs10_vessel_id") || "kapal-utama";
+    name.value = localStorage.getItem("bs10_vessel_name") || "Berkah Samudera 10";
+    if (id) { id.value = localStorage.getItem("bs10_device_id") || "Dibuat otomatis saat tersambung internet"; id.readOnly = true; }
     document.getElementById("settingAutoCenter").checked = localStorage.getItem("bs10_auto_center") !== "false";
     document.getElementById("settingShowTrack").checked = localStorage.getItem("bs10_show_track") !== "false";
-    document.getElementById("btnSaveSettings").addEventListener("click", () => { localStorage.setItem("bs10_vessel_name", name.value.trim() || "Berkah Samudera 10"); localStorage.setItem("bs10_vessel_id", id.value.trim() || "kapal-utama"); localStorage.setItem("bs10_auto_center", document.getElementById("settingAutoCenter").checked); localStorage.setItem("bs10_show_track", document.getElementById("settingShowTrack").checked); alert("✅ Pengaturan tersimpan."); });
+    document.getElementById("btnSaveSettings").addEventListener("click", async () => { localStorage.setItem("bs10_vessel_name", name.value.trim() || "Berkah Samudera 10"); localStorage.setItem("bs10_auto_center", document.getElementById("settingAutoCenter").checked); localStorage.setItem("bs10_show_track", document.getElementById("settingShowTrack").checked); if (typeof DeviceProfile !== "undefined") await DeviceProfile.saveVesselName(); alert("✅ Pengaturan kapal tersimpan."); });
+    const cloud = document.getElementById("settingCloudSync");
+    const cloudStatus = document.getElementById("cloudSyncStatus");
+    if (cloud) {
+      cloud.checked = localStorage.getItem("bs10_cloud_sync_enabled") === "true";
+      const syncStatus = () => {
+        if (cloudStatus) cloudStatus.textContent = cloud.checked ? "☁️ Sinkronisasi catatan operasi aktif. Posisi GPS tetap dikontrol oleh sakelar berbagi lokasi tersendiri." : "Catatan operasi tetap lokal • kapal berbagi GPS hanya melalui izin terpisah.";
+      };
+      cloud.addEventListener("change", () => {
+        if (cloud.checked && !confirm("Izinkan sinkronisasi catatan operasi kapal (misalnya tangkapan dan perbekalan) ke cloud Supabase? Pengaturan ini tidak mengaktifkan berbagi koordinat GPS; lokasi memiliki sakelar izin tersendiri.")) {
+          cloud.checked = false;
+          syncStatus();
+          return;
+        }
+        localStorage.setItem("bs10_cloud_sync_enabled", String(cloud.checked));
+        if (typeof SupabaseSync !== "undefined") SupabaseSync.init();
+        syncStatus();
+      });
+      syncStatus();
+    }
     document.getElementById("btnClearTrack").addEventListener("click", () => { if (confirm("Bersihkan jalur perjalanan di peta?")) MapApp.clearTrack(); });
     document.getElementById("btnRefreshData").addEventListener("click", () => { const pos = MapApp.lat !== null ? { lat: MapApp.lat, lon: MapApp.lon } : Weather.pos(); Weather.refreshPosition(pos.lat, pos.lon); alert("🔄 Data cuaca sedang disegarkan."); });
     document.getElementById("btnRequestGps").addEventListener("click", () => { if (navigator.geolocation) navigator.geolocation.getCurrentPosition(() => alert("✅ Akses lokasi aktif."), () => alert("❌ Akses lokasi ditolak atau belum tersedia."), { enableHighAccuracy: true }); });
@@ -122,8 +142,8 @@ const App = {
     const sub = document.getElementById("kpiGpsSub");
     if (gps && typeof MapApp !== "undefined" ) { const active = MapApp.lat !== null; gps.textContent = active ? "AKTIF" : "MENUNGGU"; sub.textContent = active ? (document.getElementById("dashAcc").textContent.replace("Akurasi GNSS: ", "")) : "Nyalakan lokasi"; }
     const track = document.getElementById("kpiTrack"); if (track && typeof MapApp !== "undefined" && MapApp.track) track.textContent = MapApp.track.getLatLngs().length + " titik";
-    const records = document.getElementById("kpiRecords"); if (records) records.textContent = ["tangkapan", "kolekting", "bbm", "logistik", "kru"].reduce((n, k) => n + Store.load(k).length, 0);
-    const sync = document.getElementById("kpiSync"); const syncSub = document.getElementById("kpiSyncSub"); if (sync) { sync.textContent = navigator.onLine ? "ONLINE" : "OFFLINE"; syncSub.textContent = navigator.onLine ? "data siap sinkron" : "mode aman lokal"; }
+    const records = document.getElementById("kpiRecords"); if (records) records.textContent = ["tangkapan", "kolekting", "bbm", "logistik"].reduce((n, k) => n + Store.load(k).length, 0);
+    const sync = document.getElementById("kpiSync"); const syncSub = document.getElementById("kpiSyncSub"); if (sync) { const enabled = localStorage.getItem("bs10_cloud_sync_enabled") === "true"; sync.textContent = !navigator.onLine ? "OFFLINE" : (enabled ? "CLOUD ON" : "LOKAL"); syncSub.textContent = !navigator.onLine ? "mode aman lokal" : (enabled ? "sinkronisasi diizinkan" : "cloud nonaktif"); }
   },
   quoteDashboard() {
     const el = document.getElementById("dashQuote");
@@ -142,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
   Tangkapan.init();
   Kolekting.init();
   Perbekalan.init();
-  Kru.init();
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js");
   }

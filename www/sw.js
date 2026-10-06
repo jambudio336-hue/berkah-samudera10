@@ -1,10 +1,17 @@
-const CACHE = "berkah-samudera-v9";
-const SHELL = ["./", "./index.html", "./css/style.css", "./manifest.json",
-  "./js/storage.js", "./js/map.js", "./js/live-sync.js", "./icon.svg", "./logo-berkahsamudera.svg", "./js/weather.js", "./js/tangkapan.js",
-  "./js/kolekting.js", "./js/perbekalan.js", "./js/kru.js", "./js/auth.js", "./js/story.js", "./js/supabase-sync.js", "./js/notifications.js", "./js/prayer.js", "./js/quran.js", "./js/app.js", "./js/marine-os.js", "./js/marine-command.js", "./js/marine-free.js", "./js/marine-external.js", "./js/marine-runtime.js", "./js/marine-welcome.js", "./js/garmin-activecaptain.js", "./js/marine-capabilities.js", "./js/marine-native-tracking.js", "./js/marine-updater.js", "./js/marine-tools.js", "./js/jarvis-openrouter.js", "./css/marine-os.css", "./css/marine-runtime.css", "./css/marine-welcome.css", "./css/jarvis.css", "./assets/marine-splash.jpg",
-  "./file_000000000fa48211b2c09fa64b21f357.png",
-  "./background-m4zk1pl4y.png",
-  "./490719828_1789293110615125.jpg"];
+const CACHE = "berkah-samudera-v11";
+const SHELL = [
+  "./", "./index.html", "./css/style.css", "./manifest.json",
+  "./icon.svg", "./icon-192.png", "./icon-512.png", "./icon-foreground.svg",
+  "./js/storage.js", "./js/map.js", "./js/map-provider-catalog.js", "./js/weather.js", "./js/tangkapan.js",
+  "./js/kolekting.js", "./js/perbekalan.js", "./js/supabase-sync.js", "./js/device-profile.js",
+  "./js/notifications.js", "./js/prayer.js", "./js/quran.js", "./js/app.js",
+  "./js/marine-os.js", "./js/marine-command.js", "./js/marine-free.js", "./js/marine-external.js",
+  "./js/marine-runtime.js", "./js/marine-welcome.js", "./js/safety-checklist.js",
+  "./js/garmin-activecaptain.js", "./js/marine-capabilities.js", "./js/marine-native-tracking.js",
+  "./js/marine-updater.js", "./js/marine-tools.js", "./js/jarvis-openrouter.js",
+  "./css/marine-os.css", "./css/marine-runtime.css", "./css/marine-welcome.css", "./css/jarvis.css",
+  "./assets/marine-splash.jpg"
+];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)));
@@ -34,19 +41,6 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // Cache peta (tile OSM) strategi cache-first
-  if (url.includes("tile.openstreetmap.org")) {
-    e.respondWith(
-      caches.match(e.request).then((hit) => hit ||
-        fetch(e.request).then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(e.request, copy));
-          return res;
-        }).catch(() => hit))
-    );
-    return;
-  }
-
   // API cuaca: network-first, fallback cache
   if (url.includes("open-meteo.com") || url.includes("bmkg")) {
     e.respondWith(
@@ -56,6 +50,13 @@ self.addEventListener("fetch", (e) => {
         return res;
       }).catch(() => caches.match(e.request))
     );
+    return;
+  }
+
+  // Tile/provider eksternal mengikuti kebijakan cache masing-masing; jangan
+  // menyimpan tile peta publik secara permanen atau menyiapkan offline tiles.
+  if (new URL(url).origin !== self.location.origin) {
+    e.respondWith(fetch(e.request));
     return;
   }
 

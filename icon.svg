@@ -1,23 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-<defs>
- <linearGradient id="ocean" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#06172f"/><stop offset=".6" stop-color="#0d4070"/><stop offset="1" stop-color="#061d3e"/></linearGradient>
- <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff3a4"/><stop offset=".35" stop-color="#ffc42e"/><stop offset="1" stop-color="#b76a00"/></linearGradient>
- <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="8" flood-color="#000" flood-opacity=".6"/></filter>
-</defs>
-<rect width="1024" height="1024" rx="210" fill="url(#ocean)"/>
-<path d="M98 800c130-76 234 50 360-2s227-67 350 0 168 45 218 9" fill="none" stroke="#4fd4ff" stroke-width="24" opacity=".8"/>
-<path d="M86 867c145-79 240 44 365-4s232-62 350 1 169 47 227 3" fill="none" stroke="#05d6a0" stroke-width="13" opacity=".85"/>
-<g filter="url(#shadow)">
- <path d="M196 604h616l-74 130H286z" fill="url(#gold)" stroke="#fff0a0" stroke-width="9"/>
- <path d="M248 604l24-118h420l32 118" fill="#f8f4df" stroke="#ffcf48" stroke-width="10"/>
- <path d="M300 486h310v-74H300z" fill="#eaf3ff" stroke="#ffc42e" stroke-width="9"/>
- <path d="M454 412V188" stroke="#ffc42e" stroke-width="13"/>
- <path d="M468 210l174 104H468z" fill="#ef476f" stroke="#fff0a0" stroke-width="8"/>
- <path d="M442 252L306 340h136z" fill="#06d6a0" stroke="#fff0a0" stroke-width="8"/>
- <circle cx="366" cy="530" r="22" fill="#0b2547" stroke="#ffc42e" stroke-width="8"/><circle cx="486" cy="530" r="22" fill="#0b2547" stroke="#ffc42e" stroke-width="8"/><circle cx="606" cy="530" r="22" fill="#0b2547" stroke="#ffc42e" stroke-width="8"/>
-</g>
-<g transform="rotate(-5 512 900)">
- <text x="512" y="912" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="900" font-style="italic" font-size="82" letter-spacing="-4" fill="#fff3a4" stroke="#08192f" stroke-width="18" paint-order="stroke">BERKAH</text>
- <text x="512" y="980" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="900" font-style="italic" font-size="58" letter-spacing="2" fill="#4fd4ff" stroke="#08192f" stroke-width="14" paint-order="stroke">SAMUDERA</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Berkah Samudera — kapal di atas ombak biru">
+  <defs>
+    <linearGradient id="ocean" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0C93B8"/><stop offset=".48" stop-color="#075985"/><stop offset="1" stop-color="#06284F"/>
+    </linearGradient>
+    <linearGradient id="hull" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F5FEFF"/><stop offset="1" stop-color="#B9F2FF"/>
+    </linearGradient>
+    <linearGradient id="sail" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C5F5FF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".35" r=".6">
+      <stop offset="0" stop-color="#54E7F2" stop-opacity=".5"/><stop offset="1" stop-color="#54E7F2" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#ocean)"/>
+  <circle cx="256" cy="233" r="196" fill="url(#glow)"/>
+  <circle cx="256" cy="241" r="158" fill="none" stroke="#88F1FF" stroke-opacity=".2" stroke-width="4"/>
+  <circle cx="256" cy="241" r="130" fill="none" stroke="#FFFFFF" stroke-opacity=".1" stroke-width="3"/>
+  <path d="M256 109l13 36-13 19-13-19z" fill="#BFFBFF" opacity=".92"/>
+  <path d="M256 156v163" stroke="#E8FCFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M247 171L151 301q48 11 96 2z" fill="url(#sail)" stroke="#D9FBFF" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M265 185l101 115q-50 8-101 3z" fill="#42D9F2" stroke="#B8F8FF" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M164 315h185l37 0-31 48q-98 40-197 0z" fill="url(#hull)" stroke="#E1FBFF" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M204 312l15-38h79l30 38z" fill="#F5FEFF" stroke="#B8F8FF" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M229 286h16v13h-16zm35 0h16v13h-16z" fill="#0D6590"/>
+  <path d="M95 388c47-25 81 21 127 0s78-22 123 0 62 18 77 5" fill="none" stroke="#72EEFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M107 423c43-23 78 20 119 0s81-21 119 0 59 18 77 4" fill="none" stroke="#FFFFFF" stroke-opacity=".78" stroke-width="8" stroke-linecap="round"/>
+  <path d="M144 455c34-18 60 15 92 0s64-16 94 0 47 14 61 3" fill="none" stroke="#12C9E3" stroke-width="7" stroke-linecap="round"/>
 </svg>

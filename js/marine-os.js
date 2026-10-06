@@ -1,41 +1,40 @@
 const MarineOS = {
-  version: "0.3.0",
+  version: "1.1.0",
   modules: [
-    ["sea-map","🗺️","Sea Map / Nautical Chart","Peta laut, nautical layers, seamarks, depth contours, satellite & night mode.","peta"],
-    ["navigation","🧭","Navigation & Voyage","Route, waypoint, bearing, NM/km, ETA, track replay, voyage log & anchor watch.","peta"],
-    ["ais","🚢","AIS / Marine Traffic","Traffic kapal, vessel search, MMSI/IMO, SOG/COG, CPA/TCPA bila provider tersedia.","peta"],
-    ["radar","📡","Marine Radar","Radar PPI dan target overlay dari perangkat/gateway radar yang kompatibel.","peta"],
-    ["bathymetry","🌊","BATNAS + GEBCO","Kedalaman, contour, sounding, sumber, resolusi dan confidence.","peta"],
-    ["weather","🌦️","Weather & Ocean","Angin, gelombang, arus, SST, prakiraan dan BMKG maritime warnings.","cuaca"],
-    ["fishing","🐟","Fishing Intelligence","Indikasi area potensial berdasarkan SST, depth, currents, weather & observations.","tangkapan"],
-    ["hazards","⚠️","Hazards & Wrecks","Reef, rock, shoal, wreck, restricted areas dan navigational aids.","peta"],
-    ["safety","🛟","Safety Guardian","SOS, MAYDAY/PAN-PAN assistant, hazard alert, connectivity & anchor watch.","pengaturan"],
-    ["vessel","⚓","Vessel & Fleet","Profil kapal, crew, fleet, cargo, manifest, vessel status dan permissions.","akun"],
-    ["maintenance","🔧","Maintenance","Engine hours, maintenance schedule, service history dan reminders.","pengaturan"],
-    ["documents","📄","Document Vault","Dokumen kapal/kru, expiry tracking dan reminder.","pengaturan"],
-    ["economy","💰","Marine Economy","Fuel, logistics, fish prices, trip cost, revenue dan profit/loss.","riwayat"],
-    ["social","👥","Marine Social","Follow, vessel search, posts, Story, activity, location sharing & notifications.","akun"],
-    ["messenger","💬","Messenger & Calls","Private/group chat, files, voice messages, voice/video calls.","akun"],
-    ["offline","📥","Offline Marine Maps","GeoPDF, GeoTIFF, MBTiles, GPX, KML/KMZ dan cached marine data.","peta"],
-    ["data","📡","Marine Data Contribution","User observations, hazards, photos, timestamp, source & confidence.","peta"],
-    ["opportunity","🎯","Opportunity Radar","Fishing, port, logistics, market and trip opportunities.","riwayat"],
-    ["academy","🎓","Marine Academy","Materi navigasi, safety, weather, fishing and operational learning.","pengaturan"],
-    ["ai","🤖","Mazkiplay.ai","Marine Copilot multimodal: text, image, file, voice and authorized app tools.","pengaturan"],
-    ["registry","🧠","AI Feature Registry","Capability registry + versioned manifest agar AI memahami fitur baru.","pengaturan"],
-    ["camera","📷","Marine Camera","Foto dengan koordinat, waktu dan metadata perjalanan.","peta"],
-    ["checklist","✅","Smart Checklist","Pre-departure, underway, arrival, post-trip and emergency checklist.","pengaturan"],
-    ["digital-twin","🧩","Digital Twin","Status digital kapal, equipment, trips, maintenance and operational context.","akun"]
+    ["sea-map","🗺️","Sea Map / Basemap","Peta layar penuh, pilihan basemap, overlay dan gaya vektor 3D.","peta",true],
+    ["navigation","🧭","Navigasi & Perjalanan","GPS, track lokal, bearing dan estimasi rute garis lurus.","peta",true],
+    ["ais","🚢","AIS / Marine Traffic","Belum terhubung: memerlukan feed AIS dan izin/API provider resmi.","peta",false],
+    ["radar","📡","Marine Radar","Belum terhubung: target radar memerlukan perangkat dan gateway kapal.","peta",false],
+    ["bathymetry","🌊","GEBCO Bathymetry","Model kedalaman global indikatif; bukan sounding atau chart navigasi.","peta",true],
+    ["weather","🌦️","Weather & Ocean","Prakiraan model angin, gelombang, arus dan cuaca; bukan sensor kapal.","cuaca",true],
+    ["fishing","🐟","Catatan Tangkapan","Catat hasil tangkapan lokal; tidak memprediksi hotspot ikan.","tangkapan",true],
+    ["hazards","⚠️","Karang & Bahaya Terpetakan","Kueri objek OSM hingga 1 NM; data komunitas, bukan sonar.","peta",true],
+    ["safety","🛟","Safety Guardian","Checklist lokal, MOB dan persiapan SOS manual; tidak menghubungi darurat otomatis.","safety",true],
+    ["vessel","⚓","Profil Kapal Anonim","ID otomatis tanpa form login; publikasi GPS opsional dan memerlukan persetujuan.","pengaturan",true],
+    ["maintenance","🔧","Maintenance Kapal","Belum tersedia pada rilis ini.","pengaturan",false],
+    ["documents","📄","Document Vault","Belum tersedia pada rilis ini; jangan mengunggah dokumen pribadi.","pengaturan",false],
+    ["economy","💰","BBM & Logistik","Catatan BBM/perbekalan lokal dan kalkulator perjalanan.","perbekalan",true],
+    ["social","🛰️","Peta Kapal yang Berbagi","Nama dan ID kapal lain tampil jika pemiliknya opt-in berbagi lokasi.","peta",true],
+    ["messenger","💬","Messenger & Calls","Tidak tersedia; aplikasi ini tidak menyediakan chat atau panggilan.","pengaturan",false],
+    ["offline","📥","Offline Marine Maps","Belum tersedia; tile provider tidak diunduh/cache untuk offline.","pengaturan",false],
+    ["data","📡","Marine Data Contribution","Belum tersedia; belum ada unggahan observasi publik pengguna.","pengaturan",false],
+    ["opportunity","🎯","Opportunity Radar","Belum tersedia; aplikasi tidak menyajikan data pasar/peluang prediktif.","riwayat",false],
+    ["academy","🎓","Marine Academy","Belum tersedia pada rilis ini.","pengaturan",false],
+    ["ai","🤖","Kiplay Voice Assistant","Jawaban AI dapat dibacakan TTS perangkat; model online memerlukan API key pengguna.","kiplay",true],
+    ["registry","🧠","AI Feature Registry","Internal/roadmap; belum menjadi fitur pengguna.","pengaturan",false],
+    ["camera","📷","Marine Camera","Belum tersedia; kamera berkoordinat belum diimplementasikan.","peta",false],
+    ["checklist","✅","Safety Checklist","Checklist keberangkatan tersimpan lokal tanpa akun.","safety",true],
+    ["digital-twin","🧩","Digital Twin","Belum tersedia; belum ada telemetri alat/mesin kapal.","pengaturan",false]
   ],
   providers: {
-    osm: {name:"OpenStreetMap", enabled:true, mode:"open data / ODbL; tile service terms apply", env:""},
-    openseamap: {name:"OpenSeaMap", enabled:true, mode:"open marine data / ODbL + chart tile license", env:""},
-    gebco: {name:"GEBCO 2026", enabled:true, mode:"official public WMS / open bathymetry", env:""},
+    osm: {name:"OpenStreetMap", enabled:true, mode:"on-demand tiles / ODbL; attribution required; no offline tile cache", env:""},
+    openseamap: {name:"OpenSeaMap", enabled:true, mode:"community seamarks overlay; incomplete and not an official chart", env:""},
+    gebco: {name:"GEBCO 2026", enabled:true, mode:"public bathymetry model for visualization only; not navigation", env:""},
     bmkg: {name:"BMKG Maritim", enabled:true, mode:"official public API; commercial integration requires permission", env:""},
-    carto: {name:"CARTO", enabled:true, mode:"public map tiles subject to provider terms", env:""},
     overpass: {name:"OpenStreetMap Overpass", enabled:true, mode:"community OSM query service; fair-use/availability applies", env:""},
-    rainviewer: {name:"RainViewer", enabled:true, mode:"public weather radar tiles subject to provider terms", env:""},
+    rainviewer: {name:"RainViewer", enabled:true, mode:"personal/educational overlay; archive only; rate and zoom limits apply", env:""},
     openMeteoMarine: {name:"Open-Meteo Marine", enabled:true, mode:"free non-commercial marine forecast; CC BY 4.0", env:""},
-    noaaNowCoast: {name:"NOAA nowCOAST", enabled:true, mode:"public NOAA marine map/services; coverage primarily U.S. waters", env:""},
+    noaaNowCoast: {name:"NOAA nowCOAST", enabled:false, mode:"not installed; endpoint/terms unverified and coverage primarily U.S. waters", env:""},
     navionics: {name:"Navionics / Garmin", enabled:false, mode:"official SDK + license", env:"NAVIONICS_DEVELOPER_TOKEN"},
     marineTraffic: {name:"MarineTraffic / Kpler", enabled:false, mode:"official API + license", env:"MARINETRAFFIC_API_KEY"},
     radar: {name:"Onboard Marine Radar", enabled:false, mode:"hardware gateway", env:"RADAR_GATEWAY_URL"},
@@ -62,13 +61,15 @@ const MarineOS = {
   },
   renderDashboard() {
     const grid=document.getElementById("marineModuleGrid"); if(!grid)return;
-    grid.innerHTML=this.modules.map(([id,icon,title,desc,target])=>'<button class="marine-module" data-marine-target="'+this.esc(target)+'"><span>'+icon+'</span><div><b>'+this.esc(title)+'</b><small>'+this.esc(desc)+'</small></div></button>').join("");
+    const available=this.modules.filter((item)=>item[5]).length;
+    const count=document.getElementById("marineModuleCount"); if(count)count.textContent=available+" aktif • "+(this.modules.length-available)+" belum tersedia";
+    grid.innerHTML=this.modules.map(([id,icon,title,desc,target,active])=>'<button class="marine-module" '+(active?'data-marine-target="'+this.esc(target)+'"':'disabled aria-disabled="true"')+'><span>'+icon+'</span><div><b>'+this.esc(title)+'</b><small>'+this.esc(desc)+'</small><em class="marine-module-status '+(active?'is-active':'')+'">'+(active?'TERSEDIA':'BELUM TERSEDIA')+'</em></div></button>').join("");
   },
   bind() {
     document.getElementById("marineModuleGrid")?.addEventListener("click",e=>{const b=e.target.closest("[data-marine-target]"); if(b)this.go(b.dataset.marineTarget);});
     document.getElementById("marineCenterMap")?.addEventListener("click",()=>this.go("peta"));
     document.getElementById("marineOpenWeather")?.addEventListener("click",()=>this.go("cuaca"));
-    document.getElementById("marineOpenAccount")?.addEventListener("click",()=>this.go("akun"));
+    document.getElementById("marineOpenAccount")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineOpenSettings")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineOpenSafety")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineOpenAI")?.addEventListener("click",()=>this.go("pengaturan"));
@@ -131,7 +132,7 @@ const MarineOS = {
   showProviders(){
     const box=document.getElementById("marineProviderStatus");if(!box)return;
     box.innerHTML=Object.values(this.providers).map(p=>'<div class="marine-provider-row"><b>'+this.esc(p.name)+'</b><span>'+(p.enabled?"🟢 Aktif":"🟡 Belum terhubung")+" • "+this.esc(p.mode)+(p.env?" • "+this.esc(p.env):"")+"</span></div>").join("");
-    if(window.MarineExternal?.health){MarineExternal.health().then(h=>{const labels={bmkg:"BMKG",gebco:"GEBCO",osm:"OSM tiles",openseamap:"OpenSeaMap",carto:"CARTO"};Object.keys(labels).forEach(k=>{const row=[...box.querySelectorAll(".marine-provider-row")].find(x=>x.textContent.includes(labels[k]));if(row){const span=row.querySelector("span");if(span)span.textContent=(h[k]?"🟢 Reachable":"🔴 Unreachable")+" • "+span.textContent.replace(/^.*? • /,"")}})}).catch(()=>{});}
+    if(window.MarineExternal?.health){MarineExternal.health().then(h=>{const labels={bmkg:"BMKG",gebco:"GEBCO",openMeteoMarine:"Open-Meteo"};Object.keys(labels).forEach(k=>{const row=[...box.querySelectorAll(".marine-provider-row")].find(x=>x.textContent.includes(labels[k]));if(row){const span=row.querySelector("span");if(span){const reach=h[k]===true?"🟢 Reachable":h[k]===false?"🔴 Unreachable":"ℹ️ On-demand • belum diuji";span.textContent=reach+" • "+span.textContent.replace(/^.*? • /,"")}}})}).catch(()=>{});}
   },
   esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 };

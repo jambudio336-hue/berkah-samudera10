@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Siluet kapal dan ombak">
+  <defs>
+    <linearGradient id="hull" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#B9F2FF"/></linearGradient>
+    <linearGradient id="sail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C5F5FF"/></linearGradient>
+  </defs>
+  <circle cx="256" cy="240" r="156" fill="none" stroke="#8CF5FF" stroke-opacity=".24" stroke-width="8"/>
+  <path d="M256 102l18 48-18 22-18-22z" fill="#FFF1A8"/>
+  <path d="M256 153v165" stroke="#F1FDFF" stroke-width="15" stroke-linecap="round"/>
+  <path d="M245 172L143 306q51 12 102 2z" fill="url(#sail)" stroke="#D9FBFF" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M267 183l108 120q-54 9-108 3z" fill="#45DDF2" stroke="#C7FAFF" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M151 319h194l39 0-33 52q-101 41-203 0z" fill="url(#hull)" stroke="#E1FBFF" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M193 315l17-42h84l32 42z" fill="#F5FEFF" stroke="#B8F8FF" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M220 285h20v16h-20zm39 0h20v16h-20z" fill="#075985"/>
+  <path d="M100 399c48-25 82 22 128 0s78-22 123 0 62 18 77 5" fill="none" stroke="#72EEFF" stroke-width="15" stroke-linecap="round"/>
+  <path d="M116 438c42-22 77 20 118 0s81-20 119 0 59 17 76 4" fill="none" stroke="#FFFFFF" stroke-opacity=".86" stroke-width="10" stroke-linecap="round"/>
+</svg>

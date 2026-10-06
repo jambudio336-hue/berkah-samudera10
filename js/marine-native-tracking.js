@@ -1,64 +1,85 @@
-/* Native 24/7 Marine Tracking bridge.
- * Uses Android foreground location service when available.
- * Web/PWA safely falls back to normal GNSS watchPosition.
- */
-(function(){
+/* Native foreground tracking bridge. The Android service stores GPS locally only; cloud sharing is handled by SupabaseSync in the active WebView and requires separate consent. */
+(function () {
   "use strict";
-  const Native=()=>window.Capacitor?.Plugins?.MarineTracking||null;
-  const key="bs10_native_tracking_v1";
-  const read=()=>{try{return JSON.parse(localStorage.getItem(key)||"{}")}catch(_){return {}}};
-  const save=v=>localStorage.setItem(key,JSON.stringify(v));
-  async function status(){
-    const n=Native();
-    if(!n)return {supported:false,running:false,message:"Native tracking hanya tersedia pada APK Android."};
-    try{return {supported:true,...await n.status()}}catch(e){return {supported:true,running:false,message:e?.message||"Status native gagal"}}
+
+  const Native = () => window.Capacitor?.Plugins?.MarineTracking || null;
+  const key = "bs10_native_tracking_v1";
+  const read = () => { try { return JSON.parse(localStorage.getItem(key) || "{}"); } catch (_) { return {}; } };
+  const save = (value) => localStorage.setItem(key, JSON.stringify(value));
+
+  async function status() {
+    const native = Native();
+    if (!native) return { supported: false, running: false, message: "Tracking latar belakang hanya tersedia pada APK Android." };
+    try { return { supported: true, ...await native.status() }; }
+    catch (error) { return { supported: true, running: false, message: error?.message || "Status native gagal" }; }
   }
-  async function start(){
-    const n=Native();
-    if(!n){
-      save({...read(),requested:true});
-      return {ok:false,supported:false,message:"Jalankan APK Android untuk tracking latar belakang."};
+
+  async function start() {
+    const native = Native();
+    if (!native) {
+      save({ ...read(), requested: true });
+      return { ok: false, supported: false, message: "Jalankan APK Android untuk tracking latar belakang." };
     }
-    const deviceId=localStorage.getItem("bs10_device_id")||("dev-"+Date.now());
-    const vesselId=localStorage.getItem("bs10_vessel_id")||"kapal-utama";
-    try{
-      const r=await n.start({deviceId,vesselId});
-      save({running:true,startedAt:Date.now()});
-      return r;
-    }catch(e){
-      save({...read(),running:false,lastError:e?.message||String(e)});
-      throw e;
+    const result = await native.start({ mode: "local-only" });
+    if (result?.ok === false) throw new Error(result.message || "Tracking native gagal dimulai");
+    save({ ...read(), running: true, startedAt: Date.now() });
+    return result;
+  }
+
+  async function stop() {
+    const native = Native();
+    if (!native) return { ok: false, supported: false };
+    const result = await native.stop();
+    save({ ...read(), running: false, stoppedAt: Date.now() });
+    return result;
+  }
+
+  function render(state) {
+    const element = document.getElementById("nativeTrackingStatus");
+    if (!element) return;
+    if (!state.supported) {
+      element.textContent = "📱 Tracking latar belakang hanya tersedia di APK Android. GPS cloud memerlukan izin berbagi terpisah.";
+      return;
+    }
+    if (!state.running) {
+      element.textContent = "⚪ Tracking latar belakang berhenti. GPS cloud dikendalikan oleh izin berbagi terpisah.";
+      return;
+    }
+    const shareNote = localStorage.getItem("bs10_share_live_location") === "true"
+      ? "🔐 Posisi cloud hanya saat aplikasi aktif dan izin berbagi menyala"
+      : "🔒 Lokal saja • posisi tidak dibagikan";
+    if (!state.updatedAt) {
+      element.textContent = "🟠 Service lokal aktif, menunggu fix GNSS • " + shareNote;
+      return;
+    }
+    const age = Math.max(0, Date.now() - state.updatedAt);
+    const freshness = age < 15000 ? "🟢 GPS baru" : "🟠 GPS terakhir " + Math.round(age / 1000) + " dtk lalu";
+    element.textContent = freshness + " • " + Number(state.lat).toFixed(5) + ", " + Number(state.lon).toFixed(5) + " • " + new Date(state.updatedAt).toLocaleTimeString("id-ID") + " • tersimpan lokal • " + shareNote;
+  }
+
+  async function poll() {
+    const state = await status();
+    render(state);
+    if (state.updatedAt && typeof MapApp !== "undefined" && MapApp.lat === null) {
+      MapApp.lat = state.lat;
+      MapApp.lon = state.lon;
     }
   }
-  async function stop(){
-    const n=Native();
-    if(!n)return {ok:false,supported:false};
-    const r=await n.stop(); save({...read(),running:false,stoppedAt:Date.now()}); return r;
-  }
-  function render(s){
-    const el=document.getElementById("nativeTrackingStatus"); if(!el)return;
-    if(!s.supported){el.textContent="📱 APK Android: tracking latar belakang tersedia setelah build native terbaru.";return}
-    if(s.updatedAt){
-      const age=Math.max(0,Date.now()-s.updatedAt);
-      el.textContent=(age<15000?"🟢 TRACKING AKTIF":"🟠 Tracking aktif, posisi terakhir "+Math.round(age/1000)+" dtk lalu")+
-        " • "+Number(s.lat).toFixed(5)+", "+Number(s.lon).toFixed(5)+" • "+new Date(s.updatedAt).toLocaleTimeString("id-ID");
-    }else el.textContent="⚪ Tracking belum menerima fix GNSS.";
-  }
-  async function poll(){
-    const s=await status(); render(s);
-    if(s.updatedAt && typeof MapApp!=="undefined" && MapApp.lat===null){
-      MapApp.lat=s.lat; MapApp.lon=s.lon;
-    }
-  }
-  window.MarineNativeTracking={start,stop,status,poll};
-  document.addEventListener("DOMContentLoaded",()=>{
-    const startBtn=document.getElementById("btnStartNativeTracking"),stopBtn=document.getElementById("btnStopNativeTracking");
-    startBtn?.addEventListener("click",async()=>{
-      try{await start();alert("Tracking kapal diaktifkan. Android akan menampilkan notifikasi tracking.");}
-      catch(e){alert(e?.message||"Tracking belum dapat diaktifkan. Periksa izin lokasi.");}
+
+  window.MarineNativeTracking = { start, stop, status, poll };
+  document.addEventListener("DOMContentLoaded", () => {
+    const startButton = document.getElementById("btnStartNativeTracking");
+    const stopButton = document.getElementById("btnStopNativeTracking");
+    startButton?.addEventListener("click", async () => {
+      try {
+        const result = await start();
+        if (result?.ok === false) throw new Error(result.message || "Tracking tidak aktif");
+        alert("Tracking latar belakang diaktifkan untuk penyimpanan lokal. Berbagi ke kapal lain hanya berjalan saat aplikasi aktif dan izin GPS berbagi dinyalakan.");
+      } catch (error) { alert(error?.message || "Tracking belum dapat diaktifkan. Periksa izin lokasi."); }
       poll();
     });
-    stopBtn?.addEventListener("click",async()=>{await stop();poll();});
-    poll(); setInterval(poll,5000);
+    stopButton?.addEventListener("click", async () => { await stop(); poll(); });
+    poll();
+    setInterval(poll, 5000);
   });
 })();
