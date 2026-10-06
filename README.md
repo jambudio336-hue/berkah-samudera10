@@ -21,6 +21,15 @@ Saat pertama kali aplikasi dibuka, pengguna dapat memilih **Daftar/Masuk Akun** 
 
 Atau buka halaman [Releases](https://github.com/jambudio336-hue/berkah-samudera10/releases) dan pilih asset `Berkah-Samudera10-release.apk`.
 
+## Marine Toolkit, Windy, background tracking, dan update
+
+- Windy global dengan pilihan layer laut/cuaca yang diperluas: angin, gust, hujan, akumulasi hujan, gelombang, swell, wind waves, arus, arus pasang, suhu laut, suhu udara, titik embun, kelembapan, awan, kabut, CAPE, tekanan, visibilitas, dan satelit. Windy menyediakan 40+ layer pada Map Forecast API; sebagian layer/model bergantung pada produk dan ketentuan Windy.
+- Marine Toolkit offline untuk konversi satuan, perhitungan BBM + cadangan, jarak/bearing, dan penyalinan koordinat GPS.
+- Android foreground tracking untuk pemantauan kapal saat aplikasi tidak sedang dibuka, dengan persistent state dan restart setelah reboot/app replacement jika diizinkan Android.
+- Google Play In-App Updates untuk distribusi Play.
+- GitHub Release updater untuk APK sideload; Android tetap mengontrol izin dan konfirmasi instalasi.
+- Release production wajib memakai signing certificate yang sama; private keystore tidak disimpan di repository.
+
 ## Fitur utama
 
 ### Navigasi dan data laut
