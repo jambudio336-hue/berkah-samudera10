@@ -1,6 +1,7 @@
 name: Marine OS CI
 
 on:
+  workflow_dispatch:
   push:
     branches: ["feature/marine-os-expansion", "main"]
   pull_request:
@@ -34,3 +35,12 @@ jobs:
       - name: Android debug build
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
+
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: berkah-samudera10-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
