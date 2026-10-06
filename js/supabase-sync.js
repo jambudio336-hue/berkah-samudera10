@@ -8,6 +8,7 @@ const SupabaseSync = {
   suppress: false,
   lastPositionAt: 0,
   lastRealtimeAt: 0,
+  lastPositionPayload: null,
   friendIds: [],
   channels: [],
   reconnectTimer: null,
@@ -25,7 +26,7 @@ const SupabaseSync = {
       this.connect();
       this.pullRecords();
       this.setStatus("🟡 Menghubungkan Realtime…");
-      window.addEventListener("online", () => this.scheduleReconnect(250));
+      window.addEventListener("online", () => { this.scheduleReconnect(250); setTimeout(() => { if (this.lastPositionPayload) this.publishPosition(this.lastPositionPayload, true); this.pullRecords(); }, 700); });
       window.addEventListener("offline", () => this.setStatus("🔴 Internet terputus • cache lokal aktif"));
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden) this.scheduleReconnect(250);
@@ -147,10 +148,11 @@ const SupabaseSync = {
     }, 10000);
   },
 
-  async publishPosition(payload) {
+  async publishPosition(payload, force) {
+    this.lastPositionPayload = { ...payload };
     if (!this.ready || !this.client || !navigator.onLine) return;
     const now = Date.now();
-    if (now - this.lastPositionAt < 3000) return;
+    if (!force && now - this.lastPositionAt < 3000) return;
     this.lastPositionAt = now;
 
     const row = {
