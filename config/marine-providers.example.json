@@ -128,6 +128,15 @@
       "mode": "official-web-map/embed",
       "url": "https://www.windy.com/",
       "note": "Full API parity requires the applicable Windy API access/terms."
+    },
+    "garminActiveCaptain": {
+      "enabled": true,
+      "mode": "official-open-source-sdk",
+      "github": "https://github.com/garmin/ActiveCaptainCommunitySDK-android",
+      "license": "Apache-2.0",
+      "credentialEnv": "GARMIN_ACTIVECAPTAIN_STAGE_API_KEY",
+      "nativeBridge": "GarminActiveCaptain",
+      "note": "SDK gratis/open-source, tetapi Garmin Developer Portal access + Stage API key diperlukan untuk Community data. Do not ship secret in web assets."
     }
   },
   "publicSources": {
