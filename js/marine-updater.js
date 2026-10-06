@@ -18,7 +18,7 @@
       state.latest = r;
       const b = document.getElementById('btnMarineUpdate');
       if (r.available) {
-        status(\`Update tersedia: v\${r.versionName}. Siap diunduh.\`);
+        status(`Update tersedia: v${r.versionName}. Siap diunduh.`);
         if (b) b.hidden = false;
       } else if (!silent) {
         status('Sudah versi terbaru.');
