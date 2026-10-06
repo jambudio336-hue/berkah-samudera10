@@ -5,8 +5,8 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 export ANDROID_HOME
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
 export JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk-amd64}"
-: "${VERSION_NAME:=1.0.31}"
-: "${VERSION_CODE:=10031}"
+: "${VERSION_NAME:=1.0.32}"
+: "${VERSION_CODE:=10032}"
 
 # Build www from the canonical source tree; never ship a stale partial copy.
 rm -rf "$ROOT/www"

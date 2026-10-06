@@ -106,12 +106,23 @@
   <div class="marine-command-actions">
     <button class="btn primary-inline" id="marineOpenWeather">🌦️ Cuaca & Ocean</button>
     <button class="btn" id="marineProviderInfo">🔌 Provider</button>
-    <button class="btn" id="marineRefresh">🔄 Refresh</button>
+    <button class="btn" id="marineRefresh">🔄 Refresh</button><button class="btn primary-inline" id="marineOpenJarvis">🤖 Tanya Jarvis</button>
     <button class="btn" id="marineOpenAccount">👤 Kapal & Social</button>
     <button class="btn" id="marineOpenSettings">⚙️ Safety & Settings</button>
   </div>
+  <div class="card marine-command-center-card">
+    <div class="section-head"><div><span class="eyebrow">OCEAN COMMAND</span><h3>🧭 Quick Modes & Safety</h3></div><span class="chip" id="marineModeStatus">MODE: NAVIGATION</span></div>
+    <div class="marine-command-grid compact-command">
+      <div class="marine-kpi"><span>MARINE RISK</span><b id="marineRiskScore">—</b><small id="marineRiskDetail">Menghitung telemetry...</small></div>
+      <div class="marine-kpi"><span>DATA CONFIDENCE</span><b id="marineConfidence">LIVE / CACHE</b><small>Selalu cek source dan umur data.</small></div>
+    </div>
+    <div class="marine-mode-buttons"><button class="btn" data-marine-mode="NAVIGATION">🧭 NAV</button><button class="btn" data-marine-mode="WEATHER">🌦️ WEATHER</button><button class="btn" data-marine-mode="FISHING">🐟 FISHING</button><button class="btn" data-marine-mode="HUD">🎛️ HUD</button><button class="btn" data-marine-mode="AI">🤖 AI BRIEF</button></div>
+    <div class="marine-mode-buttons vision-buttons"><button class="btn sm" data-marine-vision="OCEAN-DARK">Ocean dark</button><button class="btn sm" data-marine-vision="RED-NIGHT">Red night</button><button class="btn sm" data-marine-vision="BLACKOUT">Blackout</button></div>
+    <div class="row marine-emergency-actions"><button class="btn danger" id="btnMarineMOB">🆘 Aktifkan MOB</button><button class="btn danger" id="btnMarineSOS">📡 Siapkan SOS</button></div>
+    <p class="muted" id="marineEmergencyOutput">MOB/SOS tidak mengirim panggilan otomatis. Periksa detail dan hubungi layanan darurat setempat.</p>
+  </div>
 
-  <div class="marine-section-head"><div><span class="eyebrow">MARINE OS MODULES</span><h3>⚓ Semua rencana kita</h3></div><span class="chip">24 modul</span></div>
+  <div class="marine-section-head"><div><span class="eyebrow">MARINE OS MODULES</span><h3>⚓ Semua rencana kita</h3></div><span class="chip">26 modul • LIVE CORE</span></div>
   <div id="marineModuleGrid" class="marine-module-grid"></div>
 
   <div class="card marine-status-card">
@@ -138,7 +149,7 @@
 
   <div class="marine-lower-grid">
     <div class="card marine-safety-card"><span class="eyebrow">SAFETY FIRST</span><h3>🛟 Safety Guardian</h3><p>Hazard, weather, AIS, route, anchor watch, SOS dan emergency assistant akan terhubung di sini.</p><button class="btn" id="marineOpenSafety">Buka pusat keselamatan</button></div>
-    <div class="card marine-ai-card"><span class="eyebrow">MARINE COPILOT</span><h3>🤖 Mazkiplay.ai</h3><p>AI multimodal untuk membaca konteks kapal, peta, cuaca, AIS, dokumen dan data operasi melalui tools yang diizinkan.</p><button class="btn" id="marineOpenAI">Buka Marine Copilot</button></div>
+    <div class="card marine-ai-card"><span class="eyebrow">MARINE COPILOT</span><h3>🤖 Jarvis Intelligence</h3><p id="marineJarvisStatus">Jarvis membaca konteks kapal, lokasi, cuaca, fitur, dan data lokal ketika diaktifkan.</p><button class="btn" id="marineOpenAI">Buka Marine Copilot</button></div>
   </div>
 
   <div class="marine-warning">⚠️ Marine OS adalah decision-support. Kedalaman, AIS, radar, cuaca, hazard dan route tidak boleh dianggap pengganti official nautical charts, ECDIS, radar/AIS tersertifikasi, visual lookout, atau prosedur keselamatan pelayaran.</div>
@@ -429,19 +440,22 @@
   </div>
   <div class="card jarvis-card">
   <div class="section-head"><div><span class="eyebrow">MARINE AI • OPENROUTER</span><h3>🤖 Jarvis — Voice Captain Assistant</h3></div><div class="jarvis-orb">J</div></div>
-  <p class="muted">Jarvis membaca snapshot realtime Marine OS saat Anda bertanya: GNSS, kapal, runtime, fitur, provider, dan data lokal yang aman. Jawaban AI tidak ditampilkan sebagai chat; Jarvis membacakannya dengan suara.</p>
+  <p class="muted">Jarvis membaca GNSS, status kapal, cuaca, provider, modul, dan data lokal yang aman. Aktifkan tombolnya untuk percakapan teks atau hands-free Bahasa Indonesia.</p>
   <label class="switch-row"><span>Aktifkan Jarvis</span><input id="jarvisEnabled" type="checkbox"></label>
-  <label>OpenRouter API key</label><input id="jarvisApiKey" class="jarvis-input jarvis-secret" type="password" autocomplete="off" placeholder="sk-or-v1-...">
+  <label>OpenRouter API key pribadi</label><input id="jarvisApiKey" class="jarvis-input jarvis-secret" type="password" autocomplete="off" placeholder="sk-or-v1-...">
+  <div class="jarvis-model-row"><label>Model AI<select id="jarvisModel"></select></label><button class="btn sm" id="btnJarvisDiscover">🔎 Cari model gratis</button></div>
+  <label class="switch-row"><span>Pilih model gratis otomatis</span><input id="jarvisAutoModel" type="checkbox" checked></label>
   <div class="row"><label>Kecepatan suara <input id="jarvisRate" type="number" min=".6" max="1.5" step=".1" value="1"></label><label>Pitch <input id="jarvisPitch" type="number" min=".5" max="1.5" step=".1" value="1"></label></div>
-  <div class="jarvis-controls"><button class="btn primary" id="btnJarvisSave">💾 Simpan Jarvis</button><button class="btn" id="btnJarvisTest">🔊 Tes suara</button><button class="btn" id="btnJarvisMic">🎙️ Aktifkan pendengar</button><button class="btn" id="btnJarvisStop">⏹️ Stop</button></div>
-  <label class="switch-row"><span>Mode dengar berulang</span><input id="jarvisVoiceToggle" type="checkbox"></label>
-  <div class="row"><input id="jarvisAsk" class="jarvis-input" placeholder="Tulis pertanyaan untuk tes Jarvis…"><button class="btn primary-inline" id="btnJarvisAsk">Tanya</button></div>
-  <p id="jarvisStatus" class="muted jarvis-status">⚪ Masukkan API key OpenRouter</p>
-  <p class="jarvis-note jarvis-voice-only">Contoh: tekan “Aktifkan pendengar”, lalu ucapkan “Halo Jarvis”. Jarvis menjawab: “Iya Captain, ada yang perlu ditanyakan?” Pengenalan suara bergantung dukungan Android/WebView. Untuk privasi, konteks hanya dikirim ketika Captain mengajukan pertanyaan.</p>
-  <small>Model default: <b>openrouter/free</b>. API key tidak ditanam di source APK; pengguna memasukkannya sendiri. Penyimpanan saat ini lokal di perangkat.</small>
+  <div class="jarvis-controls"><button class="btn primary" id="btnJarvisSave">💾 Simpan & Aktifkan</button><button class="btn" id="btnJarvisTest">🧠 Tes rekomendasi</button><button class="btn" id="btnJarvisMic">🎙️ Aktifkan pendengar</button><button class="btn" id="btnJarvisStop">⏹️ Stop</button><button class="btn" id="btnJarvisClear">🧹 Hapus chat</button></div>
+  <label class="switch-row"><span>Mode percakapan hands-free</span><input id="jarvisVoiceToggle" type="checkbox"></label>
+  <div class="row"><input id="jarvisAsk" class="jarvis-input" placeholder="Tanya kondisi kapal, rute, cuaca, fitur…"><button class="btn primary-inline" id="btnJarvisAsk">Tanya</button></div>
+  <p id="jarvisStatus" class="muted jarvis-status">⚪ Aktifkan Jarvis dan masukkan API key OpenRouter</p>
+  <div id="jarvisConversation" class="jarvis-conversation"><p class="muted">Percakapan Jarvis akan tampil di sini.</p></div>
+  <p class="jarvis-note jarvis-voice-only">Ucapkan “Halo Jarvis” lalu pertanyaan. API key hanya disimpan lokal pada perangkat ini dan dikirim langsung ke OpenRouter saat bertanya. Jangan gunakan mode suara sebagai pengganti lookout atau prosedur keselamatan.</p>
+  <small>Default <b>openrouter/free</b>. Tombol “Cari model gratis” membaca katalog OpenRouter dan memfilter model dengan harga prompt/completion nol.</small>
 </div><div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
   <div class="card donation-card"><span class="eyebrow">DUKUNG PENGEMBANGAN</span><h3>💝 Donasi untuk Pengembangan APK</h3><p class="donation-copy">Dukungan Anda membantu kami merawat server, memperbaiki fitur, dan terus mengembangkan Berkah Samudera agar semakin nyaman digunakan para pengguna.</p><img class="donation-qr" src="donasi-qris.png" alt="QRIS donasi pengembangan Berkah Samudera" loading="lazy"><p class="muted center">Scan QRIS di atas menggunakan aplikasi pembayaran Anda. Terima kasih atas dukungan dan kepercayaannya.</p></div>
-  <div class="card about-card"><span class="eyebrow">TENTANG APLIKASI</span><h3>🚢 Berkah Samudera10</h3><p>Aplikasi pendamping operasi kapal untuk memantau GPS, rute perjalanan, cuaca laut, gelombang, Windy global, kedalaman GEBCO, karang terpetakan, kompas, kru, tangkapan, perbekalan, dan log riwayat.</p><p class="thanks">Terima kasih telah menggunakan aplikasi kami. Semoga Berkah Samudera membantu perjalanan Anda menjadi lebih aman, rapi, dan nyaman.</p><p class="sponsor center">Dikembangkan dan disponsori by.m4zk1pl4y</p><p class="muted center">Versi aplikasi 1.0.30</p></div>
+  <div class="card about-card"><span class="eyebrow">TENTANG APLIKASI</span><h3>🚢 Berkah Samudera10</h3><p>Aplikasi pendamping operasi kapal untuk memantau GPS, rute perjalanan, cuaca laut, gelombang, Windy global, kedalaman GEBCO, karang terpetakan, kompas, kru, tangkapan, perbekalan, dan log riwayat.</p><p class="thanks">Terima kasih telah menggunakan aplikasi kami. Semoga Berkah Samudera membantu perjalanan Anda menjadi lebih aman, rapi, dan nyaman.</p><p class="sponsor center">Dikembangkan dan disponsori by.m4zk1pl4y</p><p class="muted center">Versi aplikasi 1.0.32</p></div>
 </section>
 <!-- ============ RIWAYAT ============ -->
 <section id="page-riwayat" class="page">
@@ -485,6 +499,7 @@
 <script src="js/app.js" defer></script>
 <script src="js/marine-capabilities.js" defer></script>
 <script src="js/marine-os.js" defer></script>
+<script src="js/marine-command.js" defer></script>
 <script src="js/marine-free.js" defer></script>
 <script src="js/marine-external.js" defer></script>
 <script src="js/marine-runtime.js" defer></script>

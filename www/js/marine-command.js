@@ -1,0 +1,19 @@
+(() => {
+  "use strict";
+  const KEY = "bs10_command_state_v1";
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (_) { return {}; } };
+  const save = (v) => localStorage.setItem(KEY, JSON.stringify(v));
+  const $ = (id) => document.getElementById(id);
+  const map = () => window.MapApp || {};
+  function position() { const m = map(); return { lat: Number.isFinite(m.lat) ? m.lat : null, lon: Number.isFinite(m.lon) ? m.lon : null, speed: Number(m.speedKmh || 0) / 1.852, accuracy: m.accuracy ?? null, heading: m.heading ?? null }; }
+  function score() { const p = position(); let risk = 15; const reasons = []; if (!navigator.onLine) { risk += 20; reasons.push("offline"); } if (p.lat === null) { risk += 25; reasons.push("GNSS belum tersedia"); } if (Number(p.accuracy) > 100) { risk += 20; reasons.push("akurasi GNSS rendah"); } if (p.speed > 0 && p.speed < 1) { risk += 8; reasons.push("kapal hampir berhenti"); } return { score: Math.min(100, risk), level: risk >= 70 ? "CRITICAL" : risk >= 50 ? "WATCH" : risk >= 30 ? "MODERATE" : "LOW", reasons }; }
+  function render() { const r = score(), box = $("marineRiskScore"), detail = $("marineRiskDetail"), mode = $("marineModeStatus"), state = read(); if (box) { box.textContent = `${r.score}% • ${r.level}`; box.dataset.level = r.level; } if (detail) detail.textContent = r.reasons.length ? `Faktor: ${r.reasons.join(", ")}.` : "GNSS, koneksi, dan status operasi terlihat siap."; if (mode) mode.textContent = `MODE: ${state.mode || "NAVIGATION"} • DATA: ${navigator.onLine ? "ONLINE" : "CACHE"}`; }
+  function setMode(mode) { const state = read(); state.mode = mode; save(state); document.body.dataset.marineMode = mode.toLowerCase(); render(); if (mode === "AI" && window.Jarvis) window.Jarvis.ask("Buat voyage briefing singkat berdasarkan kondisi aplikasi saya sekarang."); }
+  function setVision(mode) { document.body.dataset.vision = mode; const state = read(); state.vision = mode; save(state); const el = $("marineVisionStatus"); if (el) el.textContent = `Tampilan ${mode} aktif`; }
+  function notify(title, body) { window.NotificationCenter?.add?.({ source: "Marine OS", title, body, time: Date.now() }); }
+  function mob() { const p = position(); if (!confirm("Aktifkan MOB? Posisi terakhir akan disimpan sebagai titik darurat.")) return; const event = { lat: p.lat, lon: p.lon, speed: p.speed, heading: p.heading, at: new Date().toISOString() }; save({ ...read(), mob: event }); notify("MOB AKTIF", p.lat === null ? "Posisi GNSS belum tersedia." : `Lokasi ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}`); const out = $("marineEmergencyOutput"); if (out) out.textContent = p.lat === null ? "MOB dicatat, tetapi GNSS belum tersedia." : `MOB: ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)} • ${new Date(event.at).toLocaleString("id-ID")}`; }
+  async function sos() { const p = position(); const text = p.lat === null ? "SOS Berkah Samudera10: posisi GNSS belum tersedia." : `SOS Berkah Samudera10\nLokasi: ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)}\nKecepatan: ${p.speed.toFixed(1)} kn\nWaktu: ${new Date().toLocaleString("id-ID")}`; try { await navigator.clipboard?.writeText(text); } catch (_) {} const out = $("marineEmergencyOutput"); if (out) out.textContent = `${text} • Pesan disalin jika izin clipboard tersedia.`; notify("SOS READY", text); }
+  function bind() { document.querySelectorAll("[data-marine-mode]").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.marineMode))); document.querySelectorAll("[data-marine-vision]").forEach((b) => b.addEventListener("click", () => setVision(b.dataset.marineVision))); $("btnMarineMOB")?.addEventListener("click", mob); $("btnMarineSOS")?.addEventListener("click", sos); render(); setInterval(render, 5000); }
+  window.MarineCommand = { position, score, setMode, setVision, mob, sos };
+  document.addEventListener("DOMContentLoaded", bind);
+})();

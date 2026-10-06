@@ -15,9 +15,9 @@
 
 Saat pertama kali aplikasi dibuka, pengguna dapat memilih **Daftar/Masuk Akun** untuk mengaktifkan profil, follow, lokasi teman, dan Story, atau memilih **Lanjut sebagai Pengguna Biasa** untuk memakai navigasi, cuaca, catatan, Al-Qur’an, dan fitur lokal tanpa akun.
 
-## Rilis terbaru — 1.0.31
+## Rilis terbaru — 1.0.32
 
-Release 1.0.31 membawa **Jarvis Voice Captain Assistant** berbasis OpenRouter free router, snapshot konteks Marine OS per pertanyaan, voice input/output Bahasa Indonesia, serta peningkatan validasi dan dokumentasi release. API key tetap harus dimasukkan oleh pengguna dan tidak disertakan di source code.
+Release 1.0.32 membawa **Jarvis Voice Captain Assistant** berbasis OpenRouter free router, snapshot konteks Marine OS per pertanyaan, voice input/output Bahasa Indonesia, serta peningkatan validasi dan dokumentasi release. API key tetap harus dimasukkan oleh pengguna dan tidak disertakan di source code.
 
 ## Download APK
 

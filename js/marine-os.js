@@ -72,6 +72,7 @@ const MarineOS = {
     document.getElementById("marineOpenSettings")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineOpenSafety")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineOpenAI")?.addEventListener("click",()=>this.go("pengaturan"));
+    document.getElementById("marineOpenJarvis")?.addEventListener("click",()=>this.go("pengaturan"));
     document.getElementById("marineProviderInfo")?.addEventListener("click",()=>this.showProviders());
     document.getElementById("marineRefresh")?.addEventListener("click",()=>this.refreshTelemetry());
     this.bindWorldIntegrations();

@@ -1,3 +1,12 @@
+## 1.0.32
+
+- Added Ocean Command quick modes: Navigation, Weather, Fishing, HUD, and AI briefing hook.
+- Added local Marine Risk score from GNSS, network, accuracy, and motion telemetry.
+- Added confirmation-gated MOB logging and SOS message preparation with local clipboard support.
+- Added Ocean Dark, Red Night, and Blackout display modes.
+- Added Jarvis v2: OpenRouter free-model discovery, local conversation history, hands-free voice mode, and contextual recommendations.
+- Added offline service-worker cache v9 for the new command module.
+
 # Changelog — Berkah Samudera10
 
 ## 1.0.31

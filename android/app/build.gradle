@@ -9,8 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         def suppliedVersionCode = project.findProperty("VERSION_CODE")
         def suppliedVersionName = project.findProperty("VERSION_NAME")
-        versionCode (suppliedVersionCode != null && suppliedVersionCode.toString().trim().isInteger() ? suppliedVersionCode.toString().trim().toInteger() : 10031)
-        versionName (suppliedVersionName != null && suppliedVersionName.toString().trim() ? suppliedVersionName.toString().trim() : "1.0.31")
+        versionCode (suppliedVersionCode != null && suppliedVersionCode.toString().trim().isInteger() ? suppliedVersionCode.toString().trim().toInteger() : 10032)
+        versionName (suppliedVersionName != null && suppliedVersionName.toString().trim() ? suppliedVersionName.toString().trim() : "1.0.32")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
