@@ -8,3 +8,5 @@ android/*.keystore
 *.jks
 
 release-signing.env
+
+*.idsig
