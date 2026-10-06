@@ -77,7 +77,7 @@ assert.ok(!nativeBridge.includes('accessToken') && nativeBridge.includes('local-
 assert.ok(deviceProfile.includes('Saat aktif dan aplikasi berjalan') && deviceProfile.includes('tidak mengirimnya ke cloud'), 'Location consent must explain foreground-only cloud sharing');
 assert.ok(ownerWriteMigration.includes('FOR INSERT TO authenticated') && ownerWriteMigration.includes('FOR UPDATE TO authenticated') && ownerWriteMigration.includes('id = auth.uid()'), 'Owner-only profile write RLS migration missing');
 assert.ok(ciWorkflow.includes('feature/**') && ciWorkflow.includes('git ls-files --error-unmatch') && ciWorkflow.includes('unzip -Z1'), 'CI must test feature branches and verify source archive contents');
-assert.ok(releaseWorkflow.includes('workflow_dispatch:') && !/^\s*push:/m.test(releaseWorkflow) && releaseWorkflow.includes('PACKAGE_VERSION=') && releaseWorkflow.includes('--target "$GITHUB_SHA"'), 'Release workflow must be manual-only, version-checked, and point at the tested commit');
+assert.ok(releaseWorkflow.includes('workflow_dispatch:') && /push:\n    tags:\n      - "v\*"/.test(releaseWorkflow) && !/^\s*branches:/m.test(releaseWorkflow) && releaseWorkflow.includes('PACKAGE_VERSION=') && releaseWorkflow.includes('--target "$GITHUB_SHA"'), 'Release workflow must run manually or only on version tags and point at the tested commit');
 checks += 7;
 
 const config = JSON.parse(read('capacitor.config.json'));
