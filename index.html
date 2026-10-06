@@ -199,10 +199,10 @@
     </div>
     <p class="muted" id="mapDepth">Klik peta / tombol untuk ukur kedalaman laut.</p>
     <div class="row"><span class="chip">Mode: <b id="mapMode">Mode datar aktif</b></span><span class="chip">Kecepatan: <b id="mapSpeed">-</b></span></div>
-    <p class="muted" id="mapTelemetry">Ketinggian - • Arah -</p>
+    <p class="muted" id="mapTelemetry">Ketinggian - • Arah -</p><p class="muted" id="tripTelemetry">Waktu perjalanan: belum dimulai</p>
     <p class="muted" id="mapSeaTelemetry">Kecepatan - knot • Suhu - • Angin -</p>
     <div class="row map-tool-row"><button class="btn" id="btn3D">🧭 Mode peta 3D</button><button class="btn" id="btnReef">🪸 Karang Laut</button></div>
-    <p class="muted" id="reefStatus">Cek apakah ada karang laut terpetakan dalam radius 100 m dari titik kapal.</p>
+    <p class="muted" id="reefStatus">Cek apakah ada karang, batu, terumbu, atau kapal karam terpetakan dalam radius 1 km.</p><div class="depth-legend"><b>🌊 Legenda kedalaman model</b><span>0–5 m sangat dangkal</span><span>5–20 m dangkal</span><span>20–50 m sedang</span><span>50–200 m dalam</span><span>&gt;200 m sangat dalam</span></div>
     <div class="card route-panel"><h4>🎯 Router Perjalanan</h4><div class="row"><input id="routeLat" type="number" step="any" placeholder="Latitude tujuan"><input id="routeLon" type="number" step="any" placeholder="Longitude tujuan"></div><div class="row"><button class="btn primary-inline" id="btnSetRoute">Tetapkan rute</button><button class="btn" id="btnClearRoute">Hapus rute</button><span class="chip" id="routeSpeedInfo">Kecepatan: -</span></div><p class="muted" id="routeStatus">Masukkan koordinat tujuan atau ketuk peta.</p></div>
     <div class="card overlay-panel"><h4>🌦️ Overlay Laut</h4><div class="row"><button class="btn" id="btnWindOverlay">💨 Arah angin</button><button class="btn" id="btnRainOverlay">🌧️ Radar hujan</button><button class="btn" id="btnHazardOverlay">🪸 Karang/kapal karam</button><button class="btn" id="btnStormOverlay">⛈️ Badai</button></div><p class="muted" id="overlayStatus">Overlay dapat diaktifkan saat online.</p></div>
   </div>
