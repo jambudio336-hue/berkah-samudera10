@@ -70,12 +70,15 @@ public class MainActivity extends BridgeActivity {
             }
             if (info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                     && info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                appUpdateManager.startUpdateFlowForResult(
-                    info,
-                    this,
-                    AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
-                    PLAY_UPDATE_REQUEST
-                );
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                        info,
+                        this,
+                        AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build(),
+                        PLAY_UPDATE_REQUEST
+                    );
+                } catch (Exception ignored) {
+                }
             }
         });
     }
