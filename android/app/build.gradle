@@ -7,12 +7,12 @@ android {
         applicationId "com.m4zk1pl4y.berkahsamudera10"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode Integer.parseInt(((project.findProperty("VERSION_CODE") ?: "10028").toString().trim()))
-        versionName ((project.findProperty("VERSION_NAME") ?: "1.0.28").toString().trim())
+        def suppliedVersionCode = project.findProperty("VERSION_CODE")
+        def suppliedVersionName = project.findProperty("VERSION_NAME")
+        versionCode (suppliedVersionCode != null && suppliedVersionCode.toString().trim().isInteger() ? suppliedVersionCode.toString().trim().toInteger() : 10028)
+        versionName (suppliedVersionName != null && suppliedVersionName.toString().trim() ? suppliedVersionName.toString().trim() : "1.0.28")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
-             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
-             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
