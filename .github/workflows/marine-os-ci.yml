@@ -1,0 +1,44 @@
+name: Marine OS CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["feature/marine-os-expansion", "main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools platforms;android-35 build-tools;35.0.0"
+      - run: npm ci
+      - name: JavaScript syntax check
+        shell: bash
+        run: |
+          set -euo pipefail
+          find js -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+          node --check sw.js
+      - name: Capacitor sync
+        run: npx cap sync android
+      - name: Android debug build
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: berkah-samudera10-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14

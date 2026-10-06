@@ -1,0 +1,195 @@
+{
+  "map": {
+    "base": "leaflet",
+    "freeOpenData": {
+      "openStreetMap": {
+        "enabled": true,
+        "license": "ODbL",
+        "note": "Use an allowed tile provider or self-hosted tiles for production/bulk/offline use."
+      },
+      "openSeaMap": {
+        "enabled": true,
+        "license": "ODbL + chart tile license",
+        "note": "Attribute OpenSeaMap/OpenStreetMap and follow tile/data terms."
+      },
+      "gebco": {
+        "enabled": true,
+        "wms": "https://wms.gebco.net/mapserv?",
+        "layer": "GEBCO_LATEST",
+        "note": "Official GEBCO WMS; current service is based on GEBCO 2026."
+      },
+      "carto": {
+        "enabled": true,
+        "note": "Public tiles are subject to CARTO service terms and attribution."
+      }
+    },
+    "nautical": {
+      "navionics": {
+        "enabled": false,
+        "mode": "official-sdk",
+        "developerTokenEnv": "NAVIONICS_DEVELOPER_TOKEN",
+        "licenseStatus": "not-configured"
+      },
+      "avenzaStyleOffline": {
+        "enabled": true,
+        "formats": [
+          "GeoPDF",
+          "GeoTIFF",
+          "MBTiles",
+          "GPX",
+          "KML",
+          "KMZ"
+        ],
+        "note": "Only use maps/data for which the user or operator has rights."
+      }
+    }
+  },
+  "ais": {
+    "marineTraffic": {
+      "enabled": false,
+      "mode": "official-api",
+      "apiKeyEnv": "MARINETRAFFIC_API_KEY",
+      "licenseStatus": "not-configured"
+    }
+  },
+  "radar": {
+    "enabled": false,
+    "mode": "hardware-gateway",
+    "note": "A phone cannot become a physical marine radar through software alone."
+  },
+  "bathymetry": {
+    "batnas": {
+      "enabled": false,
+      "note": "Enable only after authorized dataset access is confirmed."
+    },
+    "gebco": {
+      "enabled": true
+    }
+  },
+  "weather": {
+    "bmkg": {
+      "enabled": true,
+      "mode": "official-public-api",
+      "baseUrl": "https://maritim.bmkg.go.id/marine2026-data/",
+      "note": "Automated access must use the official API. Commercial third-party integration requires written permission."
+    },
+    "openMeteo": {
+      "enabled": true
+    }
+  },
+  "ai": {
+    "mazkiplay": {
+      "enabled": false,
+      "provider": "user-configured-or-server",
+      "apiKeyStorage": "Android Keystore/local secure storage"
+    }
+  },
+  "worldIntegrations": {
+    "aisLive": {
+      "enabled": false,
+      "mode": "authorized-provider-gateway",
+      "provider": "Kpler AIS / MarineTraffic",
+      "endpointEnv": "AIS_GATEWAY_URL",
+      "credentialEnv": "AIS_PROVIDER_TOKEN",
+      "note": "Do not put provider secrets in the APK bundle. Use a server/native secure gateway."
+    },
+    "radarHardware": {
+      "enabled": false,
+      "mode": "hardware-gateway",
+      "endpointEnv": "RADAR_GATEWAY_URL",
+      "protocols": [
+        "vendor gateway",
+        "NMEA/UDP/TCP where supported"
+      ],
+      "note": "Requires compatible onboard radar hardware and network gateway."
+    },
+    "navionicsGarmin": {
+      "enabled": false,
+      "mode": "Garmin Navionics Mobile SDK",
+      "developerTokenEnv": "NAVIONICS_DEVELOPER_TOKEN",
+      "note": "Requires Garmin approval, SDK, developer token and applicable chart/content rights."
+    },
+    "marineTrafficApi": {
+      "enabled": false,
+      "mode": "official-api",
+      "endpointEnv": "MARINETRAFFIC_API_GATEWAY_URL",
+      "credentialEnv": "MARINETRAFFIC_API_KEY",
+      "note": "MarineTraffic API services are separately authorized; current MarineTraffic/Kpler products may differ by service."
+    },
+    "windyApi": {
+      "enabled": false,
+      "mode": "official-api",
+      "endpointEnv": "WINDY_API_GATEWAY_URL",
+      "credentialEnv": "WINDY_API_KEY",
+      "note": "Use the current official Windy API and terms. Never ship a private API key in public APK code."
+    },
+    "windyMap": {
+      "enabled": true,
+      "mode": "official-web-map/embed",
+      "url": "https://www.windy.com/",
+      "note": "Full API parity requires the applicable Windy API access/terms."
+    },
+    "garminActiveCaptain": {
+      "enabled": true,
+      "mode": "official-open-source-sdk",
+      "github": "https://github.com/garmin/ActiveCaptainCommunitySDK-android",
+      "license": "Apache-2.0",
+      "credentialEnv": "GARMIN_ACTIVECAPTAIN_STAGE_API_KEY",
+      "nativeBridge": "GarminActiveCaptain",
+      "note": "SDK gratis/open-source, tetapi Garmin Developer Portal access + Stage API key diperlukan untuk Community data. Do not ship secret in web assets."
+    }
+  },
+  "publicSources": {
+    "aisStream": {
+      "enabled": true,
+      "mode": "server-side-websocket",
+      "url": "wss://stream.aisstream.io/v0/stream",
+      "credentialEnv": "AISSTREAM_API_KEY",
+      "live": true,
+      "note": "Public real-time AIS WebSocket. Key must remain server-side; direct browser connection is not allowed by provider."
+    },
+    "globalFishingWatch": {
+      "enabled": true,
+      "mode": "official-api",
+      "url": "https://globalfishingwatch.org/our-apis/",
+      "credentialEnv": "GFW_API_KEY",
+      "live": false,
+      "note": "Dynamic vessel activity/identity/history and fishing-effort datasets; API key and attribution required. Use as supplemental intelligence, not as guaranteed second-by-second AIS."
+    },
+    "noaaMarineCadastreAIS": {
+      "enabled": true,
+      "mode": "public-download",
+      "url": "https://marinecadastre.gov/ais/",
+      "live": false,
+      "note": "Public U.S. AIS historical/quarterly datasets; useful for traffic history and heatmaps, not global realtime."
+    },
+    "emodnetBathymetry": {
+      "enabled": true,
+      "mode": "OGC-WMS-REST",
+      "url": "https://ows.emodnet-bathymetry.eu/wms?",
+      "live": false,
+      "note": "Public bathymetry web services; not a live navigation chart and mainly European/global products depending layer."
+    },
+    "noaaErddap": {
+      "enabled": true,
+      "mode": "public-REST",
+      "url": "https://osmc.noaa.gov/erddap/",
+      "live": true,
+      "note": "Public oceanographic datasets such as satellite/buoy observations; dataset freshness varies."
+    },
+    "indonesiaDataGoId": {
+      "enabled": true,
+      "mode": "public-catalog",
+      "url": "https://data.go.id/",
+      "live": false,
+      "note": "Public Indonesian government datasets; freshness varies by dataset."
+    },
+    "kkpData": {
+      "enabled": true,
+      "mode": "public-catalog",
+      "url": "https://portaldata.kkp.go.id/",
+      "live": false,
+      "note": "KKP public data portal including WPP and fisheries datasets."
+    }
+  }
+}

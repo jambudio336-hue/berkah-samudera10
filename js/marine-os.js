@@ -1,0 +1,137 @@
+const MarineOS = {
+  version: "0.3.0",
+  modules: [
+    ["sea-map","🗺️","Sea Map / Nautical Chart","Peta laut, nautical layers, seamarks, depth contours, satellite & night mode.","peta"],
+    ["navigation","🧭","Navigation & Voyage","Route, waypoint, bearing, NM/km, ETA, track replay, voyage log & anchor watch.","peta"],
+    ["ais","🚢","AIS / Marine Traffic","Traffic kapal, vessel search, MMSI/IMO, SOG/COG, CPA/TCPA bila provider tersedia.","peta"],
+    ["radar","📡","Marine Radar","Radar PPI dan target overlay dari perangkat/gateway radar yang kompatibel.","peta"],
+    ["bathymetry","🌊","BATNAS + GEBCO","Kedalaman, contour, sounding, sumber, resolusi dan confidence.","peta"],
+    ["weather","🌦️","Weather & Ocean","Angin, gelombang, arus, SST, prakiraan dan BMKG maritime warnings.","cuaca"],
+    ["fishing","🐟","Fishing Intelligence","Indikasi area potensial berdasarkan SST, depth, currents, weather & observations.","tangkapan"],
+    ["hazards","⚠️","Hazards & Wrecks","Reef, rock, shoal, wreck, restricted areas dan navigational aids.","peta"],
+    ["safety","🛟","Safety Guardian","SOS, MAYDAY/PAN-PAN assistant, hazard alert, connectivity & anchor watch.","pengaturan"],
+    ["vessel","⚓","Vessel & Fleet","Profil kapal, crew, fleet, cargo, manifest, vessel status dan permissions.","akun"],
+    ["maintenance","🔧","Maintenance","Engine hours, maintenance schedule, service history dan reminders.","pengaturan"],
+    ["documents","📄","Document Vault","Dokumen kapal/kru, expiry tracking dan reminder.","pengaturan"],
+    ["economy","💰","Marine Economy","Fuel, logistics, fish prices, trip cost, revenue dan profit/loss.","riwayat"],
+    ["social","👥","Marine Social","Follow, vessel search, posts, Story, activity, location sharing & notifications.","akun"],
+    ["messenger","💬","Messenger & Calls","Private/group chat, files, voice messages, voice/video calls.","akun"],
+    ["offline","📥","Offline Marine Maps","GeoPDF, GeoTIFF, MBTiles, GPX, KML/KMZ dan cached marine data.","peta"],
+    ["data","📡","Marine Data Contribution","User observations, hazards, photos, timestamp, source & confidence.","peta"],
+    ["opportunity","🎯","Opportunity Radar","Fishing, port, logistics, market and trip opportunities.","riwayat"],
+    ["academy","🎓","Marine Academy","Materi navigasi, safety, weather, fishing and operational learning.","pengaturan"],
+    ["ai","🤖","Mazkiplay.ai","Marine Copilot multimodal: text, image, file, voice and authorized app tools.","pengaturan"],
+    ["registry","🧠","AI Feature Registry","Capability registry + versioned manifest agar AI memahami fitur baru.","pengaturan"],
+    ["camera","📷","Marine Camera","Foto dengan koordinat, waktu dan metadata perjalanan.","peta"],
+    ["checklist","✅","Smart Checklist","Pre-departure, underway, arrival, post-trip and emergency checklist.","pengaturan"],
+    ["digital-twin","🧩","Digital Twin","Status digital kapal, equipment, trips, maintenance and operational context.","akun"]
+  ],
+  providers: {
+    osm: {name:"OpenStreetMap", enabled:true, mode:"open data / ODbL; tile service terms apply", env:""},
+    openseamap: {name:"OpenSeaMap", enabled:true, mode:"open marine data / ODbL + chart tile license", env:""},
+    gebco: {name:"GEBCO 2026", enabled:true, mode:"official public WMS / open bathymetry", env:""},
+    bmkg: {name:"BMKG Maritim", enabled:true, mode:"official public API; commercial integration requires permission", env:""},
+    carto: {name:"CARTO", enabled:true, mode:"public map tiles subject to provider terms", env:""},
+    overpass: {name:"OpenStreetMap Overpass", enabled:true, mode:"community OSM query service; fair-use/availability applies", env:""},
+    rainviewer: {name:"RainViewer", enabled:true, mode:"public weather radar tiles subject to provider terms", env:""},
+    openMeteoMarine: {name:"Open-Meteo Marine", enabled:true, mode:"free non-commercial marine forecast; CC BY 4.0", env:""},
+    noaaNowCoast: {name:"NOAA nowCOAST", enabled:true, mode:"public NOAA marine map/services; coverage primarily U.S. waters", env:""},
+    navionics: {name:"Navionics / Garmin", enabled:false, mode:"official SDK + license", env:"NAVIONICS_DEVELOPER_TOKEN"},
+    marineTraffic: {name:"MarineTraffic / Kpler", enabled:false, mode:"official API + license", env:"MARINETRAFFIC_API_KEY"},
+    radar: {name:"Onboard Marine Radar", enabled:false, mode:"hardware gateway", env:"RADAR_GATEWAY_URL"},
+    batnas: {name:"BATNAS", enabled:false, mode:"authorized dataset/access required", env:"BATNAS_ENDPOINT"},
+    ai: {name:"Mazkiplay.ai / OpenAI", enabled:false, mode:"user key or server gateway", env:"OPENAI_API_KEY"}
+  },
+  worldIntegrations: [
+    {id:"ais-live",icon:"🚢",name:"AIS Realtime / MarineTraffic → Kpler",kind:"AIS",status:"LICENSE / API",detail:"Real-time vessel positions, static data, history and live stream when an authorized Kpler/MarineTraffic feed is connected.",action:"https://www.kpler.com/product/maritime/data-services",adapter:"MarineExternal.integrations.ais"},
+    {id:"radar-hw",icon:"📡",name:"Marine Radar Hardware",kind:"RADAR",status:"HARDWARE",detail:"Real radar targets/PPI require an onboard radar plus a supported network/gateway. The app never invents radar targets.",action:"https://www.garmin.com/en-US/marine/",adapter:"MarineExternal.integrations.radar"},
+    {id:"navionics",icon:"🗺️",name:"Navionics / Garmin Charts",kind:"CHARTS",status:"LICENSE / SDK",detail:"Navionics nautical charts, HD bathymetry, tides/currents and chart objects through Garmin's authorized Mobile SDK.",action:"https://developer.garmin.com/marine-charts/mobile/",adapter:"MarineExternal.integrations.navionics"},
+    {id:"garmin-activecaptain",icon:"⚓",name:"Garmin ActiveCaptain Community",kind:"GARMIN COMMUNITY",status:"FREE SDK / KEY",detail:"Garmin's Apache-2.0 open-source Android SDK for ActiveCaptain Community POIs/reviews. Developer access and Stage API key are still required for live community data.",action:"https://developer.garmin.com/active-captain/mobile/",adapter:"MarineExternal.integrations.garminActiveCaptain"},
+    {id:"marinetraffic",icon:"🌐",name:"MarineTraffic API",kind:"MARINETRAFFIC",status:"API KEY / PLAN",detail:"Dedicated MarineTraffic API services can be connected for authorized AIS and vessel-data use cases.",action:"https://servicedocs.marinetraffic.com/",adapter:"MarineExternal.integrations.marineTraffic"},
+    {id:"windy-api",icon:"🌬️",name:"Windy API",kind:"WINDY",status:"LICENSE / API KEY",detail:"Official Windy API connector for forecast/map services. The public Windy map remains available separately.",action:"https://api.windy.com/",adapter:"MarineExternal.integrations.windy"},
+    {id:"windy-map",icon:"🌀",name:"Windy Map / Full Web Experience",kind:"WINDY MAP",status:"WEB / TERMS",detail:"Official Windy map surface with layer switching, timeline and global visualization; full API parity is subject to Windy terms.",action:"https://www.windy.com/",adapter:"MarineExternal.integrations.windyMap"}
+  ],
+  init() {
+    this.renderDashboard();
+    this.renderWorldIntegrations();
+    this.renderPublicSources();
+    this.bind();
+    this.refreshTelemetry();
+    setInterval(()=>this.refreshTelemetry(),5000);
+    window.addEventListener("marine:position",()=>this.refreshTelemetry());
+  },
+  renderDashboard() {
+    const grid=document.getElementById("marineModuleGrid"); if(!grid)return;
+    grid.innerHTML=this.modules.map(([id,icon,title,desc,target])=>'<button class="marine-module" data-marine-target="'+this.esc(target)+'"><span>'+icon+'</span><div><b>'+this.esc(title)+'</b><small>'+this.esc(desc)+'</small></div></button>').join("");
+  },
+  bind() {
+    document.getElementById("marineModuleGrid")?.addEventListener("click",e=>{const b=e.target.closest("[data-marine-target]"); if(b)this.go(b.dataset.marineTarget);});
+    document.getElementById("marineCenterMap")?.addEventListener("click",()=>this.go("peta"));
+    document.getElementById("marineOpenWeather")?.addEventListener("click",()=>this.go("cuaca"));
+    document.getElementById("marineOpenAccount")?.addEventListener("click",()=>this.go("akun"));
+    document.getElementById("marineOpenSettings")?.addEventListener("click",()=>this.go("pengaturan"));
+    document.getElementById("marineOpenSafety")?.addEventListener("click",()=>this.go("pengaturan"));
+    document.getElementById("marineOpenAI")?.addEventListener("click",()=>this.go("pengaturan"));
+    document.getElementById("marineProviderInfo")?.addEventListener("click",()=>this.showProviders());
+    document.getElementById("marineRefresh")?.addEventListener("click",()=>this.refreshTelemetry());
+    this.bindWorldIntegrations();
+  },
+  go(page) {
+    const tab=document.querySelector('.tab[data-page="'+page+'"]'); if(tab) tab.click();
+    setTimeout(()=>{if(page==="peta"&&window.MapApp?.map)MapApp.map.invalidateSize();},250);
+  },
+  refreshTelemetry() {
+    const m=window.MapApp, lat=m?.lat, lon=m?.lon;
+    const fix=document.getElementById("marineFix"), speed=document.getElementById("marineSpeed"), depth=document.getElementById("marineDepth"), net=document.getElementById("marineNetwork"), heading=document.getElementById("marineHeading");
+    if(fix)fix.textContent=Number.isFinite(lat)&&Number.isFinite(lon)?lat.toFixed(5)+"°, "+lon.toFixed(5)+"°":"Menunggu GNSS";
+    if(speed){const k=Number(m?.speedKmh||0)/1.852;speed.textContent=k.toFixed(1)+" kn";}
+    if(depth)depth.textContent=document.getElementById("dashDepth")?.textContent?.replace("Kedalaman: ","")||"—";
+    if(heading)heading.textContent=Number.isFinite(m?.heading)?Math.round(m.heading)+"°":"—";
+    if(net)net.textContent=navigator.onLine?"ONLINE":"OFFLINE";
+  },
+  renderPublicSources(){
+    const box=document.getElementById("marinePublicSources"); if(!box)return;
+    const s=window.MarineExternal?.publicSources||{};
+    const rows=[
+      ["aisStream","🚢","AISStream Realtime AIS","LIVE*","WebSocket AIS realtime; key server-side."],
+      ["gfw","🐟","Global Fishing Watch","DYNAMIC","Vessel activity, identity/history, fishing effort."],
+      ["noaaAis","🛰️","NOAA MarineCadastre AIS","HISTORICAL","Public U.S. AIS traffic archive."],
+      ["emodnetBathymetry","🌊","EMODnet Bathymetry","OPEN","OGC bathymetry services."],
+      ["noaaErddap","🌡️","NOAA ERDDAP","OBSERVATION","Oceanographic datasets, freshness varies."],
+      ["dataGoId","🇮🇩","data.go.id","PUBLIC","Indonesia government open datasets."],
+      ["kkp","🎣","KKP Portal Data","PUBLIC","WPP/fisheries and maritime datasets."]
+    ];
+    box.innerHTML=rows.map(x=>`<article class="marine-world-card"><div class="marine-world-top"><span class="marine-world-icon">${x[1]}</span><div><b>${x[2]}</b><small>${x[3]}</small></div></div><p>${x[4]}</p><a class="btn sm" href="${this.esc(s[x[0]]||"#")}" target="_blank" rel="noopener noreferrer">↗ Sumber publik</a></article>`).join("");
+  },
+  renderWorldIntegrations(){
+    const box=document.getElementById("marineWorldIntegrations"); if(!box)return;
+    box.innerHTML=this.worldIntegrations.map(p=>`
+      <article class="marine-world-card" data-world-provider="${this.esc(p.id)}">
+        <div class="marine-world-top"><span class="marine-world-icon">${p.icon}</span><div><b>${this.esc(p.name)}</b><small>${this.esc(p.kind)}</small></div><span class="marine-world-status">${this.esc(p.status)}</span></div>
+        <p>${this.esc(p.detail)}</p>
+        <div class="marine-world-actions"><button class="btn sm" data-world-test="${this.esc(p.id)}">🔌 Cek konektor</button><a class="btn sm" href="${this.esc(p.action)}" target="_blank" rel="noopener noreferrer">↗ Dokumentasi / akses</a></div>
+        <div class="marine-world-result muted" data-world-result>${this.esc(p.adapter)}</div>
+      </article>`).join("");
+  },
+  bindWorldIntegrations(){
+    document.getElementById("marineWorldIntegrations")?.addEventListener("click",async e=>{
+      const b=e.target.closest("[data-world-test]"); if(!b)return;
+      const card=b.closest("[data-world-provider]"), out=card?.querySelector("[data-world-result]"), id=b.dataset.worldTest;
+      b.disabled=true; b.textContent="⏳ Mengecek...";
+      try{
+        const provider={"ais-live":"ais","radar-hw":"radar","navionics":"navionics","marinetraffic":"marineTraffic","windy-api":"windy","windy-map":"windyMap"}[id]; const fn=provider?window.MarineExternal?.integrations?.[provider]:null;
+        if(id==="windy-map"){out.textContent="🟢 Windy map surface tersedia melalui iframe resmi; API penuh tetap memerlukan izin/key.";return;}
+        if(fn&&typeof fn.test==="function"){const x=await fn.test();out.textContent=(x.ok?"🟢 ":"🟡 ")+(x.message||"Adapter siap.");}
+        else out.textContent="🟡 Adapter sudah disiapkan. Hubungkan credential/gateway resmi untuk data live.";
+      }catch(err){out.textContent="🔴 "+(err?.message||"Koneksi gagal.");}
+      finally{b.disabled=false;b.textContent="🔌 Cek konektor";}
+    });
+  },
+  showProviders(){
+    const box=document.getElementById("marineProviderStatus");if(!box)return;
+    box.innerHTML=Object.values(this.providers).map(p=>'<div class="marine-provider-row"><b>'+this.esc(p.name)+'</b><span>'+(p.enabled?"🟢 Aktif":"🟡 Belum terhubung")+" • "+this.esc(p.mode)+(p.env?" • "+this.esc(p.env):"")+"</span></div>").join("");
+    if(window.MarineExternal?.health){MarineExternal.health().then(h=>{const labels={bmkg:"BMKG",gebco:"GEBCO",osm:"OSM tiles",openseamap:"OpenSeaMap",carto:"CARTO"};Object.keys(labels).forEach(k=>{const row=[...box.querySelectorAll(".marine-provider-row")].find(x=>x.textContent.includes(labels[k]));if(row){const span=row.querySelector("span");if(span)span.textContent=(h[k]?"🟢 Reachable":"🔴 Unreachable")+" • "+span.textContent.replace(/^.*? • /,"")}})}).catch(()=>{});}
+  },
+  esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+};
+document.addEventListener("DOMContentLoaded",()=>MarineOS.init());

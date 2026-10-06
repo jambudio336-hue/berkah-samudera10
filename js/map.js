@@ -8,11 +8,18 @@ const MapApp = {
     const terrain = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Topographic tiles &copy; Esri" });
     const topo = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { maxZoom: 17, attribution: "Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap" });
     const dark = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { maxZoom: 20, attribution: "&copy; CARTO" });
-    const bathymetry = L.tileLayer.wms("https://ows.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .58, attribution: "Bathymetry &copy; GEBCO" });
-    const seamarks = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", { maxZoom: 18, opacity: .9, attribution: "Seamarks &copy; OpenSeaMap" });
+    const bathymetry = L.tileLayer.wms("https://wms.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .58, attribution: "Bathymetry &copy; GEBCO 2026" });
+    const seamarks = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", { maxZoom: 18, opacity: .9, attribution: "Seamarks &copy; OpenSeaMap / OpenStreetMap (ODbL/CC BY-SA)" });
+    const gebcoRelief = L.tileLayer.wms("https://wms.gebco.net/mapserv?", { layers: "GEBCO_LATEST", format: "image/png", transparent: true, opacity: .42, attribution: "Relief &copy; GEBCO 2026" });
+    const osmHumanitarian = L.tileLayer("https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap contributors, HOT" });
+    const cartoVoyage = L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", { maxZoom: 20, attribution: "&copy; OpenStreetMap contributors &copy; CARTO" });
     this.hazardLayer = L.layerGroup(); this.windLayer = L.layerGroup(); this.stormLayer = L.layerGroup();
-    this.layers = { street, satellite, terrain, topo, dark, bathymetry, seamarks, hazards: this.hazardLayer, wind: this.windLayer, storm: this.stormLayer };
-    L.control.layers({ "Peta standar": street, "Satelit realistis": satellite, "Topografi": topo, "Peta medan": terrain, "Peta gelap": dark }, { "Kedalaman laut (GEBCO)": bathymetry, "Karang & marka laut": seamarks, "Objek karang/kapal karam": this.hazardLayer, "Arah angin": this.windLayer, "Indikasi badai": this.stormLayer }, { collapsed: true, position: "topright" }).addTo(this.map);
+    this.layers = { street, osmHumanitarian, cartoVoyage, satellite, terrain, topo, dark, bathymetry, gebcoRelief, seamarks, hazards: this.hazardLayer, wind: this.windLayer, storm: this.stormLayer };
+    L.control.layers(
+      { "OSM Standard": street, "OSM Humanitarian": osmHumanitarian, "CARTO Voyager": cartoVoyage, "Satelit Esri (syarat layanan)": satellite, "Topografi": topo, "Peta medan Esri (syarat layanan)": terrain, "Peta gelap CARTO": dark },
+      { "GEBCO 2026 Bathymetry": bathymetry, "GEBCO 2026 Relief": gebcoRelief, "OpenSeaMap Seamarks": seamarks, "Objek karang/kapal karam": this.hazardLayer, "Arah angin": this.windLayer, "Indikasi badai": this.stormLayer },
+      { collapsed: true, position: "topright" }
+    ).addTo(this.map);
     this.track = L.polyline([], { color: "#ffb703", weight: 4, opacity: .9 }).addTo(this.map);
     try {
       const savedTrack = JSON.parse(localStorage.getItem("bs10_track") || "[]");
@@ -22,6 +29,7 @@ const MapApp = {
     document.getElementById("btnGlobal").addEventListener("click", () => this.map.fitWorld({ animate: true }));
     document.getElementById("btnGoogleMaps").addEventListener("click", () => this.openGoogleMaps());
     document.getElementById("btnWindyFocus").addEventListener("click", () => this.updateWindy(true));
+    document.querySelectorAll("[data-windy-overlay]").forEach((b)=>b.addEventListener("click",()=>this.updateWindy(true,b.dataset.windyOverlay)));
     document.getElementById("btnCenter").addEventListener("click", () => this.lat !== null ? this.map.setView([this.lat, this.lon], 14) : alert("GPS belum aktif. Nyalakan lokasi di HP."));
     document.getElementById("btnDepth").addEventListener("click", () => this.lat !== null ? this.cekKedalaman(this.lat, this.lon) : alert("GPS belum aktif."));
     document.getElementById("btn3D").addEventListener("click", () => this.toggle3D());
@@ -32,6 +40,8 @@ const MapApp = {
     document.getElementById("btnRainOverlay").addEventListener("click", () => this.toggleRain());
     document.getElementById("btnHazardOverlay").addEventListener("click", () => this.toggleHazards());
     document.getElementById("btnStormOverlay").addEventListener("click", () => this.toggleLayer(this.stormLayer, "Indikasi badai"));
+    const freeMapStatus = document.getElementById("freeMapStatus");
+    if (freeMapStatus) freeMapStatus.textContent = "Gratis/open-data: OSM • OpenSeaMap • GEBCO • CARTO; layanan lain mengikuti syarat providernya.";
     this.startGPS();
   },
   startGPS() {
@@ -40,6 +50,9 @@ const MapApp = {
     navigator.geolocation.getCurrentPosition((pos) => this.onPos(pos), () => {}, options);
     this.watchId = navigator.geolocation.watchPosition((pos) => this.onPos(pos), () => this.setPosError("GPS tidak dapat diakses. Izinkan lokasi."), options);
   },
+  formatDuration(seconds) { const s=Math.max(0,Number(seconds)||0); if(s<60) return Math.round(s)+" detik"; const min=s/60; if(min<60) return min.toFixed(1)+" menit"; const h=min/60; if(h<24) return h.toFixed(1)+" jam"; const d=h/24; if(d<30) return d.toFixed(1)+" hari"; const mo=d/30.4375; if(mo<12) return mo.toFixed(1)+" bulan"; return (mo/12).toFixed(1)+" tahun"; },
+  formatDistanceNm(nm) { const n=Math.max(0,Number(nm)||0); return n<0.01?n.toFixed(3)+" NM":n<10?n.toFixed(2)+" NM":n.toFixed(1)+" NM"; },
+  bearingTo(lat1,lon1,lat2,lon2) { const r=Math.PI/180, y=Math.sin((lon2-lon1)*r)*Math.cos(lat2*r), x=Math.cos(lat1*r)*Math.sin(lat2*r)-Math.sin(lat1*r)*Math.cos(lat2*r)*Math.cos((lon2-lon1)*r); return (Math.atan2(y,x)/r+360)%360; },
   onPos(pos) {
     this.lat = pos.coords.latitude; this.lon = pos.coords.longitude;
     const acc = Math.round(pos.coords.accuracy), teksLat = this.lat.toFixed(5) + "°", teksLon = this.lon.toFixed(5) + "°", now = Date.now();
@@ -54,13 +67,15 @@ const MapApp = {
     this.speedKmh = speed;
     const knots = speed / 1.852;
     const routeSpeed = document.getElementById("routeSpeedInfo"); if (routeSpeed) routeSpeed.textContent = "Kecepatan: " + knots.toFixed(1) + " kn";
+    if (this.destinationMarker && this.destinationMarker.getLatLng()) { const d=this.destinationMarker.getLatLng(); const br=this.bearingTo(this.lat,this.lon,d.lat,d.lng); const rs=document.getElementById("routeStatus"); if(rs && this.routeLine) { const nm=this.map.distance([this.lat,this.lon],d)/1852; const k=knots>0.5?knots:6; rs.innerHTML="🎯 Ke tujuan: <b>"+this.formatDistanceNm(nm)+"</b> • Haluan: <b>"+br.toFixed(0)+"°</b> • Kecepatan: <b>"+k.toFixed(1)+" kn</b><br>⏱️ Estimasi waktu tersisa: <b>"+this.formatDuration((nm/k)*3600)+"</b>"; } }
     document.getElementById("dashAcc").textContent = "Akurasi GNSS: " + acc + " m"; document.getElementById("mapSpeed").textContent = knots.toFixed(1) + " kn • " + speed.toFixed(1) + " km/j";
     document.getElementById("dashSpeed").textContent = "Kecepatan kapal: " + knots.toFixed(1) + " knot (" + speed.toFixed(1) + " km/j)";
     const altitude = Number.isFinite(pos.coords.altitude) ? Math.round(pos.coords.altitude) + " m" : "-";
     const heading = Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 ? Math.round(pos.coords.heading) + "°" : "-";
     if (Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 && typeof App !== "undefined") App.setHeading(pos.coords.heading, "GPS kapal");
     document.getElementById("gpsState").textContent = "GNSS aktif • akurasi " + acc + " m • " + new Date().toLocaleTimeString("id-ID");
-    document.getElementById("mapTelemetry").textContent = "Ketinggian " + altitude + " • Arah " + heading;
+    document.getElementById("mapTelemetry").textContent = "Ketinggian " + altitude + " • Arah " + heading + " • Kompas " + (heading === "-" ? "belum tersedia" : heading);
+    const trip = document.getElementById("tripTelemetry"); if (trip) { const started = Number(localStorage.getItem("bs10_trip_started")||0); if (speed > 1 && !started) localStorage.setItem("bs10_trip_started", String(now)); const st=Number(localStorage.getItem("bs10_trip_started")||0); trip.textContent = st ? "Waktu perjalanan: " + this.formatDuration((now-st)/1000) : "Perjalanan belum dimulai (kapal diam)"; }
     if (!this.marker) { this.marker = L.marker([this.lat, this.lon], { icon: L.divIcon({ className: "ship-marker", html: "🚢", iconSize: [34, 34], iconAnchor: [17, 17] }) }).addTo(this.map); this.map.setView([this.lat, this.lon], 13); } else this.marker.setLatLng([this.lat, this.lon]);
     this.marker.bindPopup("Lokasi Kapal Saya<br>Lat " + teksLat + "<br>Lon " + teksLon + "<br>Kecepatan " + speed.toFixed(1) + " km/j");
     this.accuracyCircle = this.accuracyCircle || L.circle([this.lat, this.lon], { radius: acc, color: "#06d6a0", fillOpacity: .08 }).addTo(this.map);
@@ -107,7 +122,7 @@ const MapApp = {
     const distance = this.map.distance([this.lat, this.lon], [lat, lon]), knots = this.speedKmh > 1 ? this.speedKmh / 1.852 : 6, hours = distance / 1852 / knots, eta = new Date(Date.now() + hours * 3600000);
     if (this.routeLine) this.map.removeLayer(this.routeLine); if (this.destinationMarker) this.map.removeLayer(this.destinationMarker);
     this.routeLine = L.polyline([[this.lat, this.lon], [lat, lon]], { color: "#06d6a0", weight: 5, dashArray: "10 8" }).addTo(this.map); this.destinationMarker = L.marker([lat, lon]).addTo(this.map).bindPopup("🎯 Tujuan kapal<br>Lat " + lat.toFixed(5) + "<br>Lon " + lon.toFixed(5)); this.map.fitBounds(this.routeLine.getBounds(), { padding: [24, 24] });
-    document.getElementById("routeStatus").innerHTML = "🎯 Jarak garis lurus: <b>" + (distance / 1852).toFixed(2) + " NM</b> • Kecepatan hitung: <b>" + knots.toFixed(1) + " kn</b><br>Estimasi tiba: <b>" + eta.toLocaleString("id-ID", { weekday: "long", day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }) + "</b>";
+    const nm=distance/1852, durationHours=nm/knots, durationText=this.formatDuration(durationHours*3600); document.getElementById("routeStatus").innerHTML = "🎯 Jarak garis lurus: <b>" + this.formatDistanceNm(nm) + "</b> • Kecepatan hitung: <b>" + knots.toFixed(1) + " kn</b><br>⏱️ Estimasi waktu tempuh: <b>" + durationText + "</b><br>🕐 Estimasi tiba: <b>" + eta.toLocaleString("id-ID", { weekday: "long", day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }) + "</b><br><small>Rute ini garis lurus; belum memperhitungkan alur pelayaran, arus, cuaca, draft, atau hambatan.</small>";
   },
   clearRoute() { if (this.routeLine) this.map.removeLayer(this.routeLine); if (this.destinationMarker) this.map.removeLayer(this.destinationMarker); this.routeLine = null; this.destinationMarker = null; const el = document.getElementById("routeStatus"); if (el) el.textContent = "Rute dihapus. Ketuk peta atau isi koordinat tujuan."; },
   updateWindOverlay(deg, speed) { if (!this.windLayer || this.lat === null) return; this.windLayer.clearLayers(); const icon = L.divIcon({ className: "wind-marker", html: "➤", iconSize: [34, 34], iconAnchor: [17, 17] }); const m = L.marker([this.lat, this.lon], { icon }).addTo(this.windLayer).bindPopup("💨 Angin datang dari " + deg + "° • " + speed + " km/j"); m.getElement(); m.setRotationAngle = () => {}; },
@@ -122,14 +137,14 @@ const MapApp = {
     this.cekKedalaman(this.lat, this.lon, true);
     this.deteksiKarang(this.lat, this.lon, true);
   },
-  updateWindy(force) {
+  updateWindy(force, overlayOverride) {
     const frame = document.getElementById("windyFrame"); if (!frame) return;
     if (!force && !this.windyLoaded) return;
     this.windyLoaded = true;
     const lat = this.lat === null ? -2.5 : this.lat, lon = this.lon === null ? 118 : this.lon;
     const now = Date.now(), changed = !this.lastWindy || Math.abs(lat - this.lastWindy.lat) > .01 || Math.abs(lon - this.lastWindy.lon) > .01;
     if (!force && (!changed || now - (this.lastWindy && this.lastWindy.time || 0) < 15000)) return;
-    const params = "lat=" + lat.toFixed(4) + "&lon=" + lon.toFixed(4) + "&detailLat=" + lat.toFixed(4) + "&detailLon=" + lon.toFixed(4) + "&zoom=" + (this.lat === null ? 3 : 8) + "&level=surface&overlay=wind&product=ecmwf&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=kt&metricTemp=%C2%B0C";
+    const overlay = overlayOverride || "wind"; const params = "lat=" + lat.toFixed(4) + "&lon=" + lon.toFixed(4) + "&detailLat=" + lat.toFixed(4) + "&detailLon=" + lon.toFixed(4) + "&zoom=" + (this.lat === null ? 3 : 8) + "&level=surface&overlay=" + overlay + "&product=ecmwf&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=kt&metricTemp=%C2%B0C";
     frame.src = "https://embed.windy.com/embed2.html?" + params; this.lastWindy = { lat, lon, time: now };
   },
   openGoogleMaps() {
