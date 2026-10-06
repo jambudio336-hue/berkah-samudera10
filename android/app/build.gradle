@@ -7,7 +7,7 @@ android {
         applicationId "com.m4zk1pl4y.berkahsamudera10"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode (project.findProperty("VERSION_CODE") ?: "19").toInteger()
+        versionCode (project.findProperty("VERSION_CODE") ?: "10019").toInteger()
         versionName (project.findProperty("VERSION_NAME") ?: "1.0.19")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
