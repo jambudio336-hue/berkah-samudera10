@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#061a33">
-<title>Berkah Samudera10</title>
+<title>Berkah Samoedra10</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo-berkahsamudera.svg">
 <style>.photo-splash{position:fixed;inset:0;z-index:9999;background:#061a33;display:grid;place-items:center;overflow:hidden}.splash-photo{position:absolute;inset:0;background:url("assets/marine-splash.jpg") center/cover no-repeat}.splash-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,15,30,.8))}.splash-content{position:relative;z-index:2;text-align:center;color:#fff;padding:24px}.splash-content h1{font-size:clamp(2.2rem,9vw,5rem);margin:8px 0}.splash-content h1 span{color:#55d6ff}.splash-content p{margin:0 0 24px;opacity:.9}.photo-splash.is-hidden{opacity:0;pointer-events:none;transition:opacity .6s}</style>
@@ -18,7 +18,7 @@
 <!-- ============ MARINE OS WELCOME ============ -->
 <div id="marineWelcome" class="marine-welcome is-hidden" aria-hidden="true">
   <div class="marine-welcome-card">
-    <div class="marine-welcome-kicker">⚓ BERKAH SAMUDERA10 • MARINE OS</div>
+    <div class="marine-welcome-kicker">⚓ BERKAH SAMOEDRA10 • MARINE OS</div>
     <h2><span data-welcome-greeting>Selamat datang</span></h2>
     <p class="marine-welcome-user" data-welcome-user>Kapten 👋</p>
     <div class="marine-quote-box">
@@ -33,7 +33,7 @@
 </div>
 
 <!-- ============ SPLASH SCREEN VIDEO ============ -->
-<div id="splash" class="photo-splash" aria-label="Berkah Samudera10">
+<div id="splash" class="photo-splash" aria-label="Berkah Samoedra10">
   <div class="splash-photo"></div><div class="splash-shade"></div>
   <div class="splash-content"><span class="eyebrow">MARINE OS</span><h1>Berkah Samudera<span>10</span></h1><p>Komando kapal • cuaca • peta • navigasi • operasi</p><button id="splashTap" class="btn primary">🌊 Masuk ke Laut</button></div>
 </div>
@@ -76,7 +76,7 @@
 <section id="page-marine-command" class="page active marine-dashboard-page">
   <div class="marine-dashboard-hero">
     <div>
-      <span class="eyebrow">BERKAH SAMUDERA10 • MARINE OS</span>
+      <span class="eyebrow">BERKAH SAMOEDRA10 • MARINE OS</span>
       <h2>🌊 Marine Command Center</h2>
       <p>Semua informasi kapal, laut, navigasi, traffic, keselamatan, operasi, sosial, dan AI dalam satu dashboard map-first.</p>
     </div>
@@ -366,14 +366,14 @@
 <!-- ============ PENGATURAN ============ -->
 <section id="page-pengaturan" class="page">
   <div class="card hero settings-hero"><span class="eyebrow">KAPAL ANDA • SAMUDERA10</span><h2>⚙️ Pengaturan Operasi</h2><p class="hero-sub">Atur identitas kapal, sinkronisasi online, dan tampilan navigasi.</p></div>
-  <div class="card"><h3>🚢 Identitas Kapal</h3><label>Nama kapal</label><input id="settingVesselName" type="text" placeholder="Contoh: Berkah Samudera 10"><label>ID kapal (untuk sinkronisasi)</label><input id="settingVesselId" type="text" placeholder="kapal-utama"><button class="btn primary" id="btnSaveSettings">💾 Simpan pengaturan</button></div>
+  <div class="card"><h3>🚢 Identitas Kapal</h3><label>Nama kapal</label><input id="settingVesselName" type="text" placeholder="Contoh: Berkah Samoedra 10"><label>ID kapal (untuk sinkronisasi)</label><input id="settingVesselId" type="text" placeholder="kapal-utama"><button class="btn primary" id="btnSaveSettings">💾 Simpan pengaturan</button></div>
   <div class="card prayer-settings"><h3>🕌 Pengingat Waktu Sholat</h3><p class="muted">Jadwal otomatis mengikuti zona waktu dari titik GPS terkini. Saat waktu tiba, Android menerima notifikasi pengingat dengan suara notifikasi bawaan perangkat.</p><label class="switch-row"><span>Aktifkan pengingat sholat</span><input id="settingPrayerNotif" type="checkbox" checked></label><label class="switch-row"><span>Suara adzan otomatis</span><input id="settingAdhanSound" type="checkbox" checked></label><div class="row"><button class="btn primary-inline" id="btnEnablePrayer">🕌 Aktifkan izin pengingat</button></div><p class="muted" id="prayerStatus">Jadwal diperbarui dari lokasi GPS.</p></div>
   <div class="card notification-settings"><h3>🔔 Notifikasi Berita Resmi</h3><p class="muted">Aktifkan izin notifikasi Android. Aplikasi memeriksa sumber resmi saat online dan memberi notifikasi hanya jika data berubah.</p><label class="switch-row"><span>Peringatan BMKG Maritim</span><input id="settingNotifMaritim" type="checkbox" checked></label><label class="switch-row"><span>Gempa terbaru BMKG</span><input id="settingNotifGempa" type="checkbox" checked></label><div class="row"><button class="btn primary-inline" id="btnEnableNotifications">🔔 Aktifkan notifikasi</button><button class="btn" id="btnCheckNotifications">🔄 Cek sekarang</button></div><p class="muted" id="notificationSettingsNote">Pemeriksaan otomatis setiap 10 menit saat aplikasi online.</p></div>
   <div class="card local-storage-card"><h3>📱 Penyimpanan Lokal HP</h3><p class="muted">Semua data aplikasi disimpan di penyimpanan HP pengguna: rute, GPS, kru, tangkapan, perbekalan, riwayat, jadwal sholat, dan pengaturan. Aplikasi tidak membutuhkan backend atau akun.</p><span class="chip">✅ Mode lokal aktif • offline-first</span></div>
   <div class="card"><h3>🧭 Navigasi</h3><label class="switch-row"><span>Ikuti posisi kapal otomatis</span><input id="settingAutoCenter" type="checkbox" checked></label><label class="switch-row"><span>Tampilkan jalur perjalanan</span><input id="settingShowTrack" type="checkbox" checked></label><button class="btn" id="btnClearTrack">🧹 Bersihkan jalur perjalanan</button><button class="btn" id="btnRefreshData">🔄 Segarkan cuaca & peta</button></div>
   <div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
   <div class="card donation-card"><span class="eyebrow">DUKUNG PENGEMBANGAN</span><h3>💝 Donasi untuk Pengembangan APK</h3><p class="donation-copy">Dukungan Anda membantu kami merawat server, memperbaiki fitur, dan terus mengembangkan Berkah Samudera agar semakin nyaman digunakan para pengguna.</p><img class="donation-qr" src="donasi-qris.png" alt="QRIS donasi pengembangan Berkah Samudera" loading="lazy"><p class="muted center">Scan QRIS di atas menggunakan aplikasi pembayaran Anda. Terima kasih atas dukungan dan kepercayaannya.</p></div>
-  <div class="card about-card"><span class="eyebrow">TENTANG APLIKASI</span><h3>🚢 Berkah Samudera10</h3><p>Aplikasi pendamping operasi kapal untuk memantau GPS, rute perjalanan, cuaca laut, gelombang, Windy global, kedalaman GEBCO, karang terpetakan, kompas, kru, tangkapan, perbekalan, dan log riwayat.</p><p class="thanks">Terima kasih telah menggunakan aplikasi kami. Semoga Berkah Samudera membantu perjalanan Anda menjadi lebih aman, rapi, dan nyaman.</p><p class="sponsor center">Dikembangkan dan disponsori by.m4zk1pl4y</p><p class="muted center">Versi aplikasi 1.0.18</p></div>
+  <div class="card about-card"><span class="eyebrow">TENTANG APLIKASI</span><h3>🚢 Berkah Samoedra10</h3><p>Aplikasi pendamping operasi kapal untuk memantau GPS, rute perjalanan, cuaca laut, gelombang, Windy global, kedalaman GEBCO, karang terpetakan, kompas, kru, tangkapan, perbekalan, dan log riwayat.</p><p class="thanks">Terima kasih telah menggunakan aplikasi kami. Semoga Berkah Samudera membantu perjalanan Anda menjadi lebih aman, rapi, dan nyaman.</p><p class="sponsor center">Dikembangkan dan disponsori by.m4zk1pl4y</p><p class="muted center">Versi aplikasi 1.0.18</p></div>
 </section>
 <!-- ============ RIWAYAT ============ -->
 <section id="page-riwayat" class="page">
@@ -396,7 +396,7 @@
 
 </main>
 
-<footer class="footer">Berkah Samudera10 © 2026 — Dibuat untuk nelayan Indonesia 🇮🇩<br><b class="sponsor">Disponsori by.m4zk1pl4y</b><br><span id="syncState">Supabase Realtime • data tersimpan lokal sebagai cache</span></footer>
+<footer class="footer">Berkah Samoedra10 © 2026 — Dibuat untuk nelayan Indonesia 🇮🇩<br><b class="sponsor">Dikembangkan & disponsori by.m4zk1pl4y</b><br><span id="syncState">Supabase Realtime • data tersimpan lokal sebagai cache</span></footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <link rel="stylesheet" href="css/marine-os.css"><link rel="stylesheet" href="css/marine-runtime.css"><link rel="stylesheet" href="css/marine-welcome.css"><script src="js/storage.js" defer></script>
