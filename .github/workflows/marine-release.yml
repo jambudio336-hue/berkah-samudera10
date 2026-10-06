@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag, e.g. v1.0.20"
+        description: "Release tag, e.g. v1.0.28"
         required: true
         type: string
   push:
@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   release:
-    if: \${{ secrets.MARINE_KEYSTORE_B64 != '' && secrets.MARINE_KEYSTORE_PASSWORD != '' && secrets.MARINE_KEY_ALIAS != '' && secrets.MARINE_KEY_PASSWORD != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,52 +29,68 @@ jobs:
       - uses: android-actions/setup-android@v3
         with:
           packages: "platform-tools platforms;android-35 build-tools;35.0.0"
+
+      - name: Verify release signing secrets
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.MARINE_KEYSTORE_B64 }}
+          STORE_PASSWORD: ${{ secrets.MARINE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.MARINE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.MARINE_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$KEYSTORE_B64" || { echo "Missing MARINE_KEYSTORE_B64"; exit 1; }
+          test -n "$STORE_PASSWORD" || { echo "Missing MARINE_KEYSTORE_PASSWORD"; exit 1; }
+          test -n "$KEY_ALIAS" || { echo "Missing MARINE_KEY_ALIAS"; exit 1; }
+          test -n "$KEY_PASSWORD" || { echo "Missing MARINE_KEY_PASSWORD"; exit 1; }
+
       - name: Prepare release version
         id: version
         shell: bash
         run: |
-          set -e
-          TAG="\${{ github.event.inputs.tag || github.ref_name }}"
-          VERSION="\${TAG#v}"
-          IFS='.' read -r MAJOR MINOR PATCH <<< "\$VERSION"
-          PATCH_NUM="\${PATCH:-0}"
+          set -euo pipefail
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          VERSION="${TAG#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          PATCH_NUM="${PATCH:-0}"
           CODE=$((10#$MAJOR * 10000 + 10#$MINOR * 100 + 10#$PATCH_NUM))
-          echo "tag=\$TAG" >> "\$GITHUB_OUTPUT"
-          echo "version=\$VERSION" >> "\$GITHUB_OUTPUT"
-          echo "code=\$CODE" >> "\$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+
       - run: npm ci
       - run: npx cap sync android
+
       - name: Decode signing keystore
         shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.MARINE_KEYSTORE_B64 }}
         run: |
-          echo "\${{ secrets.MARINE_KEYSTORE_B64 }}" | base64 --decode > android/marine-release.keystore
-      - name: Build signed release APK
+          echo "$KEYSTORE_B64" | base64 --decode > android/marine-release.keystore
+
+      - name: Build release APK
+        working-directory: android
+        run: |
+          ./gradlew assembleRelease --no-daemon             -PVERSION_NAME="${{ steps.version.outputs.version }}"             -PVERSION_CODE="${{ steps.version.outputs.code }}"
+
+      - name: Sign release APK
         working-directory: android
         env:
-          STORE_PASSWORD: \${{ secrets.MARINE_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: \${{ secrets.MARINE_KEY_ALIAS }}
-          KEY_PASSWORD: \${{ secrets.MARINE_KEY_PASSWORD }}
+          STORE_PASSWORD: ${{ secrets.MARINE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.MARINE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.MARINE_KEY_PASSWORD }}
         run: |
-          ./gradlew assembleRelease --no-daemon \
-            -PVERSION_NAME="\${{ steps.version.outputs.version }}" \
-            -PVERSION_CODE="\${{ steps.version.outputs.code }}"
-          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign \
-            --ks marine-release.keystore \
-            --ks-pass pass:"\$STORE_PASSWORD" \
-            --ks-key-alias "\$KEY_ALIAS" \
-            --key-pass pass:"\$KEY_PASSWORD" \
-            --out app/build/outputs/apk/release/berkah-samudera10-release.apk \
-            app/build/outputs/apk/release/app-release-unsigned.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign             --ks marine-release.keystore             --ks-pass pass:"$STORE_PASSWORD"             --ks-key-alias "$KEY_ALIAS"             --key-pass pass:"$KEY_PASSWORD"             --out app/build/outputs/apk/release/berkah-samudera10-release.apk             app/build/outputs/apk/release/app-release-unsigned.apk
+
       - name: Verify APK signature
         run: "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose android/app/build/outputs/apk/release/berkah-samudera10-release.apk
+
       - name: Remove signing material
         if: always()
         run: rm -f android/marine-release.keystore
+
       - name: Publish GitHub Release
         env:
-          GH_TOKEN: \${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "\${{ steps.version.outputs.tag }}" \
-            android/app/build/outputs/apk/release/berkah-samudera10-release.apk \
-            --title "Berkah Samoedra \${{ steps.version.outputs.version }}" \
-            --generate-notes
+          gh release create "${{ steps.version.outputs.tag }}"             android/app/build/outputs/apk/release/berkah-samudera10-release.apk             --title "Berkah Samoedra ${{ steps.version.outputs.version }}"             --generate-notes
