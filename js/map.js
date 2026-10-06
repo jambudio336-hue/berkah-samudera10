@@ -50,6 +50,8 @@ const MapApp = {
     navigator.geolocation.getCurrentPosition((pos) => this.onPos(pos), () => {}, options);
     this.watchId = navigator.geolocation.watchPosition((pos) => this.onPos(pos), () => this.setPosError("GPS tidak dapat diakses. Izinkan lokasi."), options);
   },
+  formatDuration(seconds) { const s=Math.max(0,Number(seconds)||0); if(s<60) return Math.round(s)+" detik"; const min=s/60; if(min<60) return min.toFixed(1)+" menit"; const h=min/60; if(h<24) return h.toFixed(1)+" jam"; const d=h/24; if(d<30) return d.toFixed(1)+" hari"; const mo=d/30.4375; if(mo<12) return mo.toFixed(1)+" bulan"; return (mo/12).toFixed(1)+" tahun"; },
+  formatDistanceNm(nm) { const n=Math.max(0,Number(nm)||0); return n<0.01?n.toFixed(3)+" NM":n<10?n.toFixed(2)+" NM":n.toFixed(1)+" NM"; },
   onPos(pos) {
     this.lat = pos.coords.latitude; this.lon = pos.coords.longitude;
     const acc = Math.round(pos.coords.accuracy), teksLat = this.lat.toFixed(5) + "°", teksLon = this.lon.toFixed(5) + "°", now = Date.now();
@@ -70,7 +72,8 @@ const MapApp = {
     const heading = Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 ? Math.round(pos.coords.heading) + "°" : "-";
     if (Number.isFinite(pos.coords.heading) && pos.coords.heading >= 0 && typeof App !== "undefined") App.setHeading(pos.coords.heading, "GPS kapal");
     document.getElementById("gpsState").textContent = "GNSS aktif • akurasi " + acc + " m • " + new Date().toLocaleTimeString("id-ID");
-    document.getElementById("mapTelemetry").textContent = "Ketinggian " + altitude + " • Arah " + heading;
+    document.getElementById("mapTelemetry").textContent = "Ketinggian " + altitude + " • Arah " + heading + " • Kompas " + (heading === "-" ? "belum tersedia" : heading);
+    const trip = document.getElementById("tripTelemetry"); if (trip) { const started = Number(localStorage.getItem("bs10_trip_started")||0); if (speed > 1 && !started) localStorage.setItem("bs10_trip_started", String(now)); const st=Number(localStorage.getItem("bs10_trip_started")||0); trip.textContent = st ? "Waktu perjalanan: " + this.formatDuration((now-st)/1000) : "Perjalanan belum dimulai (kapal diam)"; }
     if (!this.marker) { this.marker = L.marker([this.lat, this.lon], { icon: L.divIcon({ className: "ship-marker", html: "🚢", iconSize: [34, 34], iconAnchor: [17, 17] }) }).addTo(this.map); this.map.setView([this.lat, this.lon], 13); } else this.marker.setLatLng([this.lat, this.lon]);
     this.marker.bindPopup("Lokasi Kapal Saya<br>Lat " + teksLat + "<br>Lon " + teksLon + "<br>Kecepatan " + speed.toFixed(1) + " km/j");
     this.accuracyCircle = this.accuracyCircle || L.circle([this.lat, this.lon], { radius: acc, color: "#06d6a0", fillOpacity: .08 }).addTo(this.map);
