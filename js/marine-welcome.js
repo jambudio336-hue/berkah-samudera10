@@ -57,6 +57,7 @@
     if(!root)return;
     root.classList.add("is-hidden");
     root.setAttribute("aria-hidden","true");
+    document.getElementById("splashTap")?.click();
   }
   window.MarineWelcome={show,hide,quotes:()=>QUOTES.slice()};
   document.addEventListener("DOMContentLoaded",()=>setTimeout(show,900));
