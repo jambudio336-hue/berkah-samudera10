@@ -204,7 +204,31 @@
     <div class="row map-actions"><button class="btn" id="btnGlobal">🌍 Lihat dunia</button><button class="btn" id="btnGoogleMaps">🗺️ Google Maps</button><button class="btn" id="btnWindyFocus">🌬️ Fokus Windy ke GPS</button></div>
     <div class="windy-panel">
       <div class="section-head"><div><span class="eyebrow">WINDY GLOBAL</span><h3>🌬️ Angin, ombak & prakiraan waktu</h3></div><a class="btn sm" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">Buka Windy ↗</a></div>
-      <p class="muted">Windy global dengan layer angin, hujan, gelombang, swell, suhu, tekanan, awan, radar, dan timeline. Titik pusat mengikuti GPS HP.</p><div class="row windy-layer-buttons"><button class="btn sm" data-windy-overlay="wind">💨 Angin</button><button class="btn sm" data-windy-overlay="rain">🌧️ Hujan</button><button class="btn sm" data-windy-overlay="waves">🌊 Gelombang</button><button class="btn sm" data-windy-overlay="swell">〰️ Swell</button><button class="btn sm" data-windy-overlay="temp">🌡️ Suhu</button><button class="btn sm" data-windy-overlay="pressure">📈 Tekanan</button><button class="btn sm" data-windy-overlay="clouds">☁️ Awan</button><a class="btn sm" href="https://nowcoast.noaa.gov/" target="_blank" rel="noopener noreferrer">🇺🇸 NOAA nowCOAST ↗</a></div>
+      <p class="muted">Windy global dengan layer angin, hujan, gelombang, swell, suhu, tekanan, awan, radar, dan timeline. Titik pusat mengikuti GPS HP.</p><div class="row windy-layer-buttons">
+<button class="btn sm" data-windy-overlay="wind">💨 Angin</button>
+<button class="btn sm" data-windy-overlay="gustAccu">💨 Hembusan</button>
+<button class="btn sm" data-windy-overlay="rain">🌧️ Hujan</button>
+<button class="btn sm" data-windy-overlay="rainAccu">🌧️ Akumulasi hujan</button>
+<button class="btn sm" data-windy-overlay="waves">🌊 Gelombang</button>
+<button class="btn sm" data-windy-overlay="swell1">〰️ Swell 1</button>
+<button class="btn sm" data-windy-overlay="swell2">〰️ Swell 2</button>
+<button class="btn sm" data-windy-overlay="swell3">〰️ Swell 3</button>
+<button class="btn sm" data-windy-overlay="windWaves">🌊 Wind waves</button>
+<button class="btn sm" data-windy-overlay="currents">🌀 Arus</button>
+<button class="btn sm" data-windy-overlay="tidalCurrents">🌊 Arus pasang</button>
+<button class="btn sm" data-windy-overlay="sst">🌡️ Suhu laut</button>
+<button class="btn sm" data-windy-overlay="temp">🌡️ Suhu udara</button>
+<button class="btn sm" data-windy-overlay="dewpoint">💧 Titik embun</button>
+<button class="btn sm" data-windy-overlay="rh">💦 Kelembapan</button>
+<button class="btn sm" data-windy-overlay="clouds">☁️ Awan</button>
+<button class="btn sm" data-windy-overlay="fog">🌫️ Kabut</button>
+<button class="btn sm" data-windy-overlay="cape">⚡ CAPE</button>
+<button class="btn sm" data-windy-overlay="pressure">📈 Tekanan</button>
+<button class="btn sm" data-windy-overlay="visibility">👁️ Visibilitas</button>
+<button class="btn sm" data-windy-overlay="satellite">🛰️ Satelit</button>
+<a class="btn sm" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">🌐 Semua layer Windy ↗</a>
+<a class="btn sm" href="https://nowcoast.noaa.gov/" target="_blank" rel="noopener noreferrer">🇺🇸 NOAA nowCOAST ↗</a>
+</div>
       <iframe id="windyFrame" title="Windy global weather map" loading="lazy" allow="fullscreen; geolocation" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
     <div class="row">
