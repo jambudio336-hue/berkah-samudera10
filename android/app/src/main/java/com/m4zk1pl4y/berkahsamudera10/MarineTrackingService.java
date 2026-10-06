@@ -38,6 +38,7 @@ public class MarineTrackingService extends Service implements LocationListener {
     }
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
+        prefs.edit().putBoolean("running", true).apply();
         startForegroundNotification();
         startLocationUpdates();
         return START_STICKY;
@@ -82,6 +83,7 @@ public class MarineTrackingService extends Service implements LocationListener {
             .putFloat("accuracy", l.hasAccuracy() ? l.getAccuracy() : -1f)
             .putFloat("heading", l.hasBearing() ? l.getBearing() : -1f)
             .putLong("updated_at", System.currentTimeMillis())
+            .putBoolean("running", true)
             .apply();
         new Thread(() -> publish(l)).start();
     }
@@ -92,7 +94,7 @@ public class MarineTrackingService extends Service implements LocationListener {
             String supabaseUrl = "https://volhmpsomtjnaroylmwe.supabase.co";
             String anonKey = "sb_publishable_5wuisICF0Ia8YXwf1McOkg_lMZU9d6g";
             String vesselId = getSharedPreferences("marine_tracking", MODE_PRIVATE).getString("vessel_id", "kapal-utama");
-            String deviceId = getSharedPreferences("marine_tracking", MODE_PRIVATE).getString("device_id", "android-" + Build.SERIAL);
+            String deviceId = getSharedPreferences("marine_tracking", MODE_PRIVATE).getString("device_id", "android-" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID));
             JSONObject row = new JSONObject();
             row.put("vessel_id", vesselId);
             row.put("device_id", deviceId);
@@ -126,6 +128,7 @@ public class MarineTrackingService extends Service implements LocationListener {
 
     @Override public void onDestroy() {
         if (locationManager != null) locationManager.removeUpdates(this);
+        prefs.edit().putBoolean("running", false).apply();
         super.onDestroy();
     }
     @Override public IBinder onBind(Intent intent) { return null; }
