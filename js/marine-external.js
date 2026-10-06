@@ -85,5 +85,22 @@
     try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
     return out;
   }
-  window.MarineExternal={config:CFG,bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},marine:{openMeteo:openMeteoMarine},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},health,cache:{read,write}};
+  const providerConfig=()=>window.__MARINE_PROVIDER_CONFIG__||{};
+  async function testEndpoint(name){
+    const p=providerConfig()[name]||{};
+    if(!p.endpoint)return {ok:false,message:"Belum ada endpoint/gateway resmi yang dikonfigurasi."};
+    try{
+      const r=await fetch(p.endpoint,{method:p.method||"GET",headers:p.headers||{},cache:"no-store"});
+      return {ok:r.ok,message:r.ok?"Gateway terjangkau.":"Gateway HTTP "+r.status+"."};
+    }catch(e){return {ok:false,message:"Gateway tidak terjangkau: "+(e?.message||"network error")};}
+  }
+  const integrations={
+    ais:{test:()=>testEndpoint("ais")},
+    radar:{test:()=>testEndpoint("radar")},
+    navionics:{test:async()=>({ok:!!window.NavionicsBridge,message:window.NavionicsBridge?"Native Navionics bridge terdeteksi.":"Menunggu Garmin/Navionics SDK + developer token pada build Android."})},
+    marineTraffic:{test:()=>testEndpoint("marineTraffic")},
+    windy:{test:()=>testEndpoint("windy")},
+    windyMap:{test:async()=>({ok:true,message:"Official Windy map surface siap; API berlisensi dipakai melalui adapter windy saat key/gateway tersedia."})}
+  };
+  window.MarineExternal={config:CFG,bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},marine:{openMeteo:openMeteoMarine},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},integrations,providerConfig,health,cache:{read,write}};
 })();
