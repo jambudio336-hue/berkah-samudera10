@@ -18,7 +18,7 @@
 - Memperbaiki URL RainViewer agar memakai host/path frame terbaru, membatasi zoom, dan mencegah request duplikat.
 - Mengganti efek miring CSS palsu dengan renderer vektor MapLibre 3D; marker kapal, rute, cuaca, dan objek yang didukung disinkronkan.
 - Menambahkan build web kanonis dan pemeriksaan project sebelum APK dibuat; versi dinaikkan menjadi **1.1.0 / versionCode 10100**.
-- QA: 173 assertion project, 27 JavaScript files syntax-checked, browser Chromium peta 2D/3D dan katalog 25 sumber tanpa exception JavaScript.
+- QA: 175 assertion project, 27 JavaScript files syntax-checked, browser Chromium peta 2D/3D dan katalog 25 sumber tanpa exception JavaScript.
 
 ### Catatan
 - Hanya enam dari 25 sumber yang ditinjau dipasang sebagai layer aktif/bersyarat. Provider lain ditampilkan sebagai katalog berstatus tidak aktif karena lisensi/key, cakupan, tanggal data, atau batas layanan.

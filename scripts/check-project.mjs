@@ -54,13 +54,15 @@ assert.ok(html.includes('id="mapProviderDialog"') && html.includes('id="btnMapSo
 assert.ok(!/basemaps\.cartocdn\.com|services\.arcgisonline\.com|tile\.openstreetmap\.fr/.test(read('js/map.js')), 'Unapproved legacy map endpoint still installed');
 assert.ok(sw.includes('new URL(url).origin !== self.location.origin'), 'External provider tiles must bypass service-worker cache');
 assert.ok(!read('js/marine-external.js').includes('carto:'), 'Unapproved CARTO endpoint still advertised at runtime');
-assert.ok(read('android/app/src/main/java/com/m4zk1pl4y/berkahsamudera10/MainActivity.java').includes('BerkahSamudera10/'), 'Android WebView must identify the app to public tile providers');
+const mainActivity = read('android/app/src/main/java/com/m4zk1pl4y/berkahsamudera10/MainActivity.java');
+assert.ok(mainActivity.includes('BerkahSamudera10/'), 'Android WebView must identify the app to public tile providers');
+assert.ok(mainActivity.includes('getPackageManager().getPackageInfo') && !mainActivity.includes('BuildConfig'), 'WebView User-Agent version must not depend on disabled BuildConfig generation');
 const marineOS = read('js/marine-os.js');
 assert.ok(!marineOS.includes('this.go("akun")'), 'Removed account tab is still a module destination');
 const moduleTargets = [...marineOS.matchAll(/\["[^"]+","[^"]+","[^"]+","[^"]+","([^"]+)",(?:true|false)\]/g)].map((match) => match[1]);
 assert.ok(moduleTargets.length > 0 && moduleTargets.every((target) => html.includes(`data-page="${target}"`)), 'A Marine OS module links to a missing page/tab');
 assert.ok(marineOS.includes('version: "1.1.0"'), 'Marine OS metadata version is out of sync');
-checks += 9;
+checks += 10;
 
 const syncSource = read('js/supabase-sync.js');
 const nativeBridge = read('js/marine-native-tracking.js');
@@ -68,13 +70,15 @@ const nativeService = read('android/app/src/main/java/com/m4zk1pl4y/berkahsamude
 const deviceProfile = read('js/device-profile.js');
 const ownerWriteMigration = read('supabase/migrations/20261006204600_anonymous_profile_owner_writes.sql');
 const ciWorkflow = read('.github/workflows/marine-os-ci.yml');
+const releaseWorkflow = read('.github/workflows/marine-release.yml');
 assert.ok(syncSource.includes('if (!this.sharingEnabled() || !navigator.onLine) return;'), 'WebView GPS publishing must require explicit sharing consent');
 assert.ok(!nativeService.includes('live_positions') && !nativeService.includes('Authorization') && !nativeService.includes('supabase.co/rest'), 'Native background service must never publish GPS or carry Supabase credentials');
 assert.ok(!nativeBridge.includes('accessToken') && nativeBridge.includes('local-only'), 'Native bridge must be local-only and must not pass auth tokens');
 assert.ok(deviceProfile.includes('Saat aktif dan aplikasi berjalan') && deviceProfile.includes('tidak mengirimnya ke cloud'), 'Location consent must explain foreground-only cloud sharing');
 assert.ok(ownerWriteMigration.includes('FOR INSERT TO authenticated') && ownerWriteMigration.includes('FOR UPDATE TO authenticated') && ownerWriteMigration.includes('id = auth.uid()'), 'Owner-only profile write RLS migration missing');
 assert.ok(ciWorkflow.includes('feature/**') && ciWorkflow.includes('git ls-files --error-unmatch') && ciWorkflow.includes('unzip -Z1'), 'CI must test feature branches and verify source archive contents');
-checks += 6;
+assert.ok(releaseWorkflow.includes('workflow_dispatch:') && !/^\s*push:/m.test(releaseWorkflow) && releaseWorkflow.includes('PACKAGE_VERSION=') && releaseWorkflow.includes('--target "$GITHUB_SHA"'), 'Release workflow must be manual-only, version-checked, and point at the tested commit');
+checks += 7;
 
 const config = JSON.parse(read('capacitor.config.json'));
 assert.equal(config.webDir, 'www', 'Capacitor must build the checked-in www webDir');

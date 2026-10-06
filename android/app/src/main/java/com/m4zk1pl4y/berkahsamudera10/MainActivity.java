@@ -1,5 +1,8 @@
 package com.m4zk1pl4y.berkahsamudera10;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebView;
 import com.getcapacitor.BridgeActivity;
@@ -42,10 +45,24 @@ public class MainActivity extends BridgeActivity {
             if (webView == null) return;
             String current = webView.getSettings().getUserAgentString();
             if (current == null || current.contains("BerkahSamudera10/")) return;
-            String appIdentity = " BerkahSamudera10/" + BuildConfig.VERSION_NAME
+            String appIdentity = " BerkahSamudera10/" + installedVersion()
                 + " (+https://github.com/jambudio336-hue/berkah-samudera10)";
             webView.getSettings().setUserAgentString(current + appIdentity);
         } catch (Exception ignored) {
+        }
+    }
+
+    private String installedVersion() {
+        try {
+            PackageInfo info;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.PackageInfoFlags.of(0));
+            } else {
+                info = getPackageManager().getPackageInfo(getPackageName(), 0);
+            }
+            return info.versionName != null ? info.versionName : "unknown";
+        } catch (PackageManager.NameNotFoundException ignored) {
+            return "unknown";
         }
     }
 
