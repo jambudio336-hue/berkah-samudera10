@@ -35,10 +35,28 @@ jobs:
       - name: Android debug build
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
+      - name: Create build manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'commit=%s\\nbranch=%s\\nrun=%s\\n' "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_RUN_ID" > marine-build-manifest.txt
+          printf 'apk=android/app/build/outputs/apk/debug/app-debug.apk\\n' >> marine-build-manifest.txt
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: berkah-samudera10-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: |
+            android/app/build/outputs/apk/debug/app-debug.apk
+            marine-build-manifest.txt
           if-no-files-found: error
           retention-days: 14
+      - name: Archive full source tree
+        shell: bash
+        run: git archive --format=zip --output=berkah-samudera10-fullstack-source.zip HEAD
+      - name: Upload full-stack source
+        uses: actions/upload-artifact@v4
+        with:
+          name: berkah-samudera10-fullstack-source
+          path: berkah-samudera10-fullstack-source.zip
+          if-no-files-found: error
+          retention-days: 30
