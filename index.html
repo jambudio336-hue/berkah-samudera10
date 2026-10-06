@@ -202,7 +202,33 @@
     <h3>🗺️ Peta Laut Real-Time</h3>
     <div id="map"></div>
     <div class="row map-actions"><button class="btn" id="btnGlobal">🌍 Lihat dunia</button><button class="btn" id="btnGoogleMaps">🗺️ Google Maps</button><button class="btn" id="btnWindyFocus">🌬️ Fokus Windy ke GPS</button></div>
-    <div class="windy-panel">
+    <div class="card marine-tools-card">
+  <div class="section-head"><div><span class="eyebrow">MARINE TOOLKIT</span><h3>🧰 Tools Kapal</h3></div><span class="chip">Offline</span></div>
+  <select id="marineToolMode">
+    <option value="convert">Konverter satuan</option>
+    <option value="fuel">Kalkulator BBM perjalanan</option>
+    <option value="bearing">Jarak & bearing antar koordinat</option>
+  </select>
+  <div data-tool-group="convert" class="tool-group">
+    <input id="toolValue" type="number" inputmode="decimal" placeholder="Nilai">
+    <select id="toolUnit"><option value="kn-kmh">knot → km/j</option><option value="kmh-kn">km/j → knot</option><option value="nm-km">NM → km</option><option value="km-nm">km → NM</option></select>
+  </div>
+  <div data-tool-group="fuel" class="tool-group">
+    <input id="toolDistanceNm" type="number" inputmode="decimal" placeholder="Jarak (NM)">
+    <input id="toolSpeedKn" type="number" inputmode="decimal" placeholder="Kecepatan (kn)">
+    <input id="toolFuelLph" type="number" inputmode="decimal" placeholder="Konsumsi BBM (L/jam)">
+    <input id="toolReserve" type="number" inputmode="decimal" value="20" placeholder="Cadangan (%)">
+  </div>
+  <div data-tool-group="bearing" class="tool-group">
+    <input id="toolALat" type="number" step="any" placeholder="A Lat">
+    <input id="toolALon" type="number" step="any" placeholder="A Lon">
+    <input id="toolBLat" type="number" step="any" placeholder="B Lat">
+    <input id="toolBLon" type="number" step="any" placeholder="B Lon">
+  </div>
+  <div class="row"><button class="btn primary-inline" id="btnMarineToolCalc">🧮 Hitung</button><button class="btn" id="btnMarineToolGps">📍 Isi GPS ke A</button><button class="btn" id="btnMarineToolCopyGps">📋 Salin GPS</button></div>
+  <p class="muted" id="marineToolsResult">Pilih tool lalu hitung.</p>
+</div>
+<div class="windy-panel">
       <div class="section-head"><div><span class="eyebrow">WINDY GLOBAL</span><h3>🌬️ Angin, ombak & prakiraan waktu</h3></div><a class="btn sm" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">Buka Windy ↗</a></div>
       <p class="muted">Windy global dengan layer angin, hujan, gelombang, swell, suhu, tekanan, awan, radar, dan timeline. Titik pusat mengikuti GPS HP.</p><div class="row windy-layer-buttons">
 <button class="btn sm" data-windy-overlay="wind">💨 Angin</button>
@@ -449,6 +475,6 @@
 <script src="js/marine-external.js" defer></script>
 <script src="js/marine-runtime.js" defer></script>
 <script src="js/garmin-activecaptain.js" defer></script>
-<script src="js/marine-native-tracking.js" defer></script>\n<script src="js/marine-updater.js" defer></script>
+<script src="js/marine-native-tracking.js" defer></script>\n<script src="js/marine-updater.js" defer></script>\n<script src="js/marine-tools.js" defer></script>
 </body>
 </html>
