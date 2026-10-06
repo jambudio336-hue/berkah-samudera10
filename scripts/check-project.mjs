@@ -78,7 +78,8 @@ assert.ok(deviceProfile.includes('Saat aktif dan aplikasi berjalan') && devicePr
 assert.ok(ownerWriteMigration.includes('FOR INSERT TO authenticated') && ownerWriteMigration.includes('FOR UPDATE TO authenticated') && ownerWriteMigration.includes('id = auth.uid()'), 'Owner-only profile write RLS migration missing');
 assert.ok(ciWorkflow.includes('feature/**') && ciWorkflow.includes('git ls-files --error-unmatch') && ciWorkflow.includes('unzip -Z1'), 'CI must test feature branches and verify source archive contents');
 assert.ok(releaseWorkflow.includes('workflow_dispatch:') && /push:\n    tags:\n      - "v\*"/.test(releaseWorkflow) && !/^\s*branches:/m.test(releaseWorkflow) && releaseWorkflow.includes('PACKAGE_VERSION=') && releaseWorkflow.includes('--target "$GITHUB_SHA"'), 'Release workflow must run manually or only on version tags and point at the tested commit');
-checks += 7;
+assert.ok(releaseWorkflow.includes('run: |\n          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose'), 'APK signature verification command must be a valid YAML block scalar');
+checks += 8;
 
 const config = JSON.parse(read('capacitor.config.json'));
 assert.equal(config.webDir, 'www', 'Capacitor must build the checked-in www webDir');

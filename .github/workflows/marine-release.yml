@@ -92,7 +92,8 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" sign             --ks marine-release.keystore             --ks-pass pass:"$STORE_PASSWORD"             --ks-key-alias "$KEY_ALIAS"             --key-pass pass:"$KEY_PASSWORD"             --out app/build/outputs/apk/release/berkah-samudera10-release.apk             app/build/outputs/apk/release/app-release-unsigned.apk
 
       - name: Verify APK signature
-        run: "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose android/app/build/outputs/apk/release/berkah-samudera10-release.apk
+        run: |
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose android/app/build/outputs/apk/release/berkah-samudera10-release.apk
 
       - name: Remove signing material
         if: always()
