@@ -7,8 +7,8 @@ android {
         applicationId "com.m4zk1pl4y.berkahsamudera10"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode (project.findProperty("VERSION_CODE") ?: "10028").toInteger()
-        versionName (project.findProperty("VERSION_NAME") ?: "1.0.28")
+        versionCode Integer.parseInt(((project.findProperty("VERSION_CODE") ?: "10028").toString().trim()))
+        versionName ((project.findProperty("VERSION_NAME") ?: "1.0.28").toString().trim())
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
