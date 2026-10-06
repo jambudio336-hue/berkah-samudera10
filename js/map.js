@@ -52,6 +52,7 @@ const MapApp = {
   },
   formatDuration(seconds) { const s=Math.max(0,Number(seconds)||0); if(s<60) return Math.round(s)+" detik"; const min=s/60; if(min<60) return min.toFixed(1)+" menit"; const h=min/60; if(h<24) return h.toFixed(1)+" jam"; const d=h/24; if(d<30) return d.toFixed(1)+" hari"; const mo=d/30.4375; if(mo<12) return mo.toFixed(1)+" bulan"; return (mo/12).toFixed(1)+" tahun"; },
   formatDistanceNm(nm) { const n=Math.max(0,Number(nm)||0); return n<0.01?n.toFixed(3)+" NM":n<10?n.toFixed(2)+" NM":n.toFixed(1)+" NM"; },
+  bearingTo(lat1,lon1,lat2,lon2) { const r=Math.PI/180, y=Math.sin((lon2-lon1)*r)*Math.cos(lat2*r), x=Math.cos(lat1*r)*Math.sin(lat2*r)-Math.sin(lat1*r)*Math.cos(lat2*r)*Math.cos((lon2-lon1)*r); return (Math.atan2(y,x)/r+360)%360; },
   onPos(pos) {
     this.lat = pos.coords.latitude; this.lon = pos.coords.longitude;
     const acc = Math.round(pos.coords.accuracy), teksLat = this.lat.toFixed(5) + "°", teksLon = this.lon.toFixed(5) + "°", now = Date.now();
@@ -65,7 +66,7 @@ const MapApp = {
     document.getElementById("dashLat").textContent = "Latitude: " + teksLat; document.getElementById("dashLon").textContent = "Longitude: " + teksLon;
     this.speedKmh = speed;
     const knots = speed / 1.852;
-    const routeSpeed = document.getElementById("routeSpeedInfo"); if (routeSpeed) routeSpeed.textContent = "Kecepatan: " + knots.toFixed(1) + " kn";
+    const routeSpeed = document.getElementById("routeSpeedInfo"); if (routeSpeed) routeSpeed.textContent = "Kecepatan: " + knots.toFixed(1) + " kn";\n    if (this.destinationMarker && this.destinationMarker.getLatLng()) { const d=this.destinationMarker.getLatLng(); const br=this.bearingTo(this.lat,this.lon,d.lat,d.lng); const rs=document.getElementById("routeStatus"); if(rs && this.routeLine) { const nm=this.map.distance([this.lat,this.lon],d)/1852; const k=knots>0.5?knots:6; rs.innerHTML="🎯 Ke tujuan: <b>"+this.formatDistanceNm(nm)+"</b> • Haluan: <b>"+br.toFixed(0)+"°</b> • Kecepatan: <b>"+k.toFixed(1)+" kn</b><br>⏱️ Estimasi waktu tersisa: <b>"+this.formatDuration((nm/k)*3600)+"</b>"; } }
     document.getElementById("dashAcc").textContent = "Akurasi GNSS: " + acc + " m"; document.getElementById("mapSpeed").textContent = knots.toFixed(1) + " kn • " + speed.toFixed(1) + " km/j";
     document.getElementById("dashSpeed").textContent = "Kecepatan kapal: " + knots.toFixed(1) + " knot (" + speed.toFixed(1) + " km/j)";
     const altitude = Number.isFinite(pos.coords.altitude) ? Math.round(pos.coords.altitude) + " m" : "-";
