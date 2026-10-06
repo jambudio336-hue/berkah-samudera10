@@ -85,6 +85,20 @@
     try{const r=await fetch(CFG.gebco+"SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0",{cache:"no-store"});out.gebco=r.ok}catch(_){}
     return out;
   }
+  const PUBLIC={
+    aisStream:"wss://stream.aisstream.io/v0/stream",
+    gfw:"https://globalfishingwatch.org/our-apis/",
+    noaaAis:"https://marinecadastre.gov/ais/",
+    emodnetBathymetry:"https://ows.emodnet-bathymetry.eu/wms?",
+    noaaErddap:"https://osmc.noaa.gov/erddap/",
+    dataGoId:"https://data.go.id/",
+    kkp:"https://portaldata.kkp.go.id/"
+  };
+  function aisStreamSubscription(boundingBoxes,filters=[]){
+    const key=providerConfig().aisStream?.apiKey;
+    if(!key)throw new Error("AISStream API key belum dikonfigurasi di server.");
+    return {APIKey:key,BoundingBoxes:boundingBoxes,FilterMessageTypes:filters.length?filters:["PositionReport","ShipStaticData","StandardClassBPositionReport"]};
+  }
   const providerConfig=()=>window.__MARINE_PROVIDER_CONFIG__||{};
   async function testEndpoint(name){
     const p=providerConfig()[name]||{};
@@ -102,5 +116,5 @@
     windy:{test:()=>testEndpoint("windy")},
     windyMap:{test:async()=>({ok:true,message:"Official Windy map surface siap; API berlisensi dipakai melalui adapter windy saat key/gateway tersedia."})}
   };
-  window.MarineExternal={config:CFG,bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},marine:{openMeteo:openMeteoMarine},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},integrations,providerConfig,health,cache:{read,write}};
+  window.MarineExternal={config:CFG,publicSources:PUBLIC,aisStream:{subscription:aisStreamSubscription},bmkg:{json,meta:marineMeta,weather:marineWeather,warnings},marine:{openMeteo:openMeteoMarine},gebco:{getFeatureInfoUrl:gebcoGetFeatureInfo},integrations,providerConfig,health,cache:{read,write}};
 })();
