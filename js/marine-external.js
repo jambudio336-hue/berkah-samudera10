@@ -111,7 +111,7 @@
   const integrations={
     ais:{test:()=>testEndpoint("ais")},
     radar:{test:()=>testEndpoint("radar")},
-    navionics:{test:async()=>({ok:!!window.NavionicsBridge,message:window.NavionicsBridge?"Native Navionics bridge terdeteksi.":"Menunggu Garmin/Navionics SDK + developer token pada build Android."})},
+    navionics:{test:async()=>({ok:!!window.NavionicsBridge,message:window.NavionicsBridge?"Native Navionics bridge terdeteksi.":"Menunggu Garmin/Navionics SDK + developer token pada build Android."})},garminActiveCaptain:{test:async()=>window.GarminActiveCaptain?.status?window.GarminActiveCaptain.status():({ok:false,message:"Garmin ActiveCaptain adapter belum dimuat."})},
     marineTraffic:{test:()=>testEndpoint("marineTraffic")},
     windy:{test:()=>testEndpoint("windy")},
     windyMap:{test:async()=>({ok:true,message:"Official Windy map surface siap; API berlisensi dipakai melalui adapter windy saat key/gateway tersedia."})}
