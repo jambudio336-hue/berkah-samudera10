@@ -427,7 +427,19 @@
     <div class="row"><button class="btn" id="btnMarineUpdate" hidden>⬇️ Unduh Update</button></div>
     <p class="muted" id="marineUpdateStatus">Memeriksa pembaruan...</p>
   </div>
-  <div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
+  <div class="card jarvis-card">
+  <div class="section-head"><div><span class="eyebrow">MARINE AI • OPENROUTER</span><h3>🤖 Jarvis — Voice Captain Assistant</h3></div><div class="jarvis-orb">J</div></div>
+  <p class="muted">Jarvis membaca snapshot realtime Marine OS saat Anda bertanya: GNSS, kapal, runtime, fitur, provider, dan data lokal yang aman. Jawaban AI tidak ditampilkan sebagai chat; Jarvis membacakannya dengan suara.</p>
+  <label class="switch-row"><span>Aktifkan Jarvis</span><input id="jarvisEnabled" type="checkbox"></label>
+  <label>OpenRouter API key</label><input id="jarvisApiKey" class="jarvis-input jarvis-secret" type="password" autocomplete="off" placeholder="sk-or-v1-...">
+  <div class="row"><label>Kecepatan suara <input id="jarvisRate" type="number" min=".6" max="1.5" step=".1" value="1"></label><label>Pitch <input id="jarvisPitch" type="number" min=".5" max="1.5" step=".1" value="1"></label></div>
+  <div class="jarvis-controls"><button class="btn primary" id="btnJarvisSave">💾 Simpan Jarvis</button><button class="btn" id="btnJarvisTest">🔊 Tes suara</button><button class="btn" id="btnJarvisMic">🎙️ Aktifkan pendengar</button><button class="btn" id="btnJarvisStop">⏹️ Stop</button></div>
+  <label class="switch-row"><span>Mode dengar berulang</span><input id="jarvisVoiceToggle" type="checkbox"></label>
+  <div class="row"><input id="jarvisAsk" class="jarvis-input" placeholder="Tulis pertanyaan untuk tes Jarvis…"><button class="btn primary-inline" id="btnJarvisAsk">Tanya</button></div>
+  <p id="jarvisStatus" class="muted jarvis-status">⚪ Masukkan API key OpenRouter</p>
+  <p class="jarvis-note jarvis-voice-only">Contoh: tekan “Aktifkan pendengar”, lalu ucapkan “Halo Jarvis”. Jarvis menjawab: “Iya Captain, ada yang perlu ditanyakan?” Pengenalan suara bergantung dukungan Android/WebView. Untuk privasi, konteks hanya dikirim ketika Captain mengajukan pertanyaan.</p>
+  <small>Model default: <b>openrouter/free</b>. API key tidak ditanam di source APK; pengguna memasukkannya sendiri. Penyimpanan saat ini lokal di perangkat.</small>
+</div><div class="card"><h3>🛟 Keselamatan</h3><p class="muted">GPS/GNSS, cuaca, bathymetry, dan deteksi karang adalah alat bantu. Tetap gunakan peta navigasi resmi, radar, dan sounder saat melaut.</p><button class="btn danger" id="btnRequestGps">📍 Izinkan akses lokasi</button><button class="btn" id="btnRequestCompass">🧭 Aktifkan sensor kompas</button></div>
   <div class="card donation-card"><span class="eyebrow">DUKUNG PENGEMBANGAN</span><h3>💝 Donasi untuk Pengembangan APK</h3><p class="donation-copy">Dukungan Anda membantu kami merawat server, memperbaiki fitur, dan terus mengembangkan Berkah Samudera agar semakin nyaman digunakan para pengguna.</p><img class="donation-qr" src="donasi-qris.png" alt="QRIS donasi pengembangan Berkah Samudera" loading="lazy"><p class="muted center">Scan QRIS di atas menggunakan aplikasi pembayaran Anda. Terima kasih atas dukungan dan kepercayaannya.</p></div>
   <div class="card about-card"><span class="eyebrow">TENTANG APLIKASI</span><h3>🚢 Berkah Samoedra10</h3><p>Aplikasi pendamping operasi kapal untuk memantau GPS, rute perjalanan, cuaca laut, gelombang, Windy global, kedalaman GEBCO, karang terpetakan, kompas, kru, tangkapan, perbekalan, dan log riwayat.</p><p class="thanks">Terima kasih telah menggunakan aplikasi kami. Semoga Berkah Samudera membantu perjalanan Anda menjadi lebih aman, rapi, dan nyaman.</p><p class="sponsor center">Dikembangkan dan disponsori by.m4zk1pl4y</p><p class="muted center">Versi aplikasi 1.0.28</p></div>
 </section>
@@ -476,5 +488,6 @@
 <script src="js/marine-runtime.js" defer></script>
 <script src="js/garmin-activecaptain.js" defer></script>
 <script src="js/marine-native-tracking.js" defer></script>\n<script src="js/marine-updater.js" defer></script>\n<script src="js/marine-tools.js" defer></script>
+<script src="js/jarvis-openrouter.js" defer></script>
 </body>
 </html>
