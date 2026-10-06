@@ -23,4 +23,4 @@ SOFTWARE.
 
 ## Third-party services and data
 
-The MIT license applies to this project's original code. Third-party maps, data, SDKs, fonts, APIs, tiles, imagery, and services remain subject to their own licenses, attribution requirements, usage limits, and terms. This includes, where used, OpenStreetMap, OpenSeaMap, GEBCO, CARTO, Esri, Windy, BMKG, Open-Meteo, Supabase, Aladhan, EQuran, RainViewer, NOAA, and other providers documented by the project. The project does not grant rights to redistribute third-party data beyond the permissions of those providers.
+The MIT license applies to this project's original code. Third-party maps, data, SDKs, fonts, APIs, tiles, imagery, and services remain subject to their own licenses, attribution requirements, usage limits, and terms. This includes, where used, OpenStreetMap, OpenSeaMap, GEBCO, CARTO, Esri, Windy, BMKG, Open-Meteo, Supabase, OpenRouter, Aladhan, EQuran, RainViewer, NOAA, and other providers documented by the project. The project does not grant rights to redistribute third-party data beyond the permissions of those providers.
