@@ -92,7 +92,9 @@
     emodnetBathymetry:"https://ows.emodnet-bathymetry.eu/wms?",
     noaaErddap:"https://osmc.noaa.gov/erddap/",
     dataGoId:"https://data.go.id/",
-    kkp:"https://portaldata.kkp.go.id/"
+    kkp:"https://portaldata.kkp.go.id/",
+    kkpMarket:"https://mi.kkp.go.id/data/",
+    kkpPipp:"https://pipp.kkp.go.id/"
   };
   function aisStreamSubscription(boundingBoxes,filters=[]){
     const key=providerConfig().aisStream?.apiKey;
