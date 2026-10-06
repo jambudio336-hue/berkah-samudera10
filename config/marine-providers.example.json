@@ -129,5 +129,58 @@
       "url": "https://www.windy.com/",
       "note": "Full API parity requires the applicable Windy API access/terms."
     }
+  },
+  "publicSources": {
+    "aisStream": {
+      "enabled": true,
+      "mode": "server-side-websocket",
+      "url": "wss://stream.aisstream.io/v0/stream",
+      "credentialEnv": "AISSTREAM_API_KEY",
+      "live": true,
+      "note": "Public real-time AIS WebSocket. Key must remain server-side; direct browser connection is not allowed by provider."
+    },
+    "globalFishingWatch": {
+      "enabled": true,
+      "mode": "official-api",
+      "url": "https://globalfishingwatch.org/our-apis/",
+      "credentialEnv": "GFW_API_KEY",
+      "live": false,
+      "note": "Dynamic vessel activity/identity/history and fishing-effort datasets; API key and attribution required. Use as supplemental intelligence, not as guaranteed second-by-second AIS."
+    },
+    "noaaMarineCadastreAIS": {
+      "enabled": true,
+      "mode": "public-download",
+      "url": "https://marinecadastre.gov/ais/",
+      "live": false,
+      "note": "Public U.S. AIS historical/quarterly datasets; useful for traffic history and heatmaps, not global realtime."
+    },
+    "emodnetBathymetry": {
+      "enabled": true,
+      "mode": "OGC-WMS-REST",
+      "url": "https://ows.emodnet-bathymetry.eu/wms?",
+      "live": false,
+      "note": "Public bathymetry web services; not a live navigation chart and mainly European/global products depending layer."
+    },
+    "noaaErddap": {
+      "enabled": true,
+      "mode": "public-REST",
+      "url": "https://osmc.noaa.gov/erddap/",
+      "live": true,
+      "note": "Public oceanographic datasets such as satellite/buoy observations; dataset freshness varies."
+    },
+    "indonesiaDataGoId": {
+      "enabled": true,
+      "mode": "public-catalog",
+      "url": "https://data.go.id/",
+      "live": false,
+      "note": "Public Indonesian government datasets; freshness varies by dataset."
+    },
+    "kkpData": {
+      "enabled": true,
+      "mode": "public-catalog",
+      "url": "https://portaldata.kkp.go.id/",
+      "live": false,
+      "note": "KKP public data portal including WPP and fisheries datasets."
+    }
   }
 }
