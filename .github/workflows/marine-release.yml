@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag, e.g. v1.0.28"
+        description: "Release tag, e.g. v1.0.29"
         required: true
         type: string
   push:
     tags: ["v*"]
+    branches: ["release/*"]
 
 permissions:
   contents: write
@@ -50,10 +51,12 @@ jobs:
         run: |
           set -euo pipefail
           TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          if [[ "$TAG" == release/* ]]; then TAG="${TAG#release/}"; fi
           VERSION="${TAG#v}"
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
           PATCH_NUM="${PATCH:-0}"
           CODE=$((10#$MAJOR * 10000 + 10#$MINOR * 100 + 10#$PATCH_NUM))
+          [[ "$TAG" == v* ]] || TAG="v$TAG"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "code=$CODE" >> "$GITHUB_OUTPUT"
